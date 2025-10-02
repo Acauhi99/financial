@@ -5,7 +5,6 @@ import {
   Wallet,
   Plus,
   DollarSign,
-  Loader2,
 } from "lucide-react";
 import {
   useTransactions,
@@ -327,11 +326,7 @@ export function TransactionsPage() {
                   : "bg-gray-900 text-white hover:bg-gray-800 shadow-sm hover:shadow-md"
               }`}
             >
-              {createMutation.isPending ? (
-                <Loader2 size={16} className="animate-spin" />
-              ) : (
-                <Plus size={16} />
-              )}
+              <Plus size={16} />
               <span>
                 {createMutation.isPending
                   ? "Adicionando..."
