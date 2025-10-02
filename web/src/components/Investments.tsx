@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { PiggyBank, TrendingUp, Plus, DollarSign, Percent } from "lucide-react";
 import { useInvestments, useCreateInvestment } from "../hooks/useInvestments";
 import { DataTable, type Column } from "./DataTable";
@@ -38,12 +38,35 @@ export function Investments() {
     );
   };
 
-  const allInvestments = data?.data || [];
-  const totalInvested = allInvestments.reduce(
+  const sortedInvestments = useMemo(() => {
+    const allInvestments = data?.data || [];
+    if (allInvestments.length === 0) return [];
+
+    const sorted = [...allInvestments];
+    sorted.sort((a, b) => {
+      const aValue = a[sortBy as keyof Investment];
+      const bValue = b[sortBy as keyof Investment];
+
+      if (typeof aValue === "string" && typeof bValue === "string") {
+        return sortOrder === "asc"
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue);
+      }
+
+      if (typeof aValue === "number" && typeof bValue === "number") {
+        return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
+      }
+
+      return 0;
+    });
+    return sorted;
+  }, [data, sortBy, sortOrder]);
+
+  const totalInvested = sortedInvestments.reduce(
     (sum, inv) => sum + inv.amount,
     0
   );
-  const totalMonthlyReturn = allInvestments.reduce(
+  const totalMonthlyReturn = sortedInvestments.reduce(
     (sum, inv) => sum + inv.monthlyReturn,
     0
   );
@@ -256,7 +279,7 @@ export function Investments() {
 
         <div className="p-6">
           <DataTable
-            data={allInvestments}
+            data={sortedInvestments}
             columns={columns}
             loading={isLoading}
             error={error ? String(error) : null}
@@ -268,9 +291,19 @@ export function Investments() {
             sortBy={sortBy}
             sortOrder={sortOrder}
             onSort={(key) => {
+              console.log(
+                "onSort called with key:",
+                key,
+                "current sortBy:",
+                sortBy,
+                "current sortOrder:",
+                sortOrder
+              );
               if (sortBy === key) {
+                console.log("Same column, toggling order");
                 setSortOrder(sortOrder === "asc" ? "desc" : "asc");
               } else {
+                console.log("Different column, setting to:", key);
                 setSortBy(key as typeof sortBy);
                 setSortOrder("asc");
               }
@@ -280,7 +313,7 @@ export function Investments() {
             onPageChange={setCurrentPage}
           />
 
-          {!isLoading && allInvestments.length === 0 && (
+          {!isLoading && sortedInvestments.length === 0 && (
             <div className="p-8 text-center">
               <p className="text-gray-500">Nenhum investimento encontrado</p>
               <p className="text-sm text-gray-400 mt-1">

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   TrendingUp,
   TrendingDown,
@@ -20,8 +20,6 @@ export function TransactionsPage() {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [type, setType] = useState<"income" | "expense">("expense");
-
-  // Filtros e paginação
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState<FilterType>("all");
   const [sortBy, setSortBy] = useState<"description" | "amount" | "type">(
@@ -118,13 +116,35 @@ export function TransactionsPage() {
     </select>
   );
 
-  // Calcular totais dos dados carregados
-  const allTransactions = data?.data || [];
-  const totalIncome = allTransactions
+  const sortedTransactions = useMemo(() => {
+    const allTransactions = data?.data || [];
+    if (allTransactions.length === 0) return [];
+
+    const sorted = [...allTransactions];
+    sorted.sort((a, b) => {
+      const aValue = a[sortBy as keyof Transaction];
+      const bValue = b[sortBy as keyof Transaction];
+
+      if (typeof aValue === "string" && typeof bValue === "string") {
+        return sortOrder === "asc"
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue);
+      }
+
+      if (typeof aValue === "number" && typeof bValue === "number") {
+        return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
+      }
+
+      return 0;
+    });
+    return sorted;
+  }, [data, sortBy, sortOrder]);
+
+  const totalIncome = sortedTransactions
     .filter((t) => t.type === "income")
     .reduce((sum, t) => sum + t.amount, 0);
 
-  const totalExpenses = allTransactions
+  const totalExpenses = sortedTransactions
     .filter((t) => t.type === "expense")
     .reduce((sum, t) => sum + t.amount, 0);
 
@@ -335,7 +355,7 @@ export function TransactionsPage() {
 
         <div className="p-6">
           <DataTable
-            data={allTransactions}
+            data={sortedTransactions}
             columns={columns}
             loading={isLoading}
             error={error ? String(error) : null}
@@ -360,7 +380,7 @@ export function TransactionsPage() {
             filters={filters}
           />
 
-          {!isLoading && allTransactions.length === 0 && (
+          {!isLoading && sortedTransactions.length === 0 && (
             <div className="p-8 text-center">
               <p className="text-gray-500">Nenhuma transação encontrada</p>
               <p className="text-sm text-gray-400 mt-1">

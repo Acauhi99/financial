@@ -1,4 +1,12 @@
-import { ChevronLeft, ChevronRight, Search } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Search,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
+} from "lucide-react";
+import { Loading } from "./Loading";
 
 export interface Column<T> {
   key: keyof T | string;
@@ -38,12 +46,19 @@ export function DataTable<T extends { id?: string | number }>({
   onPageChange,
   filters,
 }: Readonly<DataTableProps<T>>) {
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-      </div>
+  const getSortIcon = (columnKey: string) => {
+    if (sortBy !== columnKey) {
+      return <ArrowUpDown className="h-3 w-3" />;
+    }
+    return sortOrder === "asc" ? (
+      <ArrowUp className="h-3 w-3 text-gray-900" />
+    ) : (
+      <ArrowDown className="h-3 w-3 text-gray-900" />
     );
+  };
+
+  if (loading) {
+    return <Loading />;
   }
 
   if (error) {
@@ -86,9 +101,9 @@ export function DataTable<T extends { id?: string | number }>({
                 >
                   <div className="flex items-center space-x-1">
                     <span>{column.label}</span>
-                    {column.sortable && sortBy === String(column.key) && (
-                      <span className="text-blue-500">
-                        {sortOrder === "asc" ? "↑" : "↓"}
+                    {column.sortable && (
+                      <span className="text-gray-400">
+                        {getSortIcon(String(column.key))}
                       </span>
                     )}
                   </div>

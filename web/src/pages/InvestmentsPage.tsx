@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { TrendingUp, Plus, DollarSign, Loader2 } from "lucide-react";
+import { useState, useMemo } from "react";
+import { TrendingUp, Plus, DollarSign } from "lucide-react";
 import { useInvestments, useCreateInvestment } from "../hooks/useInvestments";
 import { DataTable, type Column } from "../components/DataTable";
 import { type Investment } from "../services/api";
@@ -11,7 +11,6 @@ export function InvestmentsPage() {
   const [quantity, setQuantity] = useState("");
   const [price, setPrice] = useState("");
   const [type, setType] = useState<"stocks" | "bonds" | "crypto">("stocks");
-
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState<FilterType>("all");
   const [sortBy, setSortBy] = useState<"name" | "amount" | "rate">("name");
@@ -45,8 +44,34 @@ export function InvestmentsPage() {
     );
   };
 
-  const allInvestments = data?.data || [];
-  const totalValue = allInvestments.reduce((sum, inv) => sum + inv.amount, 0);
+  const sortedInvestments = useMemo(() => {
+    const allInvestments = data?.data || [];
+    if (allInvestments.length === 0) return [];
+
+    const sorted = [...allInvestments];
+    sorted.sort((a, b) => {
+      const aValue = a[sortBy as keyof Investment];
+      const bValue = b[sortBy as keyof Investment];
+
+      if (typeof aValue === "string" && typeof bValue === "string") {
+        return sortOrder === "asc"
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue);
+      }
+
+      if (typeof aValue === "number" && typeof bValue === "number") {
+        return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
+      }
+
+      return 0;
+    });
+    return sorted;
+  }, [data, sortBy, sortOrder]);
+
+  const totalValue = sortedInvestments.reduce(
+    (sum, inv) => sum + inv.amount,
+    0
+  );
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("pt-BR", {
@@ -268,11 +293,7 @@ export function InvestmentsPage() {
                   : "bg-gray-900 text-white hover:bg-gray-800 shadow-sm hover:shadow-md"
               }`}
             >
-              {createMutation.isPending ? (
-                <Loader2 size={16} className="animate-spin" />
-              ) : (
-                <Plus size={16} />
-              )}
+              <Plus size={16} />
               <span>
                 {createMutation.isPending
                   ? "Adicionando..."
@@ -296,7 +317,7 @@ export function InvestmentsPage() {
 
         <div className="p-6">
           <DataTable
-            data={allInvestments}
+            data={sortedInvestments}
             columns={columns}
             loading={isLoading}
             error={error ? String(error) : null}
@@ -321,7 +342,7 @@ export function InvestmentsPage() {
             filters={filters}
           />
 
-          {!isLoading && allInvestments.length === 0 && (
+          {!isLoading && sortedInvestments.length === 0 && (
             <div className="p-8 text-center">
               <p className="text-gray-500">Nenhum investimento encontrado</p>
               <p className="text-sm text-gray-400 mt-1">
