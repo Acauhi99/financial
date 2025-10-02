@@ -5,6 +5,8 @@ import {
   Wallet,
   Plus,
   DollarSign,
+  Filter,
+  X,
 } from "lucide-react";
 import {
   useTransactions,
@@ -12,9 +14,22 @@ import {
 } from "../hooks/useTransactions";
 import { DataTable, type Column } from "./DataTable";
 import { type Transaction } from "../services/api";
-import { formatCurrency, PAGINATION } from "../constants";
+import {
+  formatCurrency,
+  PAGINATION,
+  FILTER_OPTIONS,
+  filterByAmountRange,
+} from "../constants";
 
 type FilterType = "all" | "income" | "expense";
+type AmountRangeType =
+  | "all"
+  | "0-100"
+  | "100-500"
+  | "500-1000"
+  | "1000-5000"
+  | "5000+";
+type SortableValue = string | number | Date;
 
 export function Transactions() {
   const [description, setDescription] = useState("");
@@ -22,10 +37,12 @@ export function Transactions() {
   const [type, setType] = useState<"income" | "expense">("expense");
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState<FilterType>("all");
+  const [amountRange, setAmountRange] = useState<AmountRangeType>("all");
+  const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState<"description" | "amount" | "type">(
     "description"
   );
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = PAGINATION.ITEMS_PER_PAGE;
 
@@ -55,14 +72,32 @@ export function Transactions() {
     );
   };
 
-  const sortedTransactions = useMemo(() => {
-    const allTransactions = data?.data || [];
-    if (allTransactions.length === 0) return [];
+  const filteredAndSortedTransactions = useMemo(() => {
+    let filtered = data?.data || [];
 
-    const sorted = [...allTransactions];
+    // Aplicar filtros
+    if (filterType !== "all") {
+      filtered = filtered.filter((t) => t.type === filterType);
+    }
+
+    if (amountRange !== "all") {
+      filtered = filtered.filter((t) =>
+        filterByAmountRange(t.amount, amountRange)
+      );
+    }
+
+    // Aplicar busca
+    if (searchTerm) {
+      filtered = filtered.filter((t) =>
+        t.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Ordenar
+    const sorted = [...filtered];
     sorted.sort((a, b) => {
-      const aValue = a[sortBy as keyof Transaction];
-      const bValue = b[sortBy as keyof Transaction];
+      const aValue: SortableValue = a[sortBy as keyof Transaction];
+      const bValue: SortableValue = b[sortBy as keyof Transaction];
 
       if (typeof aValue === "string" && typeof bValue === "string") {
         return sortOrder === "asc"
@@ -77,12 +112,12 @@ export function Transactions() {
       return 0;
     });
     return sorted;
-  }, [data, sortBy, sortOrder]);
-  const totalIncome = sortedTransactions
+  }, [data, sortBy, sortOrder, filterType, amountRange, searchTerm]);
+  const totalIncome = filteredAndSortedTransactions
     .filter((t) => t.type === "income")
     .reduce((sum, t) => sum + t.amount, 0);
 
-  const totalExpenses = sortedTransactions
+  const totalExpenses = filteredAndSortedTransactions
     .filter((t) => t.type === "expense")
     .reduce((sum, t) => sum + t.amount, 0);
 
@@ -93,6 +128,11 @@ export function Transactions() {
       key: "description",
       label: "Descrição",
       sortable: true,
+      render: (transaction) => (
+        <div className="font-medium text-gray-900">
+          {transaction.description}
+        </div>
+      ),
     },
     {
       key: "type",
@@ -100,12 +140,17 @@ export function Transactions() {
       sortable: true,
       render: (transaction) => (
         <span
-          className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+          className={`inline-flex items-center px-2.5 py-1 text-xs font-semibold rounded-full ${
             transaction.type === "income"
               ? "bg-green-100 text-green-800"
               : "bg-red-100 text-red-800"
           }`}
         >
+          {transaction.type === "income" ? (
+            <TrendingUp className="w-3 h-3 mr-1" />
+          ) : (
+            <TrendingDown className="w-3 h-3 mr-1" />
+          )}
           {transaction.type === "income" ? "Receita" : "Despesa"}
         </span>
       ),
@@ -116,7 +161,7 @@ export function Transactions() {
       sortable: true,
       render: (transaction) => (
         <div
-          className={`text-sm font-semibold ${
+          className={`text-sm font-bold ${
             transaction.type === "income" ? "text-green-600" : "text-red-600"
           }`}
         >
@@ -127,19 +172,83 @@ export function Transactions() {
     },
   ];
 
+  const clearFilters = () => {
+    setFilterType("all");
+    setAmountRange("all");
+    setSearchTerm("");
+    setCurrentPage(1);
+  };
+
+  const hasActiveFilters =
+    filterType !== "all" || amountRange !== "all" || searchTerm;
+
   const filters = (
-    <select
-      value={filterType}
-      onChange={(e) => {
-        setFilterType(e.target.value as FilterType);
-        setCurrentPage(1);
-      }}
-      className="px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-    >
-      <option value="all">Todos</option>
-      <option value="income">Receitas</option>
-      <option value="expense">Despesas</option>
-    </select>
+    <>
+      <button
+        onClick={() => setShowFilters(!showFilters)}
+        className={`flex items-center space-x-2 px-3 py-2 border rounded-md text-sm font-medium transition-colors ${
+          hasActiveFilters
+            ? "border-gray-500 bg-gray-100 text-gray-700"
+            : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
+        }`}
+      >
+        <Filter className="w-4 h-4" />
+        <span>Filtros</span>
+        {hasActiveFilters && (
+          <span className="bg-gray-500 text-white text-xs px-1.5 py-0.5 rounded-full">
+            {
+              [filterType !== "all", amountRange !== "all", searchTerm].filter(
+                Boolean
+              ).length
+            }
+          </span>
+        )}
+      </button>
+
+      {showFilters && (
+        <div className="flex flex-wrap gap-2">
+          <select
+            value={filterType}
+            onChange={(e) => {
+              setFilterType(e.target.value as FilterType);
+              setCurrentPage(1);
+            }}
+            className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-gray-500 focus:border-transparent bg-white"
+          >
+            {FILTER_OPTIONS.TRANSACTION_TYPES.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={amountRange}
+            onChange={(e) => {
+              setAmountRange(e.target.value as AmountRangeType);
+              setCurrentPage(1);
+            }}
+            className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-gray-500 focus:border-transparent bg-white"
+          >
+            {FILTER_OPTIONS.AMOUNT_RANGES.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+
+          {hasActiveFilters && (
+            <button
+              onClick={clearFilters}
+              className="flex items-center space-x-1 px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-600 hover:bg-gray-50 bg-white"
+            >
+              <X className="w-4 h-4" />
+              <span>Limpar</span>
+            </button>
+          )}
+        </div>
+      )}
+    </>
   );
 
   if (error) {
@@ -332,15 +441,23 @@ export function Transactions() {
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-900">Histórico</h2>
-            <span className="text-sm text-gray-500">
-              {data?.pagination.total || 0} transações
-            </span>
+            <div className="flex items-center space-x-4">
+              <span className="text-sm text-gray-500">
+                {filteredAndSortedTransactions.length} de{" "}
+                {data?.pagination.total || 0} transações
+              </span>
+              {hasActiveFilters && (
+                <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                  Filtros ativos
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
         <div className="p-6">
           <DataTable
-            data={sortedTransactions}
+            data={filteredAndSortedTransactions}
             columns={columns}
             loading={isLoading}
             error={error ? String(error) : null}
@@ -360,19 +477,34 @@ export function Transactions() {
               }
             }}
             currentPage={currentPage}
-            totalPages={data?.pagination.totalPages || 1}
+            totalPages={Math.ceil(
+              filteredAndSortedTransactions.length / PAGINATION.ITEMS_PER_PAGE
+            )}
             onPageChange={setCurrentPage}
             filters={filters}
           />
 
-          {!isLoading && sortedTransactions.length === 0 && (
+          {!isLoading && filteredAndSortedTransactions.length === 0 && (
             <div className="p-8 text-center">
-              <p className="text-gray-500">Nenhuma transação encontrada</p>
-              <p className="text-sm text-gray-400 mt-1">
-                {searchTerm || filterType !== "all"
-                  ? "Tente ajustar os filtros"
-                  : "Adicione sua primeira transação acima"}
-              </p>
+              <div className="max-w-sm mx-auto">
+                <Wallet className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-500 font-medium">
+                  Nenhuma transação encontrada
+                </p>
+                <p className="text-sm text-gray-400 mt-1">
+                  {hasActiveFilters
+                    ? "Tente ajustar os filtros ou limpar a busca"
+                    : "Adicione sua primeira transação acima"}
+                </p>
+                {hasActiveFilters && (
+                  <button
+                    onClick={clearFilters}
+                    className="mt-3 text-sm text-gray-600 hover:text-gray-800 underline"
+                  >
+                    Limpar todos os filtros
+                  </button>
+                )}
+              </div>
             </div>
           )}
         </div>

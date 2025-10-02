@@ -26,10 +26,76 @@ export const CSS_CLASSES = {
     "px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-gray-500 focus:border-transparent",
 } as const;
 
+// Filtros e opções
+export const FILTER_OPTIONS = {
+  TRANSACTION_TYPES: [
+    { value: "all", label: "Todos os tipos" },
+    { value: "income", label: "Receitas" },
+    { value: "expense", label: "Despesas" },
+  ],
+  AMOUNT_RANGES: [
+    { value: "all", label: "Todos os valores" },
+    { value: "0-100", label: "Até R$ 100" },
+    { value: "100-500", label: "R$ 100 - R$ 500" },
+    { value: "500-1000", label: "R$ 500 - R$ 1.000" },
+    { value: "1000-5000", label: "R$ 1.000 - R$ 5.000" },
+    { value: "5000+", label: "Acima de R$ 5.000" },
+  ],
+  INVESTMENT_RATES: [
+    { value: "all", label: "Todas as taxas" },
+    { value: "0-50", label: "0% - 50% CDI" },
+    { value: "50-80", label: "50% - 80% CDI" },
+    { value: "80-100", label: "80% - 100% CDI" },
+    { value: "100+", label: "Acima de 100% CDI" },
+  ],
+  SORT_OPTIONS: [
+    { value: "newest", label: "Mais recentes" },
+    { value: "oldest", label: "Mais antigos" },
+    { value: "highest", label: "Maior valor" },
+    { value: "lowest", label: "Menor valor" },
+  ],
+} as const;
+
 // Utilitários
 export const formatCurrency = (amount: number) => {
   return new Intl.NumberFormat(CURRENCY_FORMAT.LOCALE, {
     style: "currency",
     currency: CURRENCY_FORMAT.CURRENCY,
   }).format(amount);
+};
+
+export const formatDate = (date: string | Date) => {
+  return new Intl.DateTimeFormat(CURRENCY_FORMAT.LOCALE, {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(new Date(date));
+};
+
+export const formatPercentage = (value: number) => {
+  return `${value.toFixed(2)}%`;
+};
+
+export const filterByAmountRange = (amount: number, range: string) => {
+  if (range === "all") return true;
+
+  const [min, max] = range.split("-").map((v) => v.replace("+", ""));
+
+  if (range.includes("+")) {
+    return amount >= parseFloat(min);
+  }
+
+  return amount >= parseFloat(min) && amount <= parseFloat(max);
+};
+
+export const filterByRateRange = (rate: number, range: string) => {
+  if (range === "all") return true;
+
+  const [min, max] = range.split("-").map((v) => v.replace("+", ""));
+
+  if (range.includes("+")) {
+    return rate >= parseFloat(min);
+  }
+
+  return rate >= parseFloat(min) && rate <= parseFloat(max);
 };
