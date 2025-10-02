@@ -11,6 +11,7 @@ export function useTransactions(
     queryKey: ["transactions", page, limit, search, type],
     queryFn: () => api.getTransactions(page, limit, search, type),
     staleTime: 5 * 60 * 1000, // 5 minutes
+    placeholderData: (previousData) => previousData,
   });
 }
 

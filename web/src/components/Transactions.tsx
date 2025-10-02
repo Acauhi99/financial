@@ -186,7 +186,7 @@ export function Transactions() {
     <>
       <button
         onClick={() => setShowFilters(!showFilters)}
-        className={`flex items-center space-x-2 px-3 py-2 border rounded-md text-sm font-medium transition-colors ${
+        className={`flex items-center space-x-2 px-3 py-2 border rounded-md text-sm font-medium transition-colors cursor-pointer ${
           hasActiveFilters
             ? "border-gray-500 bg-gray-100 text-gray-700"
             : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
@@ -213,7 +213,7 @@ export function Transactions() {
               setFilterType(e.target.value as FilterType);
               setCurrentPage(1);
             }}
-            className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-gray-500 focus:border-transparent bg-white"
+            className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-gray-500 focus:border-transparent bg-white cursor-pointer"
           >
             {FILTER_OPTIONS.TRANSACTION_TYPES.map((option) => (
               <option key={option.value} value={option.value}>
@@ -228,7 +228,7 @@ export function Transactions() {
               setAmountRange(e.target.value as AmountRangeType);
               setCurrentPage(1);
             }}
-            className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-gray-500 focus:border-transparent bg-white"
+            className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-gray-500 focus:border-transparent bg-white cursor-pointer"
           >
             {FILTER_OPTIONS.AMOUNT_RANGES.map((option) => (
               <option key={option.value} value={option.value}>
@@ -240,7 +240,7 @@ export function Transactions() {
           {hasActiveFilters && (
             <button
               onClick={clearFilters}
-              className="flex items-center space-x-1 px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-600 hover:bg-gray-50 bg-white"
+              className="flex items-center space-x-1 px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-600 hover:bg-gray-50 bg-white cursor-pointer"
             >
               <X className="w-4 h-4" />
               <span>Limpar</span>
@@ -348,7 +348,7 @@ export function Transactions() {
               <button
                 type="button"
                 onClick={() => setType("income")}
-                className={`p-3 rounded border-2 transition-all flex items-center justify-center space-x-2 ${
+                className={`p-3 rounded border-2 transition-all flex items-center justify-center space-x-2 cursor-pointer ${
                   type === "income"
                     ? "border-green-500 bg-green-50 text-green-700"
                     : "border-gray-200 hover:border-gray-300 text-gray-600"
@@ -360,7 +360,7 @@ export function Transactions() {
               <button
                 type="button"
                 onClick={() => setType("expense")}
-                className={`p-3 rounded border-2 transition-all flex items-center justify-center space-x-2 ${
+                className={`p-3 rounded border-2 transition-all flex items-center justify-center space-x-2 cursor-pointer ${
                   type === "expense"
                     ? "border-red-500 bg-red-50 text-red-700"
                     : "border-gray-200 hover:border-gray-300 text-gray-600"
@@ -422,7 +422,7 @@ export function Transactions() {
               className={`px-6 py-3 rounded font-medium transition-all flex items-center space-x-2 ${
                 !description || !amount || createMutation.isPending
                   ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                  : "bg-gray-900 text-white hover:bg-gray-800 shadow-sm hover:shadow-md"
+                  : "bg-gray-900 text-white hover:bg-gray-800 shadow-sm hover:shadow-md cursor-pointer"
               }`}
             >
               <Plus size={16} />
@@ -443,8 +443,13 @@ export function Transactions() {
             <h2 className="text-lg font-semibold text-gray-900">Histórico</h2>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-500">
-                {filteredAndSortedTransactions.length} de{" "}
-                {data?.pagination.total || 0} transações
+                {isLoading
+                  ? "Carregando..."
+                  : `${Math.min(
+                      (currentPage - 1) * itemsPerPage +
+                        filteredAndSortedTransactions.length,
+                      data?.pagination.total || 0
+                    )} de ${data?.pagination.total || 0} transações`}
               </span>
               {hasActiveFilters && (
                 <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
@@ -477,9 +482,7 @@ export function Transactions() {
               }
             }}
             currentPage={currentPage}
-            totalPages={Math.ceil(
-              filteredAndSortedTransactions.length / PAGINATION.ITEMS_PER_PAGE
-            )}
+            totalPages={data?.pagination.totalPages || 1}
             onPageChange={setCurrentPage}
             filters={filters}
           />
@@ -499,7 +502,7 @@ export function Transactions() {
                 {hasActiveFilters && (
                   <button
                     onClick={clearFilters}
-                    className="mt-3 text-sm text-gray-600 hover:text-gray-800 underline"
+                    className="mt-3 text-sm text-gray-600 hover:text-gray-800 underline cursor-pointer"
                   >
                     Limpar todos os filtros
                   </button>

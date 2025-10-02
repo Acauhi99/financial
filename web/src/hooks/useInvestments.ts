@@ -6,6 +6,7 @@ export function useInvestments(page = 1, limit = 10, search = "") {
     queryKey: ["investments", page, limit, search],
     queryFn: () => api.getInvestments(page, limit, search),
     staleTime: 5 * 60 * 1000, // 5 minutes
+    placeholderData: (previousData) => previousData,
   });
 }
 

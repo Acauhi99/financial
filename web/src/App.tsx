@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
   LayoutDashboard,
   ArrowLeftRight,
@@ -62,7 +61,7 @@ function App() {
               )}
               <button
                 onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                className="text-gray-400 hover:text-white transition-colors p-1"
+                className="text-gray-400 hover:text-white transition-colors p-1 cursor-pointer"
               >
                 {sidebarCollapsed ? (
                   <ChevronRight size={16} />
@@ -77,7 +76,7 @@ function App() {
               <button
                 key={item.id}
                 onClick={() => setCurrentPage(item.id as Page)}
-                className={`w-full flex items-center px-4 py-3 text-left hover:bg-gray-800 transition-colors ${
+                className={`w-full flex items-center px-4 py-3 text-left hover:bg-gray-800 transition-colors cursor-pointer ${
                   currentPage === item.id
                     ? "bg-gray-800 border-r-2 border-gray-400 text-white"
                     : "text-gray-300"
@@ -97,7 +96,6 @@ function App() {
         {/* Main Content */}
         <div className="flex-1 p-8">{renderPage()}</div>
       </div>
-      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }
