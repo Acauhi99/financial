@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
   LayoutDashboard,
   ArrowLeftRight,
@@ -6,9 +8,18 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { Overview } from "./components/Overview";
-import { Transactions } from "./components/Transactions";
+import { OverviewPage } from "./pages/OverviewPage";
+import { TransactionsPage } from "./pages/TransactionsPage";
 import { Investments } from "./components/Investments";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 type Page = "overview" | "transactions" | "investments";
 
@@ -25,66 +36,69 @@ function App() {
   const renderPage = () => {
     switch (currentPage) {
       case "overview":
-        return <Overview />;
+        return <OverviewPage />;
       case "transactions":
-        return <Transactions />;
+        return <TransactionsPage />;
       case "investments":
         return <Investments />;
       default:
-        return <Overview />;
+        return <OverviewPage />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex">
-      {/* Sidebar */}
-      <div
-        className={`${
-          sidebarCollapsed ? "w-16" : "w-64"
-        } bg-gray-900 shadow-xl transition-all duration-300`}
-      >
-        <div className="p-4">
-          <div className="flex items-center justify-between">
-            {!sidebarCollapsed && (
-              <h1 className="text-lg font-semibold text-white">Financeiro</h1>
-            )}
-            <button
-              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-              className="text-gray-400 hover:text-white transition-colors p-1"
-            >
-              {sidebarCollapsed ? (
-                <ChevronRight size={16} />
-              ) : (
-                <ChevronLeft size={16} />
+    <QueryClientProvider client={queryClient}>
+      <div className="min-h-screen bg-gray-100 flex">
+        {/* Sidebar */}
+        <div
+          className={`${
+            sidebarCollapsed ? "w-16" : "w-64"
+          } bg-gray-900 shadow-xl transition-all duration-300`}
+        >
+          <div className="p-4">
+            <div className="flex items-center justify-between">
+              {!sidebarCollapsed && (
+                <h1 className="text-lg font-semibold text-white">Financeiro</h1>
               )}
-            </button>
+              <button
+                onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+                className="text-gray-400 hover:text-white transition-colors p-1"
+              >
+                {sidebarCollapsed ? (
+                  <ChevronRight size={16} />
+                ) : (
+                  <ChevronLeft size={16} />
+                )}
+              </button>
+            </div>
           </div>
+          <nav className="mt-4">
+            {menuItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setCurrentPage(item.id as Page)}
+                className={`w-full flex items-center px-4 py-3 text-left hover:bg-gray-800 transition-colors ${
+                  currentPage === item.id
+                    ? "bg-gray-800 border-r-2 border-gray-400 text-white"
+                    : "text-gray-300"
+                }`}
+                title={sidebarCollapsed ? item.label : ""}
+              >
+                <item.icon
+                  size={20}
+                  className={sidebarCollapsed ? "mx-auto" : "mr-3"}
+                />
+                {!sidebarCollapsed && item.label}
+              </button>
+            ))}
+          </nav>
         </div>
-        <nav className="mt-4">
-          {menuItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setCurrentPage(item.id as Page)}
-              className={`w-full flex items-center px-4 py-3 text-left hover:bg-gray-800 transition-colors ${
-                currentPage === item.id
-                  ? "bg-gray-800 border-r-2 border-gray-400 text-white"
-                  : "text-gray-300"
-              }`}
-              title={sidebarCollapsed ? item.label : ""}
-            >
-              <item.icon
-                size={20}
-                className={sidebarCollapsed ? "mx-auto" : "mr-3"}
-              />
-              {!sidebarCollapsed && item.label}
-            </button>
-          ))}
-        </nav>
-      </div>
 
-      {/* Main Content */}
-      <div className="flex-1 p-8">{renderPage()}</div>
-    </div>
+        {/* Main Content */}
+        <div className="flex-1 p-8">{renderPage()}</div>
+      </div>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 }
 
