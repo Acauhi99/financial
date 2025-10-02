@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { OverviewPage } from "./pages/OverviewPage";
 import { TransactionsPage } from "./pages/TransactionsPage";
-import { Investments } from "./components/Investments";
+import { InvestmentsPage } from "./pages/InvestmentsPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -40,7 +40,7 @@ function App() {
       case "transactions":
         return <TransactionsPage />;
       case "investments":
-        return <Investments />;
+        return <InvestmentsPage />;
       default:
         return <OverviewPage />;
     }

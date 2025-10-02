@@ -17,6 +17,10 @@ interface Transaction {
   amount: number;
 }
 
+type FilterType = "all" | "income" | "expense";
+type SortBy = "description" | "amount" | "type";
+type SortOrder = "asc" | "desc";
+
 export function Transactions() {
   const mockTransactions: Transaction[] = [
     { id: 1, type: "income", description: "Salário", amount: 8500 },
@@ -94,13 +98,9 @@ export function Transactions() {
 
   // Filtros e paginação
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState<"all" | "income" | "expense">(
-    "all"
-  );
-  const [sortBy, setSortBy] = useState<"description" | "amount" | "type">(
-    "description"
-  );
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [filterType, setFilterType] = useState<FilterType>("all");
+  const [sortBy, setSortBy] = useState<SortBy>("description");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
 
@@ -151,8 +151,8 @@ export function Transactions() {
       }
 
       return sortOrder === "asc"
-        ? (aValue as number) - (bValue as number)
-        : (bValue as number) - (aValue as number);
+        ? Number(aValue) - Number(bValue)
+        : Number(bValue) - Number(aValue);
     });
 
     return filtered;
@@ -256,10 +256,10 @@ export function Transactions() {
 
         <div className="space-y-4">
           {/* Tipo de Transação */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <fieldset>
+            <legend className="block text-sm font-medium text-gray-700 mb-2">
               Tipo
-            </label>
+            </legend>
             <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
@@ -286,15 +286,19 @@ export function Transactions() {
                 <span>Despesa</span>
               </button>
             </div>
-          </div>
+          </fieldset>
 
           {/* Descrição e Valor */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="description"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Descrição
               </label>
               <input
+                id="description"
                 type="text"
                 placeholder="Ex: Salário, Aluguel, Supermercado..."
                 value={description}
@@ -303,7 +307,10 @@ export function Transactions() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="amount"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Valor
               </label>
               <div className="relative">
@@ -312,6 +319,7 @@ export function Transactions() {
                   className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
                 />
                 <input
+                  id="amount"
                   type="number"
                   placeholder="0,00"
                   value={amount}
@@ -374,7 +382,7 @@ export function Transactions() {
               <select
                 value={filterType}
                 onChange={(e) => {
-                  setFilterType(e.target.value as any);
+                  setFilterType(e.target.value as FilterType);
                   setCurrentPage(1);
                 }}
                 className="px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-gray-500 focus:border-transparent"
@@ -385,7 +393,7 @@ export function Transactions() {
               </select>
               <select
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
+                onChange={(e) => setSortBy(e.target.value as SortBy)}
                 className="px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-gray-500 focus:border-transparent"
               >
                 <option value="description">Descrição</option>

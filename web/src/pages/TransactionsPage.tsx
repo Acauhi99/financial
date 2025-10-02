@@ -5,15 +5,16 @@ import {
   Wallet,
   Plus,
   DollarSign,
-  Search,
-  ChevronLeft,
-  ChevronRight,
   Loader2,
 } from "lucide-react";
 import {
   useTransactions,
   useCreateTransaction,
 } from "../hooks/useTransactions";
+import { DataTable, type Column } from "../components/DataTable";
+import { type Transaction } from "../services/api";
+
+type FilterType = "all" | "income" | "expense";
 
 export function TransactionsPage() {
   const [description, setDescription] = useState("");
@@ -22,9 +23,7 @@ export function TransactionsPage() {
 
   // Filtros e paginação
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState<"all" | "income" | "expense">(
-    "all"
-  );
+  const [filterType, setFilterType] = useState<FilterType>("all");
   const [sortBy, setSortBy] = useState<"description" | "amount" | "type">(
     "description"
   );
@@ -57,6 +56,67 @@ export function TransactionsPage() {
       }
     );
   };
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(amount);
+  };
+
+  const columns: Column<Transaction>[] = [
+    {
+      key: "description",
+      label: "Descrição",
+      sortable: true,
+    },
+    {
+      key: "type",
+      label: "Tipo",
+      sortable: true,
+      render: (transaction) => (
+        <span
+          className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+            transaction.type === "income"
+              ? "bg-green-100 text-green-800"
+              : "bg-red-100 text-red-800"
+          }`}
+        >
+          {transaction.type === "income" ? "Receita" : "Despesa"}
+        </span>
+      ),
+    },
+    {
+      key: "amount",
+      label: "Valor",
+      sortable: true,
+      render: (transaction) => (
+        <div
+          className={`text-sm font-semibold ${
+            transaction.type === "income" ? "text-green-600" : "text-red-600"
+          }`}
+        >
+          {transaction.type === "income" ? "+" : "-"}
+          {formatCurrency(transaction.amount)}
+        </div>
+      ),
+    },
+  ];
+
+  const filters = (
+    <select
+      value={filterType}
+      onChange={(e) => {
+        setFilterType(e.target.value as FilterType);
+        setCurrentPage(1);
+      }}
+      className="px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+    >
+      <option value="all">Todos</option>
+      <option value="income">Receitas</option>
+      <option value="expense">Despesas</option>
+    </select>
+  );
 
   // Calcular totais dos dados carregados
   const allTransactions = data?.data || [];
@@ -160,10 +220,10 @@ export function TransactionsPage() {
 
         <div className="space-y-4">
           {/* Tipo de Transação */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <fieldset>
+            <legend className="block text-sm font-medium text-gray-700 mb-2">
               Tipo
-            </label>
+            </legend>
             <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
@@ -190,15 +250,19 @@ export function TransactionsPage() {
                 <span>Despesa</span>
               </button>
             </div>
-          </div>
+          </fieldset>
 
           {/* Descrição e Valor */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="transaction-description"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Descrição
               </label>
               <input
+                id="transaction-description"
                 type="text"
                 placeholder="Ex: Salário, Aluguel, Supermercado..."
                 value={description}
@@ -207,7 +271,10 @@ export function TransactionsPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="transaction-amount"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Valor
               </label>
               <div className="relative">
@@ -216,6 +283,7 @@ export function TransactionsPage() {
                   className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
                 />
                 <input
+                  id="transaction-amount"
                   type="number"
                   placeholder="0,00"
                   value={amount}
@@ -263,147 +331,46 @@ export function TransactionsPage() {
               {data?.pagination.total || 0} transações
             </span>
           </div>
-
-          {/* Filtros */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="relative flex-1">
-              <Search
-                size={16}
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              />
-              <input
-                type="text"
-                placeholder="Buscar transação..."
-                value={searchTerm}
-                onChange={(e) => {
-                  setSearchTerm(e.target.value);
-                  setCurrentPage(1);
-                }}
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-              />
-            </div>
-            <div className="flex gap-2">
-              <select
-                value={filterType}
-                onChange={(e) => {
-                  setFilterType(e.target.value as any);
-                  setCurrentPage(1);
-                }}
-                className="px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-              >
-                <option value="all">Todos</option>
-                <option value="income">Receitas</option>
-                <option value="expense">Despesas</option>
-              </select>
-            </div>
-          </div>
         </div>
 
-        {/* Tabela */}
-        <div className="overflow-x-auto">
-          {isLoading ? (
-            <div className="flex items-center justify-center h-64">
-              <Loader2 size={32} className="animate-spin text-gray-400" />
+        <div className="p-6">
+          <DataTable
+            data={allTransactions}
+            columns={columns}
+            loading={isLoading}
+            error={error ? String(error) : null}
+            searchValue={searchTerm}
+            onSearchChange={(value) => {
+              setSearchTerm(value);
+              setCurrentPage(1);
+            }}
+            sortBy={sortBy}
+            sortOrder={sortOrder}
+            onSort={(key) => {
+              if (sortBy === key) {
+                setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+              } else {
+                setSortBy(key as typeof sortBy);
+                setSortOrder("asc");
+              }
+            }}
+            currentPage={currentPage}
+            totalPages={data?.pagination.totalPages || 1}
+            onPageChange={setCurrentPage}
+            filters={filters}
+          />
+
+          {!isLoading && allTransactions.length === 0 && (
+            <div className="p-8 text-center">
+              <p className="text-gray-500">Nenhuma transação encontrada</p>
+              <p className="text-sm text-gray-400 mt-1">
+                {searchTerm || filterType !== "all"
+                  ? "Tente ajustar os filtros"
+                  : "Adicione sua primeira transação acima"}
+              </p>
             </div>
-          ) : (
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Descrição
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Tipo
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Valor
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {allTransactions.map((transaction) => (
-                  <tr key={transaction.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="font-medium text-gray-900">
-                        {transaction.description}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span
-                        className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          transaction.type === "income"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-red-100 text-red-800"
-                        }`}
-                      >
-                        {transaction.type === "income" ? "Receita" : "Despesa"}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div
-                        className={`text-sm font-semibold ${
-                          transaction.type === "income"
-                            ? "text-green-600"
-                            : "text-red-600"
-                        }`}
-                      >
-                        {transaction.type === "income" ? "+" : "-"}R${" "}
-                        {transaction.amount.toLocaleString("pt-BR", {
-                          minimumFractionDigits: 2,
-                        })}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           )}
         </div>
-
-        {/* Paginação */}
-        {data && data.pagination.totalPages > 1 && (
-          <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
-            <div className="text-sm text-gray-700">
-              Mostrando {(currentPage - 1) * itemsPerPage + 1} a{" "}
-              {Math.min(currentPage * itemsPerPage, data.pagination.total)} de{" "}
-              {data.pagination.total} transações
-            </div>
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                disabled={currentPage === 1}
-                className="p-2 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <ChevronLeft size={16} />
-              </button>
-              <span className="px-3 py-1 text-sm">
-                {currentPage} de {data.pagination.totalPages}
-              </span>
-              <button
-                onClick={() =>
-                  setCurrentPage(
-                    Math.min(data.pagination.totalPages, currentPage + 1)
-                  )
-                }
-                disabled={currentPage === data.pagination.totalPages}
-                className="p-2 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <ChevronRight size={16} />
-              </button>
-            </div>
-          </div>
-        )}
-
-        {!isLoading && allTransactions.length === 0 && (
-          <div className="p-8 text-center">
-            <p className="text-gray-500">Nenhuma transação encontrada</p>
-            <p className="text-sm text-gray-400 mt-1">
-              {searchTerm || filterType !== "all"
-                ? "Tente ajustar os filtros"
-                : "Adicione sua primeira transação acima"}
-            </p>
-          </div>
-        )}
       </div>
     </div>
   );
