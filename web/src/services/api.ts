@@ -24,6 +24,29 @@ export interface PaginatedResponse<T> {
   };
 }
 
+export interface OverviewData {
+  summary: {
+    balance: number;
+    totalIncome: number;
+    totalExpenses: number;
+  };
+  balanceData: Array<{
+    name: string;
+    value: number;
+    color: string;
+  }>;
+  monthlyData: Array<{
+    month: string;
+    receitas: number;
+    despesas: number;
+    saldo: number;
+  }>;
+  expenseCategories: Array<{
+    name: string;
+    value: number;
+  }>;
+}
+
 // Mock data
 const mockTransactions: Transaction[] = [
   { id: 1, type: "income", description: "Salário", amount: 8500 },
@@ -329,5 +352,56 @@ export const api = {
     const newInvestment = { ...investment, id: Date.now(), monthlyReturn };
     mockInvestments.unshift(newInvestment);
     return newInvestment;
+  },
+
+  // Overview
+  async getOverview(): Promise<OverviewData> {
+    await delay(800);
+
+    const totalIncome = mockTransactions
+      .filter((t) => t.type === "income")
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    const totalExpenses = mockTransactions
+      .filter((t) => t.type === "expense")
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    const totalInvestments = mockInvestments.reduce(
+      (sum, inv) => sum + inv.amount,
+      0
+    );
+
+    const balance = totalIncome - totalExpenses;
+
+    return {
+      summary: {
+        balance,
+        totalIncome,
+        totalExpenses,
+      },
+      balanceData: [
+        { name: "Receitas", value: totalIncome, color: "#10b981" },
+        { name: "Despesas", value: totalExpenses, color: "#ef4444" },
+        { name: "Investimentos", value: totalInvestments, color: "#6b7280" },
+      ],
+      monthlyData: [
+        { month: "Jan", receitas: 4800, despesas: 3200, saldo: 1600 },
+        { month: "Fev", receitas: 5200, despesas: 2800, saldo: 2400 },
+        { month: "Mar", receitas: 4900, despesas: 3500, saldo: 1400 },
+        { month: "Abr", receitas: 5300, despesas: 3100, saldo: 2200 },
+        {
+          month: "Mai",
+          receitas: totalIncome,
+          despesas: totalExpenses,
+          saldo: balance,
+        },
+      ],
+      expenseCategories: [
+        { name: "Alimentação", value: 1200 },
+        { name: "Transporte", value: 800 },
+        { name: "Moradia", value: 1000 },
+        { name: "Lazer", value: 200 },
+      ],
+    };
   },
 };
