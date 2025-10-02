@@ -12,6 +12,7 @@ import {
 } from "../hooks/useTransactions";
 import { DataTable, type Column } from "./DataTable";
 import { type Transaction } from "../services/api";
+import { formatCurrency, PAGINATION } from "../constants";
 
 type FilterType = "all" | "income" | "expense";
 
@@ -26,7 +27,7 @@ export function Transactions() {
   );
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 15;
+  const itemsPerPage = PAGINATION.ITEMS_PER_PAGE;
 
   const { data, isLoading, error } = useTransactions(
     currentPage,
@@ -86,13 +87,6 @@ export function Transactions() {
     .reduce((sum, t) => sum + t.amount, 0);
 
   const balance = totalIncome - totalExpenses;
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(amount);
-  };
 
   const columns: Column<Transaction>[] = [
     {

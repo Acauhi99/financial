@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { PAGINATION, formatCurrency } from "../constants";
 import {
   TrendingUp,
   TrendingDown,
@@ -26,7 +27,7 @@ export function TransactionsPage() {
   );
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 15;
+  const itemsPerPage = PAGINATION.ITEMS_PER_PAGE;
 
   const { data, isLoading, error } = useTransactions(
     currentPage,
@@ -52,13 +53,6 @@ export function TransactionsPage() {
         },
       }
     );
-  };
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(amount);
   };
 
   const columns: Column<Transaction>[] = [

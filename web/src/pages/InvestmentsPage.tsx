@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { PAGINATION, formatCurrency } from "../constants";
 import { TrendingUp, Plus, DollarSign } from "lucide-react";
 import { useInvestments, useCreateInvestment } from "../hooks/useInvestments";
 import { DataTable, type Column } from "../components/DataTable";
@@ -16,7 +17,7 @@ export function InvestmentsPage() {
   const [sortBy, setSortBy] = useState<"name" | "amount" | "rate">("name");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 15;
+  const itemsPerPage = PAGINATION.ITEMS_PER_PAGE;
 
   const { data, isLoading, error } = useInvestments(
     currentPage,
@@ -72,13 +73,6 @@ export function InvestmentsPage() {
     (sum, inv) => sum + inv.amount,
     0
   );
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(amount);
-  };
 
   const columns: Column<Investment>[] = [
     {

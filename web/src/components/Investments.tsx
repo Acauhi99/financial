@@ -3,6 +3,7 @@ import { PiggyBank, TrendingUp, Plus, DollarSign, Percent } from "lucide-react";
 import { useInvestments, useCreateInvestment } from "../hooks/useInvestments";
 import { DataTable, type Column } from "./DataTable";
 import { type Investment } from "../services/api";
+import { PAGINATION, formatCurrency } from "../constants";
 
 export function Investments() {
   const [name, setName] = useState("");
@@ -14,7 +15,7 @@ export function Investments() {
   >("name");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = PAGINATION.ITEMS_PER_PAGE;
 
   const { data, isLoading, error } = useInvestments(
     currentPage,
@@ -70,13 +71,6 @@ export function Investments() {
     (sum, inv) => sum + inv.monthlyReturn,
     0
   );
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(amount);
-  };
 
   const columns: Column<Investment>[] = [
     { key: "name", label: "Nome", sortable: true },
