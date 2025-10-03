@@ -1,1 +1,23 @@
 @import "tailwindcss";
+
+/* Remove outline preto dos gráficos */
+svg:focus {
+  outline: none;
+}
+
+.recharts-wrapper svg:focus {
+  outline: none;
+}
+
+/* Remove outline das fatias dos gráficos de pizza */
+.recharts-pie-sector:focus {
+  outline: none !important;
+}
+
+.recharts-sector:focus {
+  outline: none !important;
+}
+
+path:focus {
+  outline: none !important;
+}
