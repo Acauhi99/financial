@@ -97,16 +97,16 @@ export function Overview() {
   }));
 
   return (
-    <div className="h-full flex flex-col space-y-2 overflow-hidden">
+    <div className="h-full flex flex-col space-y-4 overflow-hidden">
       <div className="flex-shrink-0">
-        <h1 className="text-xl font-bold text-gray-900 mb-1">Overview</h1>
-        <p className="text-gray-600 text-xs">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Overview</h1>
+        <p className="text-gray-600 text-base">
           Visão geral do estado da sua conta
         </p>
       </div>
 
       {/* Cards de Métricas */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 flex-shrink-0">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-shrink-0">
         <MetricCard
           title="Saldo Total"
           value={summary?.balance || 0}
@@ -131,18 +131,18 @@ export function Overview() {
       </div>
 
       {/* Layout em duas linhas */}
-      <div className="flex-1 min-h-0 flex flex-col space-y-2">
+      <div className="flex-1 min-h-0 flex flex-col space-y-4">
         {/* Gráfico de Evolução Mensal */}
         <div className="h-1/2">
           <MonthlyEvolutionChart data={monthlyData || []} />
         </div>
 
         {/* Gráficos de Pizza */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 h-1/2">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-1/2">
           {/* Gráfico de Distribuição Financeira */}
           <div className="bg-white p-3 rounded-xl border border-gray-200 shadow-lg hover:shadow-xl transition-shadow flex flex-col">
             <div className="flex items-center space-x-1 mb-2 flex-shrink-0">
-              <CircleDollarSign size={16} className="text-gray-600" />
+              <CircleDollarSign size={20} className="text-gray-600" />
               <h3 className="text-sm font-semibold text-gray-900">
                 Distribuição Financeira
               </h3>
@@ -154,8 +154,8 @@ export function Overview() {
                     data={balanceDataWithTotal}
                     cx="50%"
                     cy="50%"
-                    innerRadius={20}
-                    outerRadius={40}
+                    innerRadius={40}
+                    outerRadius={80}
                     paddingAngle={2}
                     dataKey="value"
                   >
@@ -181,7 +181,7 @@ export function Overview() {
           {/* Gráfico de Tipos de Investimento */}
           <div className="bg-white p-3 rounded-xl border border-gray-200 shadow-lg hover:shadow-xl transition-shadow flex flex-col">
             <div className="flex items-center space-x-1 mb-2 flex-shrink-0">
-              <TrendingUpIcon size={16} className="text-gray-600" />
+              <TrendingUpIcon size={20} className="text-gray-600" />
               <h3 className="text-sm font-semibold text-gray-900">
                 Distribuição de Investimentos
               </h3>
@@ -193,7 +193,7 @@ export function Overview() {
                     data={investmentTypesWithTotal}
                     cx="50%"
                     cy="50%"
-                    outerRadius={40}
+                    outerRadius={80}
                     dataKey="value"
                   >
                     {investmentTypesWithTotal?.map((entry) => (
@@ -218,7 +218,7 @@ export function Overview() {
           {/* Gráfico de Despesas por Categoria */}
           <div className="bg-white p-3 rounded-xl border border-gray-200 shadow-lg hover:shadow-xl transition-shadow flex flex-col">
             <div className="flex items-center space-x-1 mb-2 flex-shrink-0">
-              <BarChart3 size={16} className="text-gray-600" />
+              <BarChart3 size={20} className="text-gray-600" />
               <h3 className="text-sm font-semibold text-gray-900">
                 Despesas por Categoria
               </h3>
@@ -230,7 +230,7 @@ export function Overview() {
                     data={expenseCategoriesWithTotal}
                     cx="50%"
                     cy="50%"
-                    outerRadius={40}
+                    outerRadius={80}
                     dataKey="value"
                   >
                     {expenseCategoriesWithTotal?.map((entry) => (

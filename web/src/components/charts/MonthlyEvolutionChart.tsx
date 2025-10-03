@@ -8,8 +8,8 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import { LineChart as LineChartIcon } from "lucide-react";
 import { CustomTooltip } from "./CustomTooltip";
-import { COLORS } from "../../constants";
 
 interface MonthlyData {
   month: string;
@@ -28,9 +28,10 @@ export function MonthlyEvolutionChart({
 }: Readonly<MonthlyEvolutionChartProps>) {
   return (
     <div className="bg-white p-3 rounded-xl border border-gray-200 shadow-lg ring-2 ring-blue-100 h-full flex flex-col">
-      <h3 className="text-sm font-semibold text-gray-900 mb-2 flex-shrink-0">
-        Evolução Mensal
-      </h3>
+      <div className="flex items-center space-x-2 mb-2 flex-shrink-0">
+        <LineChartIcon size={20} className="text-gray-600" />
+        <h3 className="text-sm font-semibold text-gray-900">Evolução Mensal</h3>
+      </div>
       <div className="flex-1 min-h-0">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
@@ -39,39 +40,69 @@ export function MonthlyEvolutionChart({
           >
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             <XAxis dataKey="month" tick={{ fontSize: 9 }} height={20} />
-            <YAxis tick={{ fontSize: 9 }} width={40} />
+            <YAxis
+              yAxisId="left"
+              tick={{ fontSize: 9 }}
+              width={40}
+              label={{
+                value: "R$ (mil)",
+                angle: -90,
+                position: "insideLeft",
+                style: { fontSize: "8px" },
+              }}
+            />
+            <YAxis
+              yAxisId="right"
+              orientation="right"
+              tick={{ fontSize: 9 }}
+              width={40}
+              label={{
+                value: "R$ (centenas)",
+                angle: 90,
+                position: "insideRight",
+                style: { fontSize: "8px" },
+              }}
+            />
             <Tooltip content={<CustomTooltip />} />
             <Legend wrapperStyle={{ fontSize: "10px", paddingTop: "5px" }} />
             <Line
+              yAxisId="left"
               type="monotone"
               dataKey="receitas"
-              stroke={COLORS.CHART.GREEN}
-              strokeWidth={2}
-              dot={{ fill: COLORS.CHART.GREEN, strokeWidth: 1, r: 2 }}
+              stroke="#22c55e"
+              strokeWidth={3}
+              dot={{ fill: "#22c55e", strokeWidth: 2, r: 4 }}
+              activeDot={{ r: 6, fill: "#22c55e" }}
               name="Receitas"
             />
             <Line
+              yAxisId="left"
               type="monotone"
               dataKey="despesas"
-              stroke={COLORS.CHART.RED}
-              strokeWidth={2}
-              dot={{ fill: COLORS.CHART.RED, strokeWidth: 1, r: 2 }}
+              stroke="#ef4444"
+              strokeWidth={3}
+              dot={{ fill: "#ef4444", strokeWidth: 2, r: 4 }}
+              activeDot={{ r: 6, fill: "#ef4444" }}
               name="Despesas"
             />
             <Line
+              yAxisId="right"
               type="monotone"
               dataKey="saldo"
-              stroke={COLORS.CHART.INDIGO}
-              strokeWidth={2}
-              dot={{ fill: COLORS.CHART.INDIGO, strokeWidth: 1, r: 2 }}
+              stroke="#3b82f6"
+              strokeWidth={3}
+              dot={{ fill: "#3b82f6", strokeWidth: 2, r: 4 }}
+              activeDot={{ r: 6, fill: "#3b82f6" }}
               name="Saldo"
             />
             <Line
+              yAxisId="right"
               type="monotone"
               dataKey="investimentos"
-              stroke={COLORS.CHART.TEAL}
-              strokeWidth={2}
-              dot={{ fill: COLORS.CHART.TEAL, strokeWidth: 1, r: 2 }}
+              stroke="#8b5cf6"
+              strokeWidth={3}
+              dot={{ fill: "#8b5cf6", strokeWidth: 2, r: 4 }}
+              activeDot={{ r: 6, fill: "#8b5cf6" }}
               name="Investimentos"
             />
           </LineChart>
