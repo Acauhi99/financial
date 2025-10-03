@@ -27,35 +27,16 @@ import {
 } from "recharts";
 import { useOverview } from "../hooks/useOverview";
 import { COLORS, formatCurrency } from "../constants";
-import { useState, useEffect } from "react";
-
-interface ChartDataItem {
-  name: string;
-  value: number;
-  color: string;
-}
+import { useState } from "react";
 
 export function Overview() {
   const { data, isLoading, error } = useOverview();
 
-  const [filteredBalanceData, setFilteredBalanceData] = useState<
-    ChartDataItem[]
-  >([]);
-  const [filteredExpenseData, setFilteredExpenseData] = useState<
-    ChartDataItem[]
-  >([]);
-  const [filteredInvestmentData, setFilteredInvestmentData] = useState<
-    ChartDataItem[]
-  >([]);
-  const [hiddenBalanceItems, setHiddenBalanceItems] = useState<Set<string>>(
-    new Set()
-  );
-  const [hiddenExpenseItems, setHiddenExpenseItems] = useState<Set<string>>(
-    new Set()
-  );
-  const [hiddenInvestmentItems, setHiddenInvestmentItems] = useState<
-    Set<string>
-  >(new Set());
+  const [hiddenItems, setHiddenItems] = useState({
+    balance: new Set<string>(),
+    expense: new Set<string>(),
+    investment: new Set<string>(),
+  });
 
   const {
     balanceData,
@@ -65,28 +46,15 @@ export function Overview() {
     summary,
   } = data || {};
 
-  useEffect(() => {
-    setFilteredBalanceData(
-      (balanceData || []).filter((item) => !hiddenBalanceItems.has(item.name))
-    );
-    setFilteredExpenseData(
-      (expenseCategories || []).filter(
-        (item) => !hiddenExpenseItems.has(item.name)
-      )
-    );
-    setFilteredInvestmentData(
-      (investmentTypes || []).filter(
-        (item) => !hiddenInvestmentItems.has(item.name)
-      )
-    );
-  }, [
-    balanceData,
-    expenseCategories,
-    investmentTypes,
-    hiddenBalanceItems,
-    hiddenExpenseItems,
-    hiddenInvestmentItems,
-  ]);
+  const filteredBalanceData = (balanceData || []).filter(
+    (item) => !hiddenItems.balance.has(item.name)
+  );
+  const filteredExpenseData = (expenseCategories || []).filter(
+    (item) => !hiddenItems.expense.has(item.name)
+  );
+  const filteredInvestmentData = (investmentTypes || []).filter(
+    (item) => !hiddenItems.investment.has(item.name)
+  );
 
   if (isLoading) {
     return <Loading />;
@@ -100,34 +68,19 @@ export function Overview() {
     );
   }
 
-  const toggleBalanceItem = (itemName: string) => {
-    const newHidden = new Set(hiddenBalanceItems);
-    if (newHidden.has(itemName)) {
-      newHidden.delete(itemName);
-    } else {
-      newHidden.add(itemName);
-    }
-    setHiddenBalanceItems(newHidden);
-  };
-
-  const toggleExpenseItem = (itemName: string) => {
-    const newHidden = new Set(hiddenExpenseItems);
-    if (newHidden.has(itemName)) {
-      newHidden.delete(itemName);
-    } else {
-      newHidden.add(itemName);
-    }
-    setHiddenExpenseItems(newHidden);
-  };
-
-  const toggleInvestmentItem = (itemName: string) => {
-    const newHidden = new Set(hiddenInvestmentItems);
-    if (newHidden.has(itemName)) {
-      newHidden.delete(itemName);
-    } else {
-      newHidden.add(itemName);
-    }
-    setHiddenInvestmentItems(newHidden);
+  const toggleItem = (
+    type: "balance" | "expense" | "investment",
+    itemName: string
+  ) => {
+    setHiddenItems((prev) => {
+      const newSet = new Set(prev[type]);
+      if (newSet.has(itemName)) {
+        newSet.delete(itemName);
+      } else {
+        newSet.add(itemName);
+      }
+      return { ...prev, [type]: newSet };
+    });
   };
 
   const balanceTotal = filteredBalanceData.reduce(
@@ -266,8 +219,8 @@ export function Overview() {
           </div>
           <InteractiveChartLegend
             items={balanceData || []}
-            hiddenItems={hiddenBalanceItems}
-            onToggleItem={toggleBalanceItem}
+            hiddenItems={hiddenItems.balance}
+            onToggleItem={(name) => toggleItem("balance", name)}
             showValues
             formatter={formatCurrency}
           />
@@ -301,8 +254,8 @@ export function Overview() {
           </div>
           <InteractiveChartLegend
             items={investmentTypes || []}
-            hiddenItems={hiddenInvestmentItems}
-            onToggleItem={toggleInvestmentItem}
+            hiddenItems={hiddenItems.investment}
+            onToggleItem={(name) => toggleItem("investment", name)}
             showValues
             formatter={formatCurrency}
           />
@@ -336,8 +289,8 @@ export function Overview() {
           </div>
           <InteractiveChartLegend
             items={expenseCategories || []}
-            hiddenItems={hiddenExpenseItems}
-            onToggleItem={toggleExpenseItem}
+            hiddenItems={hiddenItems.expense}
+            onToggleItem={(name) => toggleItem("expense", name)}
             showValues
             formatter={formatCurrency}
           />
