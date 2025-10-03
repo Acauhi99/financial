@@ -140,8 +140,8 @@ export function Overview() {
         {/* Gráficos de Pizza */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-1/2">
           {/* Gráfico de Distribuição Financeira */}
-          <div className="bg-white p-3 rounded-xl border border-gray-200 shadow-lg hover:shadow-xl transition-shadow flex flex-col">
-            <div className="flex items-center space-x-1 mb-2 flex-shrink-0">
+          <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:shadow-gray-300/50 transition-all duration-200 flex flex-col">
+            <div className="flex items-center space-x-2 mb-3 flex-shrink-0">
               <CircleDollarSign size={20} className="text-gray-600" />
               <h3 className="text-sm font-semibold text-gray-900">
                 Distribuição Financeira
@@ -179,8 +179,8 @@ export function Overview() {
           </div>
 
           {/* Gráfico de Tipos de Investimento */}
-          <div className="bg-white p-3 rounded-xl border border-gray-200 shadow-lg hover:shadow-xl transition-shadow flex flex-col">
-            <div className="flex items-center space-x-1 mb-2 flex-shrink-0">
+          <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:shadow-gray-300/50 transition-all duration-200 flex flex-col">
+            <div className="flex items-center space-x-2 mb-3 flex-shrink-0">
               <TrendingUpIcon size={20} className="text-gray-600" />
               <h3 className="text-sm font-semibold text-gray-900">
                 Distribuição de Investimentos
@@ -216,8 +216,8 @@ export function Overview() {
           </div>
 
           {/* Gráfico de Despesas por Categoria */}
-          <div className="bg-white p-3 rounded-xl border border-gray-200 shadow-lg hover:shadow-xl transition-shadow flex flex-col">
-            <div className="flex items-center space-x-1 mb-2 flex-shrink-0">
+          <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:shadow-gray-300/50 transition-all duration-200 flex flex-col">
+            <div className="flex items-center space-x-2 mb-3 flex-shrink-0">
               <BarChart3 size={20} className="text-gray-600" />
               <h3 className="text-sm font-semibold text-gray-900">
                 Despesas por Categoria

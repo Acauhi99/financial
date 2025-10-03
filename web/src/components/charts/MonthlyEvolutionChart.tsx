@@ -27,8 +27,8 @@ export function MonthlyEvolutionChart({
   data,
 }: Readonly<MonthlyEvolutionChartProps>) {
   return (
-    <div className="bg-white p-3 rounded-xl border border-gray-200 shadow-lg ring-2 ring-blue-100 h-full flex flex-col">
-      <div className="flex items-center space-x-2 mb-2 flex-shrink-0">
+    <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:shadow-gray-300/50 transition-all duration-200 h-full flex flex-col">
+      <div className="flex items-center space-x-2 mb-3 flex-shrink-0">
         <LineChartIcon size={20} className="text-gray-600" />
         <h3 className="text-sm font-semibold text-gray-900">Evolução Mensal</h3>
       </div>
