@@ -40,14 +40,21 @@ export interface OverviewData {
     receitas: number;
     despesas: number;
     saldo: number;
+    investimentos: number;
   }>;
   expenseCategories: Array<{
     name: string;
     value: number;
+    color: string;
+  }>;
+  investmentTypes: Array<{
+    name: string;
+    value: number;
+    color: string;
+    percentage: number;
   }>;
 }
 
-// Mock data
 const mockTransactions: Transaction[] = [
   { id: 1, type: "income", description: "Salário", amount: 8500 },
   { id: 2, type: "expense", description: "Aluguel", amount: 2200 },
@@ -385,22 +392,62 @@ export const api = {
         { name: "Investimentos", value: totalInvestments, color: "#6b7280" },
       ],
       monthlyData: [
-        { month: "Jan", receitas: 4800, despesas: 3200, saldo: 1600 },
-        { month: "Fev", receitas: 5200, despesas: 2800, saldo: 2400 },
-        { month: "Mar", receitas: 4900, despesas: 3500, saldo: 1400 },
-        { month: "Abr", receitas: 5300, despesas: 3100, saldo: 2200 },
+        {
+          month: "Jan",
+          receitas: 4800,
+          despesas: 3200,
+          saldo: 1600,
+          investimentos: 2500,
+        },
+        {
+          month: "Fev",
+          receitas: 5200,
+          despesas: 2800,
+          saldo: 2400,
+          investimentos: 3200,
+        },
+        {
+          month: "Mar",
+          receitas: 4900,
+          despesas: 3500,
+          saldo: 1400,
+          investimentos: 2800,
+        },
+        {
+          month: "Abr",
+          receitas: 5300,
+          despesas: 3100,
+          saldo: 2200,
+          investimentos: 4100,
+        },
         {
           month: "Mai",
+          receitas: 6100,
+          despesas: 3800,
+          saldo: 2300,
+          investimentos: 5200,
+        },
+        {
+          month: "Jun",
           receitas: totalIncome,
           despesas: totalExpenses,
           saldo: balance,
+          investimentos: totalInvestments,
         },
       ],
       expenseCategories: [
-        { name: "Alimentação", value: 1200 },
-        { name: "Transporte", value: 800 },
-        { name: "Moradia", value: 1000 },
-        { name: "Lazer", value: 200 },
+        { name: "Alimentação", value: 1850, color: "#ef4444" },
+        { name: "Transporte", value: 920, color: "#f97316" },
+        { name: "Moradia", value: 2200, color: "#eab308" },
+        { name: "Lazer", value: 480, color: "#10b981" },
+        { name: "Saúde", value: 650, color: "#3b82f6" },
+        { name: "Educação", value: 320, color: "#8b5cf6" },
+        { name: "Outros", value: 580, color: "#6b7280" },
+      ],
+      investmentTypes: [
+        { name: "Renda Fixa", value: 45000, color: "#10b981", percentage: 65 },
+        { name: "Fundos", value: 18000, color: "#3b82f6", percentage: 26 },
+        { name: "Ações", value: 6000, color: "#f59e0b", percentage: 9 },
       ],
     };
   },

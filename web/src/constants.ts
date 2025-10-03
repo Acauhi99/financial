@@ -9,6 +9,30 @@ export const CURRENCY_FORMAT = {
   CURRENCY: "BRL",
 } as const;
 
+// Paleta de cores padronizada
+export const COLORS = {
+  PRIMARY: "#1f2937",
+  SUCCESS: "#10b981",
+  DANGER: "#ef4444",
+  WARNING: "#f59e0b",
+  INFO: "#3b82f6",
+  PURPLE: "#8b5cf6",
+  GRAY: "#6b7280",
+  LIGHT_GRAY: "#9ca3af",
+  CHART: {
+    GREEN: "#10b981",
+    RED: "#ef4444", 
+    BLUE: "#3b82f6",
+    ORANGE: "#f97316",
+    YELLOW: "#eab308",
+    PURPLE: "#8b5cf6",
+    GRAY: "#6b7280",
+    TEAL: "#14b8a6",
+    PINK: "#ec4899",
+    INDIGO: "#6366f1"
+  }
+} as const;
+
 // Classes CSS reutilizáveis
 export const CSS_CLASSES = {
   INPUT:

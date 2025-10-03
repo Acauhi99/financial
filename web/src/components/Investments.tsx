@@ -69,7 +69,6 @@ export function Investments() {
   const filteredAndSortedInvestments = useMemo(() => {
     let filtered = data?.data || [];
 
-    // Aplicar filtros
     if (amountRange !== "all") {
       filtered = filtered.filter((inv) =>
         filterByAmountRange(inv.amount, amountRange)
@@ -82,14 +81,12 @@ export function Investments() {
       );
     }
 
-    // Aplicar busca
     if (searchTerm) {
       filtered = filtered.filter((inv) =>
         inv.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
-    // Ordenar
     const sorted = [...filtered];
     sorted.sort((a, b) => {
       const aValue = a[sortBy as keyof Investment];
