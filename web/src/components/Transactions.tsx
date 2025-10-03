@@ -75,7 +75,6 @@ export function Transactions() {
   const filteredAndSortedTransactions = useMemo(() => {
     let filtered = data?.data || [];
 
-    // Aplicar filtros
     if (filterType !== "all") {
       filtered = filtered.filter((t) => t.type === filterType);
     }
@@ -86,14 +85,12 @@ export function Transactions() {
       );
     }
 
-    // Aplicar busca
     if (searchTerm) {
       filtered = filtered.filter((t) =>
         t.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
-    // Ordenar
     const sorted = [...filtered];
     sorted.sort((a, b) => {
       const aValue: SortableValue = a[sortBy as keyof Transaction];
