@@ -260,14 +260,16 @@ export function Transactions() {
   }
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Transações</h1>
-        <p className="text-gray-600">Gerencie suas receitas e despesas</p>
+    <div className="h-full flex flex-col space-y-3 overflow-hidden">
+      <div className="flex-shrink-0">
+        <h1 className="text-2xl font-bold text-gray-900 mb-1">Transações</h1>
+        <p className="text-gray-600 text-sm">
+          Gerencie suas receitas e despesas
+        </p>
       </div>
 
       {/* Resumo */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 flex-shrink-0">
         <div className="bg-white p-6 rounded border border-gray-200 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
@@ -321,7 +323,7 @@ export function Transactions() {
       </div>
 
       {/* Formulário */}
-      <div className="bg-white p-6 rounded border border-gray-200 shadow-sm">
+      <div className="bg-white p-4 rounded border border-gray-200 shadow-sm flex-shrink-0">
         <div className="flex items-center mb-6">
           <div className="w-10 h-10 bg-gray-100 rounded flex items-center justify-center mr-3">
             <Plus size={20} className="text-gray-600" />
@@ -434,7 +436,7 @@ export function Transactions() {
       </div>
 
       {/* Lista de Transações */}
-      <div className="bg-white rounded border border-gray-200 shadow-sm">
+      <div className="bg-white rounded border border-gray-200 shadow-sm flex-1 min-h-0 overflow-hidden">
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-900">Histórico</h2>
@@ -457,7 +459,7 @@ export function Transactions() {
           </div>
         </div>
 
-        <div className="p-6">
+        <div className="p-4 h-full overflow-auto">
           <DataTable
             data={filteredAndSortedTransactions}
             columns={columns}

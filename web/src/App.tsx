@@ -47,14 +47,14 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen bg-gray-100 flex">
+      <div className="h-screen bg-gray-100 flex overflow-hidden">
         {/* Sidebar */}
         <div
           className={`${
             sidebarCollapsed ? "w-16" : "w-64"
-          } bg-gray-900 shadow-xl transition-all duration-300`}
+          } bg-gray-900 shadow-xl transition-all duration-300 flex flex-col`}
         >
-          <div className="p-4">
+          <div className="p-4 flex-shrink-0">
             <div className="flex items-center justify-between">
               {!sidebarCollapsed && (
                 <h1 className="text-lg font-semibold text-white">Financeiro</h1>
@@ -71,7 +71,7 @@ function App() {
               </button>
             </div>
           </div>
-          <nav className="mt-4">
+          <nav className="mt-4 flex-1">
             {menuItems.map((item) => (
               <button
                 key={item.id}
@@ -94,7 +94,9 @@ function App() {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 p-8">{renderPage()}</div>
+        <div className="flex-1 overflow-hidden">
+          <div className="h-full max-w-7xl mx-auto p-6">{renderPage()}</div>
+        </div>
       </div>
     </QueryClientProvider>
   );
