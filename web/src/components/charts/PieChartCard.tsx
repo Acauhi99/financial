@@ -51,9 +51,11 @@ export function PieChartCard({
               cx="50%"
               cy="50%"
               innerRadius={innerRadius}
-              outerRadius={80}
-              paddingAngle={2}
+              outerRadius={78}
+              paddingAngle={1}
               dataKey="value"
+              stroke="#ffffff"
+              strokeWidth={1}
             >
               {data?.map((entry) => (
                 <Cell key={entry.name} fill={entry.color} />
