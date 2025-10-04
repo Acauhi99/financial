@@ -5,6 +5,5 @@ export function useOverview() {
   return useQuery({
     queryKey: ["overview"],
     queryFn: () => api.getOverview(),
-    staleTime: 0, // Always fresh data
   });
 }

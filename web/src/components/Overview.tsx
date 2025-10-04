@@ -2,7 +2,7 @@ import { Loading } from "./Loading";
 import { MetricsCards } from "./MetricsCards";
 import { MonthlyEvolutionChart } from "./charts/MonthlyEvolutionChart";
 import { ChartsGrid } from "./charts/ChartsGrid";
-import { useOverview } from "../hooks/useOverview";
+import { useOverview } from "../hooks";
 import { CSS_CLASSES } from "../constants";
 import { useState } from "react";
 
