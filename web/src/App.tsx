@@ -55,7 +55,11 @@ function App() {
           } bg-gradient-to-b from-gray-900 to-gray-800 shadow-2xl transition-all duration-300 flex flex-col border-r border-gray-700`}
         >
           <div className="p-4 flex-shrink-0 border-b border-gray-700/50">
-            <div className="flex items-center justify-between">
+            <div
+              className={`flex items-center ${
+                sidebarCollapsed ? "justify-center" : "justify-between"
+              }`}
+            >
               {!sidebarCollapsed && (
                 <div className="flex items-center space-x-2">
                   <div className="w-8 h-8 bg-gradient-to-br from-gray-600 to-gray-700 rounded-lg flex items-center justify-center">
@@ -66,7 +70,7 @@ function App() {
               )}
               <button
                 onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition-all duration-200 shadow-sm hover:shadow-md"
+                className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer"
               >
                 {sidebarCollapsed ? (
                   <ChevronRight size={16} />
@@ -81,9 +85,13 @@ function App() {
               <button
                 key={item.id}
                 onClick={() => setCurrentPage(item.id as Page)}
-                className={`w-full flex items-center px-3 py-3 rounded-xl text-left transition-all duration-200 group focus:outline-none ${
+                className={`w-full flex items-center ${
+                  sidebarCollapsed ? "justify-center px-2" : "px-3"
+                } py-3 rounded-xl text-left transition-all duration-200 group focus:outline-none cursor-pointer ${
                   currentPage === item.id
-                    ? "bg-white/10 text-white shadow-lg backdrop-blur-sm"
+                    ? sidebarCollapsed
+                      ? ""
+                      : "bg-white/10 text-white shadow-lg backdrop-blur-sm"
                     : "text-gray-300 hover:bg-white/5 hover:text-white"
                 }`}
                 title={sidebarCollapsed ? item.label : ""}
@@ -94,7 +102,7 @@ function App() {
                       ? "bg-white/20"
                       : "bg-gray-700/50 group-hover:bg-gray-600/50"
                   } p-2 rounded-lg transition-colors duration-200 ${
-                    sidebarCollapsed ? "mx-auto" : "mr-3"
+                    sidebarCollapsed ? "" : "mr-3"
                   }`}
                 >
                   <item.icon size={16} />
@@ -109,7 +117,7 @@ function App() {
             <div
               className={`${
                 sidebarCollapsed
-                  ? "w-2 h-2 mx-auto"
+                  ? "flex justify-center"
                   : "flex items-center space-x-2"
               } text-gray-400`}
             >
