@@ -23,7 +23,10 @@ export function Overview() {
     balance: new Set<string>(),
     expense: new Set<string>(),
     investment: new Set<string>(),
+    monthly: new Set<string>(),
   });
+
+  const [timePeriod, setTimePeriod] = useState("12");
 
   const {
     balanceData,
@@ -56,7 +59,7 @@ export function Overview() {
   }
 
   const toggleItem = (
-    type: "balance" | "expense" | "investment",
+    type: "balance" | "expense" | "investment" | "monthly",
     itemName: string
   ) => {
     setHiddenItems((prev) => {
@@ -106,41 +109,109 @@ export function Overview() {
       </div>
 
       {/* Cards de Métricas */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-shrink-0">
-        <MetricCard
-          title="Saldo Total"
-          value={summary?.balance || 0}
-          icon={<Wallet size={16} className="text-gray-600" />}
-          iconBgColor="bg-gray-100"
-          valueColor="text-gray-900"
-        />
-        <MetricCard
-          title="Receitas"
-          value={summary?.totalIncome || 0}
-          icon={<DollarSign size={16} className="text-green-600" />}
-          iconBgColor="bg-green-100"
-          valueColor="text-green-600"
-        />
-        <MetricCard
-          title="Despesas"
-          value={summary?.totalExpenses || 0}
-          icon={<TrendingUp size={16} className="text-red-600" />}
-          iconBgColor="bg-red-100"
-          valueColor="text-red-600"
-        />
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 flex-shrink-0">
+        <div className="relative">
+          <MetricCard
+            title="Saldo Total"
+            value={summary?.balance || 0}
+            icon={<Wallet size={16} className="text-gray-600" />}
+            iconBgColor="bg-gray-100"
+            valueColor="text-gray-900"
+            isActive={!hiddenItems.monthly.has("saldo")}
+          />
+          <button
+            onClick={() => toggleItem("monthly", "saldo")}
+            className={`absolute top-2 right-2 w-6 h-6 rounded-full text-xs font-bold transition-colors cursor-pointer ${
+              hiddenItems.monthly.has("saldo")
+                ? "bg-gray-300 text-gray-600"
+                : "bg-blue-500 text-white"
+            }`}
+          >
+            {hiddenItems.monthly.has("saldo") ? "✕" : "✓"}
+          </button>
+        </div>
+
+        <div className="relative">
+          <MetricCard
+            title="Receitas"
+            value={summary?.totalIncome || 0}
+            icon={<DollarSign size={16} className="text-green-600" />}
+            iconBgColor="bg-green-100"
+            valueColor="text-green-600"
+            isActive={!hiddenItems.monthly.has("receitas")}
+          />
+          <button
+            onClick={() => toggleItem("monthly", "receitas")}
+            className={`absolute top-2 right-2 w-6 h-6 rounded-full text-xs font-bold transition-colors cursor-pointer ${
+              hiddenItems.monthly.has("receitas")
+                ? "bg-gray-300 text-gray-600"
+                : "bg-green-500 text-white"
+            }`}
+          >
+            {hiddenItems.monthly.has("receitas") ? "✕" : "✓"}
+          </button>
+        </div>
+
+        <div className="relative">
+          <MetricCard
+            title="Despesas"
+            value={summary?.totalExpenses || 0}
+            icon={<TrendingUp size={16} className="text-red-600" />}
+            iconBgColor="bg-red-100"
+            valueColor="text-red-600"
+            isActive={!hiddenItems.monthly.has("despesas")}
+          />
+          <button
+            onClick={() => toggleItem("monthly", "despesas")}
+            className={`absolute top-2 right-2 w-6 h-6 rounded-full text-xs font-bold transition-colors cursor-pointer ${
+              hiddenItems.monthly.has("despesas")
+                ? "bg-gray-300 text-gray-600"
+                : "bg-red-500 text-white"
+            }`}
+          >
+            {hiddenItems.monthly.has("despesas") ? "✕" : "✓"}
+          </button>
+        </div>
+
+        <div className="relative">
+          <MetricCard
+            title="Investimentos"
+            value={summary?.totalInvestments || 0}
+            icon={<TrendingUpIcon size={16} className="text-purple-600" />}
+            iconBgColor="bg-purple-100"
+            valueColor="text-purple-600"
+            isActive={!hiddenItems.monthly.has("investimentos")}
+          />
+          <button
+            onClick={() => toggleItem("monthly", "investimentos")}
+            className={`absolute top-2 right-2 w-6 h-6 rounded-full text-xs font-bold transition-colors cursor-pointer ${
+              hiddenItems.monthly.has("investimentos")
+                ? "bg-gray-300 text-gray-600"
+                : "bg-purple-500 text-white"
+            }`}
+          >
+            {hiddenItems.monthly.has("investimentos") ? "✕" : "✓"}
+          </button>
+        </div>
       </div>
 
       {/* Layout em duas linhas */}
       <div className="flex-1 min-h-0 flex flex-col space-y-4">
         {/* Gráfico de Evolução Mensal */}
         <div className="h-1/2">
-          <MonthlyEvolutionChart data={monthlyData || []} />
+          <MonthlyEvolutionChart
+            data={monthlyData || []}
+            hiddenLines={hiddenItems.monthly}
+            onToggleLine={(name) => toggleItem("monthly", name)}
+            timePeriod={timePeriod}
+            onTimePeriodChange={setTimePeriod}
+          />
         </div>
 
         {/* Gráficos de Pizza */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-1/2">
           {/* Gráfico de Distribuição Financeira */}
-          <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:shadow-gray-300/50 transition-all duration-200 flex flex-col focus:outline-none">
+          <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-md hover:shadow-xl hover:shadow-gray-300/70 transition-all duration-300 flex flex-col focus:outline-none">
             <div className="flex items-center space-x-2 mb-3 flex-shrink-0">
               <CircleDollarSign size={20} className="text-gray-600" />
               <h3 className="text-sm font-semibold text-gray-900">
@@ -179,7 +250,7 @@ export function Overview() {
           </div>
 
           {/* Gráfico de Tipos de Investimento */}
-          <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:shadow-gray-300/50 transition-all duration-200 flex flex-col focus:outline-none">
+          <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-md hover:shadow-xl hover:shadow-gray-300/70 transition-all duration-300 flex flex-col focus:outline-none">
             <div className="flex items-center space-x-2 mb-3 flex-shrink-0">
               <TrendingUpIcon size={20} className="text-gray-600" />
               <h3 className="text-sm font-semibold text-gray-900">
@@ -216,7 +287,7 @@ export function Overview() {
           </div>
 
           {/* Gráfico de Despesas por Categoria */}
-          <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:shadow-gray-300/50 transition-all duration-200 flex flex-col focus:outline-none">
+          <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-md hover:shadow-xl hover:shadow-gray-300/70 transition-all duration-300 flex flex-col focus:outline-none">
             <div className="flex items-center space-x-2 mb-3 flex-shrink-0">
               <BarChart3 size={20} className="text-gray-600" />
               <h3 className="text-sm font-semibold text-gray-900">

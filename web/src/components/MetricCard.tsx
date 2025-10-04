@@ -8,6 +8,8 @@ interface MetricCardProps {
   iconBgColor: string;
   valueColor: string;
   formatter?: (value: number) => string;
+  isActive?: boolean;
+  onClick?: () => void;
 }
 
 export function MetricCard({
@@ -17,9 +19,18 @@ export function MetricCard({
   iconBgColor,
   valueColor,
   formatter = formatCurrency,
+  isActive = true,
+  onClick,
 }: Readonly<MetricCardProps>) {
+  const Component = onClick ? "button" : "div";
+
   return (
-    <div className={CSS_CLASSES.CARD}>
+    <Component
+      className={`bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:shadow-lg hover:shadow-gray-200/60 transition-all duration-300 text-left ${
+        !isActive ? "opacity-50" : ""
+      } ${onClick ? "cursor-pointer hover:bg-gray-50" : ""}`}
+      onClick={onClick}
+    >
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-gray-600">{title}</p>
@@ -31,6 +42,6 @@ export function MetricCard({
           {icon}
         </div>
       </div>
-    </div>
+    </Component>
   );
 }

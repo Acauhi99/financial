@@ -43,7 +43,7 @@ export const CSS_CLASSES = {
     "px-6 py-3 rounded font-medium transition-all flex items-center space-x-2 bg-gray-900 text-white hover:bg-gray-800 shadow-sm hover:shadow-md",
   BUTTON_DISABLED:
     "px-6 py-3 rounded font-medium transition-all flex items-center space-x-2 bg-gray-200 text-gray-400 cursor-not-allowed",
-  CARD: "bg-white p-4 rounded-lg border border-gray-200 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:shadow-gray-300/50 transition-all duration-200 focus:outline-none",
+  CARD: "bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:shadow-lg hover:shadow-gray-200/60 transition-all duration-300 focus:outline-none",
   ICON_CONTAINER: "w-10 h-10 rounded flex items-center justify-center",
   LABEL: "block text-sm font-medium text-gray-700 mb-2",
   SELECT:
