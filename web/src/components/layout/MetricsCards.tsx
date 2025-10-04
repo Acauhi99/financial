@@ -30,11 +30,11 @@ export function MetricsCards({
       icon: (
         <Wallet
           size={UI_CONFIG.SIZES.ICON_SMALL}
-          className={`text-${METRICS_CONFIG.BALANCE.color}-600`}
+          className="text-gray-600"
         />
       ),
-      iconBgColor: `bg-${METRICS_CONFIG.BALANCE.color}-100`,
-      valueColor: `text-${METRICS_CONFIG.BALANCE.color}-900`,
+      iconBgColor: "bg-gray-100",
+      valueColor: "text-gray-900",
       toggleColor: "bg-blue-500",
     },
     {
@@ -43,12 +43,12 @@ export function MetricsCards({
       icon: (
         <DollarSign
           size={UI_CONFIG.SIZES.ICON_SMALL}
-          className={`text-${METRICS_CONFIG.INCOME.color}-600`}
+          className="text-green-600"
         />
       ),
-      iconBgColor: `bg-${METRICS_CONFIG.INCOME.color}-100`,
-      valueColor: `text-${METRICS_CONFIG.INCOME.color}-600`,
-      toggleColor: `bg-${METRICS_CONFIG.INCOME.color}-500`,
+      iconBgColor: "bg-green-100",
+      valueColor: "text-green-600",
+      toggleColor: "bg-green-500",
     },
     {
       ...METRICS_CONFIG.EXPENSES,
@@ -56,12 +56,12 @@ export function MetricsCards({
       icon: (
         <TrendingUp
           size={UI_CONFIG.SIZES.ICON_SMALL}
-          className={`text-${METRICS_CONFIG.EXPENSES.color}-600`}
+          className="text-red-600"
         />
       ),
-      iconBgColor: `bg-${METRICS_CONFIG.EXPENSES.color}-100`,
-      valueColor: `text-${METRICS_CONFIG.EXPENSES.color}-600`,
-      toggleColor: `bg-${METRICS_CONFIG.EXPENSES.color}-500`,
+      iconBgColor: "bg-red-100",
+      valueColor: "text-red-600",
+      toggleColor: "bg-red-500",
     },
     {
       ...METRICS_CONFIG.INVESTMENTS,
@@ -69,12 +69,12 @@ export function MetricsCards({
       icon: (
         <TrendingUpIcon
           size={UI_CONFIG.SIZES.ICON_SMALL}
-          className={`text-${METRICS_CONFIG.INVESTMENTS.color}-600`}
+          className="text-purple-600"
         />
       ),
-      iconBgColor: `bg-${METRICS_CONFIG.INVESTMENTS.color}-100`,
-      valueColor: `text-${METRICS_CONFIG.INVESTMENTS.color}-600`,
-      toggleColor: `bg-${METRICS_CONFIG.INVESTMENTS.color}-500`,
+      iconBgColor: "bg-purple-100",
+      valueColor: "text-purple-600",
+      toggleColor: "bg-purple-500",
     },
   ];
 
