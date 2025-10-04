@@ -29,40 +29,52 @@ export function MetricsCards({
       value: summary.balance,
       icon: (
         <Wallet
-          size={UI_CONFIG.ICON_SIZES.SMALL}
-          className={METRICS_CONFIG.BALANCE.iconColor}
+          size={UI_CONFIG.SIZES.ICON_SMALL}
+          className={`text-${METRICS_CONFIG.BALANCE.color}-600`}
         />
       ),
+      iconBgColor: `bg-${METRICS_CONFIG.BALANCE.color}-100`,
+      valueColor: `text-${METRICS_CONFIG.BALANCE.color}-900`,
+      toggleColor: "bg-blue-500",
     },
     {
       ...METRICS_CONFIG.INCOME,
       value: summary.totalIncome,
       icon: (
         <DollarSign
-          size={UI_CONFIG.ICON_SIZES.SMALL}
-          className={METRICS_CONFIG.INCOME.iconColor}
+          size={UI_CONFIG.SIZES.ICON_SMALL}
+          className={`text-${METRICS_CONFIG.INCOME.color}-600`}
         />
       ),
+      iconBgColor: `bg-${METRICS_CONFIG.INCOME.color}-100`,
+      valueColor: `text-${METRICS_CONFIG.INCOME.color}-600`,
+      toggleColor: `bg-${METRICS_CONFIG.INCOME.color}-500`,
     },
     {
       ...METRICS_CONFIG.EXPENSES,
       value: summary.totalExpenses,
       icon: (
         <TrendingUp
-          size={UI_CONFIG.ICON_SIZES.SMALL}
-          className={METRICS_CONFIG.EXPENSES.iconColor}
+          size={UI_CONFIG.SIZES.ICON_SMALL}
+          className={`text-${METRICS_CONFIG.EXPENSES.color}-600`}
         />
       ),
+      iconBgColor: `bg-${METRICS_CONFIG.EXPENSES.color}-100`,
+      valueColor: `text-${METRICS_CONFIG.EXPENSES.color}-600`,
+      toggleColor: `bg-${METRICS_CONFIG.EXPENSES.color}-500`,
     },
     {
       ...METRICS_CONFIG.INVESTMENTS,
       value: summary.totalInvestments,
       icon: (
         <TrendingUpIcon
-          size={UI_CONFIG.ICON_SIZES.SMALL}
-          className={METRICS_CONFIG.INVESTMENTS.iconColor}
+          size={UI_CONFIG.SIZES.ICON_SMALL}
+          className={`text-${METRICS_CONFIG.INVESTMENTS.color}-600`}
         />
       ),
+      iconBgColor: `bg-${METRICS_CONFIG.INVESTMENTS.color}-100`,
+      valueColor: `text-${METRICS_CONFIG.INVESTMENTS.color}-600`,
+      toggleColor: `bg-${METRICS_CONFIG.INVESTMENTS.color}-500`,
     },
   ];
 

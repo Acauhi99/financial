@@ -1,7 +1,12 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { PieTooltip } from "./PieTooltip";
 import { InteractiveChartLegend } from "./InteractiveChartLegend";
-import { formatCurrency, CSS_CLASSES, UI_CONFIG } from "../../constants";
+import {
+  formatCurrency,
+  CSS_CLASSES,
+  UI_CONFIG,
+  COLORS,
+} from "../../constants";
 import type { ReactNode } from "react";
 
 interface ChartData {
@@ -54,7 +59,7 @@ export function PieChartCard({
               outerRadius={UI_CONFIG.CHART.PIE_OUTER_RADIUS}
               paddingAngle={UI_CONFIG.CHART.PIE_PADDING_ANGLE}
               dataKey="value"
-              stroke={UI_CONFIG.CHART.PIE_STROKE_COLOR}
+              stroke={COLORS.WHITE}
               strokeWidth={UI_CONFIG.CHART.PIE_STROKE_WIDTH}
             >
               {data?.map((entry) => (

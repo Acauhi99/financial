@@ -10,7 +10,12 @@ import {
 } from "recharts";
 import { LineChart as LineChartIcon } from "lucide-react";
 import { CustomTooltip } from "./CustomTooltip";
-import { CSS_CLASSES, UI_CONFIG } from "../../constants";
+import {
+  CSS_CLASSES,
+  UI_CONFIG,
+  COLORS,
+  METRICS_CONFIG,
+} from "../../constants";
 
 interface MonthlyData {
   month: string;
@@ -42,7 +47,7 @@ export function MonthlyEvolutionChart({
       <div className="flex items-center justify-between mb-3 flex-shrink-0">
         <div className={CSS_CLASSES.CHART_HEADER}>
           <LineChartIcon
-            size={UI_CONFIG.ICON_SIZES.MEDIUM}
+            size={UI_CONFIG.SIZES.ICON_MEDIUM}
             className="text-gray-600"
           />
           <h3 className={CSS_CLASSES.CHART_TITLE}>Evolução Mensal</h3>
@@ -69,42 +74,39 @@ export function MonthlyEvolutionChart({
             data={filteredData}
             margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
           >
-            <CartesianGrid
-              strokeDasharray="3 3"
-              stroke={UI_CONFIG.CHART.GRID_COLOR}
-            />
+            <CartesianGrid strokeDasharray="3 3" stroke={COLORS.GRID} />
             <XAxis
               dataKey="month"
-              tick={{ fontSize: UI_CONFIG.FONT_SIZES.CHART_TICK }}
+              tick={{ fontSize: UI_CONFIG.SIZES.FONT_TICK }}
               height={25}
             />
             <YAxis
               yAxisId="left"
-              tick={{ fontSize: UI_CONFIG.FONT_SIZES.CHART_TICK }}
+              tick={{ fontSize: UI_CONFIG.SIZES.FONT_TICK }}
               width={50}
               label={{
                 value: "R$ (mil)",
                 angle: -90,
                 position: "insideLeft",
-                style: { fontSize: `${UI_CONFIG.FONT_SIZES.CHART_LABEL}px` },
+                style: { fontSize: `${UI_CONFIG.SIZES.FONT_LABEL}px` },
               }}
             />
             <YAxis
               yAxisId="right"
               orientation="right"
-              tick={{ fontSize: UI_CONFIG.FONT_SIZES.CHART_TICK }}
+              tick={{ fontSize: UI_CONFIG.SIZES.FONT_TICK }}
               width={50}
               label={{
                 value: "R$ (centenas)",
                 angle: 90,
                 position: "insideRight",
-                style: { fontSize: `${UI_CONFIG.FONT_SIZES.CHART_LABEL}px` },
+                style: { fontSize: `${UI_CONFIG.SIZES.FONT_LABEL}px` },
               }}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend
               wrapperStyle={{
-                fontSize: `${UI_CONFIG.FONT_SIZES.CHART_LEGEND}px`,
+                fontSize: `${UI_CONFIG.SIZES.FONT_LEGEND}px`,
                 paddingTop: "5px",
               }}
             />
@@ -113,16 +115,16 @@ export function MonthlyEvolutionChart({
                 yAxisId="left"
                 type="monotone"
                 dataKey="receitas"
-                stroke={UI_CONFIG.CHART.LINES.RECEITAS}
+                stroke={METRICS_CONFIG.INCOME.chartColor}
                 strokeWidth={UI_CONFIG.CHART.LINE_STROKE_WIDTH}
                 dot={{
-                  fill: UI_CONFIG.CHART.LINES.RECEITAS,
+                  fill: METRICS_CONFIG.INCOME.chartColor,
                   strokeWidth: 2,
                   r: UI_CONFIG.CHART.LINE_DOT_RADIUS,
                 }}
                 activeDot={{
                   r: UI_CONFIG.CHART.LINE_ACTIVE_DOT_RADIUS,
-                  fill: UI_CONFIG.CHART.LINES.RECEITAS,
+                  fill: METRICS_CONFIG.INCOME.chartColor,
                 }}
                 name="Receitas"
               />
@@ -132,16 +134,16 @@ export function MonthlyEvolutionChart({
                 yAxisId="left"
                 type="monotone"
                 dataKey="despesas"
-                stroke={UI_CONFIG.CHART.LINES.DESPESAS}
+                stroke={METRICS_CONFIG.EXPENSES.chartColor}
                 strokeWidth={UI_CONFIG.CHART.LINE_STROKE_WIDTH}
                 dot={{
-                  fill: UI_CONFIG.CHART.LINES.DESPESAS,
+                  fill: METRICS_CONFIG.EXPENSES.chartColor,
                   strokeWidth: 2,
                   r: UI_CONFIG.CHART.LINE_DOT_RADIUS,
                 }}
                 activeDot={{
                   r: UI_CONFIG.CHART.LINE_ACTIVE_DOT_RADIUS,
-                  fill: UI_CONFIG.CHART.LINES.DESPESAS,
+                  fill: METRICS_CONFIG.EXPENSES.chartColor,
                 }}
                 name="Despesas"
               />
@@ -151,16 +153,16 @@ export function MonthlyEvolutionChart({
                 yAxisId="right"
                 type="monotone"
                 dataKey="saldo"
-                stroke={UI_CONFIG.CHART.LINES.SALDO}
+                stroke={METRICS_CONFIG.BALANCE.chartColor}
                 strokeWidth={UI_CONFIG.CHART.LINE_STROKE_WIDTH}
                 dot={{
-                  fill: UI_CONFIG.CHART.LINES.SALDO,
+                  fill: METRICS_CONFIG.BALANCE.chartColor,
                   strokeWidth: 2,
                   r: UI_CONFIG.CHART.LINE_DOT_RADIUS,
                 }}
                 activeDot={{
                   r: UI_CONFIG.CHART.LINE_ACTIVE_DOT_RADIUS,
-                  fill: UI_CONFIG.CHART.LINES.SALDO,
+                  fill: METRICS_CONFIG.BALANCE.chartColor,
                 }}
                 name="Saldo"
               />
@@ -170,16 +172,16 @@ export function MonthlyEvolutionChart({
                 yAxisId="right"
                 type="monotone"
                 dataKey="investimentos"
-                stroke={UI_CONFIG.CHART.LINES.INVESTIMENTOS}
+                stroke={METRICS_CONFIG.INVESTMENTS.chartColor}
                 strokeWidth={UI_CONFIG.CHART.LINE_STROKE_WIDTH}
                 dot={{
-                  fill: UI_CONFIG.CHART.LINES.INVESTIMENTOS,
+                  fill: METRICS_CONFIG.INVESTMENTS.chartColor,
                   strokeWidth: 2,
                   r: UI_CONFIG.CHART.LINE_DOT_RADIUS,
                 }}
                 activeDot={{
                   r: UI_CONFIG.CHART.LINE_ACTIVE_DOT_RADIUS,
-                  fill: UI_CONFIG.CHART.LINES.INVESTIMENTOS,
+                  fill: METRICS_CONFIG.INVESTMENTS.chartColor,
                 }}
                 name="Investimentos"
               />

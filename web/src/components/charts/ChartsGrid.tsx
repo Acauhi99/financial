@@ -51,7 +51,7 @@ export function ChartsGrid({
         title="Distribuição Financeira"
         icon={
           <CircleDollarSign
-            size={UI_CONFIG.ICON_SIZES.MEDIUM}
+            size={UI_CONFIG.SIZES.ICON_MEDIUM}
             className="text-gray-600"
           />
         }
@@ -66,7 +66,7 @@ export function ChartsGrid({
         title="Distribuição de Investimentos"
         icon={
           <TrendingUpIcon
-            size={UI_CONFIG.ICON_SIZES.MEDIUM}
+            size={UI_CONFIG.SIZES.ICON_MEDIUM}
             className="text-gray-600"
           />
         }
@@ -80,7 +80,7 @@ export function ChartsGrid({
         title="Despesas por Categoria"
         icon={
           <BarChart3
-            size={UI_CONFIG.ICON_SIZES.MEDIUM}
+            size={UI_CONFIG.SIZES.ICON_MEDIUM}
             className="text-gray-600"
           />
         }
