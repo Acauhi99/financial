@@ -100,6 +100,10 @@ export function Overview() {
     total: investmentTotal,
   }));
 
+  if (!data || !summary) {
+    return null;
+  }
+
   return (
     <div className="h-full flex flex-col space-y-4 overflow-hidden">
       <div className="flex-shrink-0">
@@ -109,17 +113,13 @@ export function Overview() {
         </p>
       </div>
 
-      {summary && (
-        <MetricsCards
-          summary={summary}
-          hiddenMonthlyItems={hiddenItems.monthly}
-          onToggleMonthlyItem={toggleMonthlyItem}
-        />
-      )}
+      <MetricsCards
+        summary={summary}
+        hiddenMonthlyItems={hiddenItems.monthly}
+        onToggleMonthlyItem={toggleMonthlyItem}
+      />
 
-      {/* Layout em duas linhas */}
       <div className="flex-1 min-h-0 flex flex-col space-y-4">
-        {/* Gráfico de Evolução Mensal */}
         <div className="h-1/2">
           <MonthlyEvolutionChart
             data={monthlyData || []}

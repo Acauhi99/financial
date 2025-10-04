@@ -51,17 +51,21 @@ export function MonthlyEvolutionChart({
             Evolução Mensal
           </h3>
         </div>
-        <select
-          value={timePeriod}
-          onChange={(e) => onTimePeriodChange(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-gray-500 focus:border-transparent focus:outline-none text-sm cursor-pointer"
-        >
+        <div className="flex items-center space-x-1">
           {periodOptions.map((option) => (
-            <option key={option.value} value={option.value}>
+            <button
+              key={option.value}
+              onClick={() => onTimePeriodChange(option.value)}
+              className={`px-2 py-1 text-xs rounded transition-colors cursor-pointer ${
+                timePeriod === option.value
+                  ? "bg-gray-200 text-gray-900 font-medium"
+                  : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+              }`}
+            >
               {option.label}
-            </option>
+            </button>
           ))}
-        </select>
+        </div>
       </div>
       <div className="flex-1 min-h-0">
         <ResponsiveContainer width="100%" height="100%">
