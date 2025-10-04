@@ -26,14 +26,26 @@ export function ChartControls({
   const [hiddenItems, setHiddenItems] = useState<Set<string>>(new Set());
 
   const getNextSortOrder = (current: SortOrder) => {
-    if (current === "none") return "desc";
-    if (current === "desc") return "asc";
+    if (current === "none") {
+      return "desc";
+    }
+
+    if (current === "desc") {
+      return "asc";
+    }
+
     return "none";
   };
 
   const getSortButtonText = (order: SortOrder) => {
-    if (order === "none") return "Ordenar";
-    if (order === "desc") return "Maior";
+    if (order === "none") {
+      return "Ordenar";
+    }
+
+    if (order === "desc") {
+      return "Maior";
+    }
+
     return "Menor";
   };
 
@@ -53,11 +65,13 @@ export function ChartControls({
 
   const toggleItem = (itemName: string) => {
     const newHidden = new Set(hiddenItems);
+
     if (newHidden.has(itemName)) {
       newHidden.delete(itemName);
     } else {
       newHidden.add(itemName);
     }
+
     setHiddenItems(newHidden);
     onDataChange(data.filter((item) => !newHidden.has(item.name)));
   };
