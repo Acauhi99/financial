@@ -109,11 +109,13 @@ export function Overview() {
         </p>
       </div>
 
-      <MetricsCards
-        summary={summary || {}}
-        hiddenMonthlyItems={hiddenItems.monthly}
-        onToggleMonthlyItem={toggleMonthlyItem}
-      />
+      {summary && (
+        <MetricsCards
+          summary={summary}
+          hiddenMonthlyItems={hiddenItems.monthly}
+          onToggleMonthlyItem={toggleMonthlyItem}
+        />
+      )}
 
       {/* Layout em duas linhas */}
       <div className="flex-1 min-h-0 flex flex-col space-y-4">

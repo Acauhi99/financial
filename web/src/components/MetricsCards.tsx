@@ -8,10 +8,10 @@ import {
 
 interface MetricsCardsProps {
   summary: {
-    balance?: number;
-    totalIncome?: number;
-    totalExpenses?: number;
-    totalInvestments?: number;
+    balance: number;
+    totalIncome: number;
+    totalExpenses: number;
+    totalInvestments: number;
   };
   hiddenMonthlyItems: Set<string>;
   onToggleMonthlyItem: (itemName: string) => void;
@@ -26,7 +26,7 @@ export function MetricsCards({
     {
       key: "saldo",
       title: "Saldo Total",
-      value: summary?.balance || 0,
+      value: summary.balance,
       icon: <Wallet size={16} className="text-gray-600" />,
       iconBgColor: "bg-gray-100",
       valueColor: "text-gray-900",
@@ -35,7 +35,7 @@ export function MetricsCards({
     {
       key: "receitas",
       title: "Receitas",
-      value: summary?.totalIncome || 0,
+      value: summary.totalIncome,
       icon: <DollarSign size={16} className="text-green-600" />,
       iconBgColor: "bg-green-100",
       valueColor: "text-green-600",
@@ -44,7 +44,7 @@ export function MetricsCards({
     {
       key: "despesas",
       title: "Despesas",
-      value: summary?.totalExpenses || 0,
+      value: summary.totalExpenses,
       icon: <TrendingUp size={16} className="text-red-600" />,
       iconBgColor: "bg-red-100",
       valueColor: "text-red-600",
@@ -53,7 +53,7 @@ export function MetricsCards({
     {
       key: "investimentos",
       title: "Investimentos",
-      value: summary?.totalInvestments || 0,
+      value: summary.totalInvestments,
       icon: <TrendingUpIcon size={16} className="text-purple-600" />,
       iconBgColor: "bg-purple-100",
       valueColor: "text-purple-600",
