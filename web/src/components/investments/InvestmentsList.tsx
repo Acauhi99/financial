@@ -20,6 +20,7 @@ interface InvestmentsListProps {
   hasActiveFilters: boolean | string;
   onClearFilters: () => void;
   totalItems: number;
+  paginationLoading?: boolean;
 }
 
 export function InvestmentsList({

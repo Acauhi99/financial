@@ -57,7 +57,7 @@ export function DataTable<T extends { id?: string | number }>({
     );
   };
 
-  if (loading) {
+  if (loading && data.length === 0) {
     return <Loading />;
   }
 
@@ -82,6 +82,7 @@ export function DataTable<T extends { id?: string | number }>({
               value={searchValue}
               onChange={(e) => onSearchChange(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-500 focus:border-transparent bg-white"
+              disabled={loading}
             />
           </div>
           {filters && (
@@ -99,11 +100,11 @@ export function DataTable<T extends { id?: string | number }>({
                 <th
                   key={String(column.key)}
                   className={`px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider ${
-                    column.sortable
+                    column.sortable && !loading
                       ? "cursor-pointer hover:bg-gray-100 transition-colors"
                       : ""
                   }`}
-                  onClick={() => column.sortable && onSort(String(column.key))}
+                  onClick={() => column.sortable && !loading && onSort(String(column.key))}
                 >
                   <div className="flex items-center space-x-2">
                     <span>{column.label}</span>
@@ -121,7 +122,11 @@ export function DataTable<T extends { id?: string | number }>({
             {data.map((item, index) => (
               <tr
                 key={item.id || index}
-                className="hover:bg-gray-50 transition-colors"
+                className={`transition-all duration-200 ${
+                  loading 
+                    ? "opacity-60 pointer-events-none" 
+                    : "hover:bg-gray-50 opacity-100"
+                }`}
               >
                 {columns.map((column) => (
                   <td
@@ -135,6 +140,18 @@ export function DataTable<T extends { id?: string | number }>({
                 ))}
               </tr>
             ))}
+            {loading && data.length > 0 && (
+              <tr>
+                <td colSpan={columns.length} className="px-6 py-2">
+                  <div className="flex items-center justify-center">
+                    <div className="flex items-center space-x-2 text-gray-500">
+                      <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-gray-400"></div>
+                      <span className="text-xs">Atualizando...</span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
@@ -148,19 +165,25 @@ export function DataTable<T extends { id?: string | number }>({
           <span className="text-xs text-gray-500">
             ({data.length} {data.length === 1 ? "item" : "itens"})
           </span>
+          {loading && (
+            <div className="flex items-center space-x-1 ml-2">
+              <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-gray-400"></div>
+              <span className="text-xs text-gray-500">Carregando...</span>
+            </div>
+          )}
         </div>
         <div className="flex space-x-1">
           <button
             onClick={() => onPageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="px-3 py-2 border border-gray-300 rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white hover:shadow-sm transition-all bg-white cursor-pointer"
+            disabled={currentPage === 1 || loading}
+            className="px-3 py-2 border border-gray-300 rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white hover:shadow-sm transition-all bg-white"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
           <button
             onClick={() => onPageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="px-3 py-2 border border-gray-300 rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white hover:shadow-sm transition-all bg-white cursor-pointer"
+            disabled={currentPage === totalPages || loading}
+            className="px-3 py-2 border border-gray-300 rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white hover:shadow-sm transition-all bg-white"
           >
             <ChevronRight className="h-4 w-4" />
           </button>

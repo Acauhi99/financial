@@ -20,6 +20,7 @@ interface TransactionsListProps {
   hasActiveFilters: boolean | string;
   onClearFilters: () => void;
   totalItems: number;
+  paginationLoading?: boolean;
 }
 
 export function TransactionsList({

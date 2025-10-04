@@ -3,6 +3,7 @@ import {
   useTransactionFilters,
   useTransactionForm,
   useTransactions,
+  usePaginationLoading,
 } from "../hooks";
 import { PAGINATION, CSS_CLASSES } from "../constants";
 import {
@@ -24,6 +25,8 @@ export function Transactions() {
     "",
     "all"
   );
+
+  const paginationLoading = usePaginationLoading(isLoading, currentPage);
 
   const {
     description,
@@ -155,6 +158,7 @@ export function Transactions() {
           hasActiveFilters={hasActiveFilters}
           onClearFilters={handleClearFilters}
           totalItems={data?.pagination.total || 0}
+          paginationLoading={paginationLoading}
         />
       </div>
     </div>

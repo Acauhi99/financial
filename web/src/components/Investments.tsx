@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { useInvestments } from "../hooks/useInvestments";
 import { useInvestmentForm } from "../hooks/useInvestmentForm";
 import { useInvestmentFilters } from "../hooks/useInvestmentFilters";
+import { usePaginationLoading } from "../hooks/usePaginationLoading";
 import { PAGINATION, CSS_CLASSES } from "../constants";
 import {
   InvestmentsSummary,
@@ -21,6 +22,8 @@ export function Investments() {
     itemsPerPage,
     ""
   );
+
+  const paginationLoading = usePaginationLoading(isLoading, currentPage);
 
   const {
     name,
@@ -158,6 +161,7 @@ export function Investments() {
           hasActiveFilters={hasActiveFilters}
           onClearFilters={handleClearFilters}
           totalItems={data?.pagination.total || 0}
+          paginationLoading={paginationLoading}
         />
       </div>
     </div>
