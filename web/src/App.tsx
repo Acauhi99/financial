@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   LayoutDashboard,
@@ -22,17 +22,25 @@ const queryClient = new QueryClient({
 
 type Page = "overview" | "transactions" | "investments";
 
+const menuItems = [
+  { id: "overview", label: "Overview", icon: LayoutDashboard },
+  { id: "transactions", label: "Transações", icon: ArrowLeftRight },
+  { id: "investments", label: "Investimentos", icon: TrendingUp },
+] as const;
+
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>("overview");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
-  const menuItems = [
-    { id: "overview", label: "Overview", icon: LayoutDashboard },
-    { id: "transactions", label: "Transações", icon: ArrowLeftRight },
-    { id: "investments", label: "Investimentos", icon: TrendingUp },
-  ];
+  const toggleSidebar = useCallback(() => {
+    setSidebarCollapsed((prev) => !prev);
+  }, []);
 
-  const renderPage = () => {
+  const handlePageChange = useCallback((page: Page) => {
+    setCurrentPage(page);
+  }, []);
+
+  const currentPageComponent = useMemo(() => {
     switch (currentPage) {
       case "overview":
         return <OverviewPage />;
@@ -43,7 +51,7 @@ function App() {
       default:
         return <OverviewPage />;
     }
-  };
+  }, [currentPage]);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -69,7 +77,7 @@ function App() {
                 </div>
               )}
               <button
-                onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+                onClick={toggleSidebar}
                 className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer"
               >
                 {sidebarCollapsed ? (
@@ -84,16 +92,23 @@ function App() {
             {menuItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => setCurrentPage(item.id as Page)}
-                className={`w-full flex items-center ${
-                  sidebarCollapsed ? "justify-center px-2" : "px-3"
-                } py-3 rounded-xl text-left transition-all duration-200 group focus:outline-none cursor-pointer ${
-                  currentPage === item.id
-                    ? sidebarCollapsed
-                      ? ""
-                      : "bg-white/10 text-white shadow-lg backdrop-blur-sm"
-                    : "text-gray-300 hover:bg-white/5 hover:text-white"
-                }`}
+                onClick={() => handlePageChange(item.id as Page)}
+                className={(() => {
+                  const baseClasses = `w-full flex items-center py-3 rounded-xl text-left transition-all duration-200 group focus:outline-none cursor-pointer`;
+                  const positionClasses = sidebarCollapsed
+                    ? "justify-center px-2"
+                    : "px-3";
+                  const isActive = currentPage === item.id;
+                  const activeClasses =
+                    isActive && !sidebarCollapsed
+                      ? "bg-white/10 text-white shadow-lg backdrop-blur-sm"
+                      : "";
+                  const inactiveClasses = !isActive
+                    ? "text-gray-300 hover:bg-white/5 hover:text-white"
+                    : "text-white";
+
+                  return `${baseClasses} ${positionClasses} ${activeClasses} ${inactiveClasses}`;
+                })()}
                 title={sidebarCollapsed ? item.label : ""}
               >
                 <div
@@ -131,7 +146,9 @@ function App() {
 
         {/* Main Content */}
         <div className="flex-1 overflow-hidden">
-          <div className="h-full max-w-7xl mx-auto p-6">{renderPage()}</div>
+          <div className="h-full max-w-7xl mx-auto p-6">
+            {currentPageComponent}
+          </div>
         </div>
       </div>
     </QueryClientProvider>
