@@ -32,6 +32,7 @@ export function Investments() {
     setAmount,
     rate,
     setRate,
+    errors,
     addInvestment,
     isLoading: isCreating,
   } = useInvestmentForm();
@@ -134,6 +135,7 @@ export function Investments() {
         amount={amount}
         rate={rate}
         isLoading={isCreating}
+        errors={errors}
         onNameChange={setName}
         onAmountChange={setAmount}
         onRateChange={setRate}

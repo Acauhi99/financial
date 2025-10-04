@@ -6,6 +6,7 @@ interface TransactionFormProps {
   amount: string;
   type: "income" | "expense";
   isLoading: boolean;
+  errors: Record<string, string>;
   onDescriptionChange: (value: string) => void;
   onAmountChange: (value: string) => void;
   onTypeChange: (type: "income" | "expense") => void;
@@ -17,6 +18,7 @@ export function TransactionForm({
   amount,
   type,
   isLoading,
+  errors,
   onDescriptionChange,
   onAmountChange,
   onTypeChange,
@@ -83,8 +85,11 @@ export function TransactionForm({
               placeholder="Ex: Salário, Aluguel, Supermercado..."
               value={description}
               onChange={(e) => onDescriptionChange(e.target.value)}
-              className={CSS_CLASSES.INPUT}
+              className={`${CSS_CLASSES.INPUT} ${errors.description ? 'border-red-500 focus:ring-red-500' : ''}`}
             />
+            {errors.description && (
+              <p className="mt-1 text-sm text-red-600">{errors.description}</p>
+            )}
           </div>
           <div>
             <label htmlFor="transaction-amount" className={CSS_CLASSES.LABEL}>
@@ -101,11 +106,14 @@ export function TransactionForm({
                 placeholder="0,00"
                 value={amount}
                 onChange={(e) => onAmountChange(e.target.value)}
-                className={CSS_CLASSES.INPUT_WITH_ICON}
+                className={`${CSS_CLASSES.INPUT_WITH_ICON} ${errors.amount ? 'border-red-500 focus:ring-red-500' : ''}`}
                 step="0.01"
                 min="0"
               />
             </div>
+            {errors.amount && (
+              <p className="mt-1 text-sm text-red-600">{errors.amount}</p>
+            )}
           </div>
         </div>
 

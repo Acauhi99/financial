@@ -6,6 +6,7 @@ interface InvestmentFormProps {
   amount: string;
   rate: string;
   isLoading: boolean;
+  errors: Record<string, string>;
   onNameChange: (value: string) => void;
   onAmountChange: (value: string) => void;
   onRateChange: (value: string) => void;
@@ -17,6 +18,7 @@ export function InvestmentForm({
   amount,
   rate,
   isLoading,
+  errors,
   onNameChange,
   onAmountChange,
   onRateChange,
@@ -49,8 +51,11 @@ export function InvestmentForm({
             placeholder="Ex: Tesouro Selic, CDB Banco X, Fundo Y..."
             value={name}
             onChange={(e) => onNameChange(e.target.value)}
-            className={CSS_CLASSES.INPUT}
+            className={`${CSS_CLASSES.INPUT} ${errors.name ? 'border-red-500 focus:ring-red-500' : ''}`}
           />
+          {errors.name && (
+            <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -69,11 +74,14 @@ export function InvestmentForm({
                 placeholder="0,00"
                 value={amount}
                 onChange={(e) => onAmountChange(e.target.value)}
-                className={CSS_CLASSES.INPUT_WITH_ICON}
+                className={`${CSS_CLASSES.INPUT_WITH_ICON} ${errors.amount ? 'border-red-500 focus:ring-red-500' : ''}`}
                 step="0.01"
                 min="0"
               />
             </div>
+            {errors.amount && (
+              <p className="mt-1 text-sm text-red-600">{errors.amount}</p>
+            )}
           </div>
           <div>
             <label htmlFor="investment-rate" className={CSS_CLASSES.LABEL}>
@@ -90,11 +98,14 @@ export function InvestmentForm({
                 placeholder="100"
                 value={rate}
                 onChange={(e) => onRateChange(e.target.value)}
-                className={CSS_CLASSES.INPUT_WITH_ICON}
+                className={`${CSS_CLASSES.INPUT_WITH_ICON} ${errors.rate ? 'border-red-500 focus:ring-red-500' : ''}`}
                 step="0.01"
                 min="0"
               />
             </div>
+            {errors.rate && (
+              <p className="mt-1 text-sm text-red-600">{errors.rate}</p>
+            )}
           </div>
         </div>
 

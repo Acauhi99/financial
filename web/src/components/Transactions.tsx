@@ -35,6 +35,7 @@ export function Transactions() {
     setAmount,
     type,
     setType,
+    errors,
     addTransaction,
     isLoading: isCreating,
   } = useTransactionForm();
@@ -131,6 +132,7 @@ export function Transactions() {
         amount={amount}
         type={type}
         isLoading={isCreating}
+        errors={errors}
         onDescriptionChange={setDescription}
         onAmountChange={setAmount}
         onTypeChange={setType}
