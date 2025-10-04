@@ -4,6 +4,7 @@ import {
   CircleDollarSign,
 } from "lucide-react";
 import { PieChartCard } from "./PieChartCard";
+import { CSS_CLASSES, UI_CONFIG } from "../../constants";
 
 interface ChartItem {
   name: string;
@@ -45,10 +46,15 @@ export function ChartsGrid({
   onToggleItem,
 }: Readonly<ChartsGridProps>) {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-1/2">
+    <div className={CSS_CLASSES.GRID_CHARTS}>
       <PieChartCard
         title="Distribuição Financeira"
-        icon={<CircleDollarSign size={20} className="text-gray-600" />}
+        icon={
+          <CircleDollarSign
+            size={UI_CONFIG.ICON_SIZES.MEDIUM}
+            className="text-gray-600"
+          />
+        }
         data={balanceDataWithTotal}
         originalItems={balanceData}
         hiddenItems={hiddenItems.balance}
@@ -58,7 +64,12 @@ export function ChartsGrid({
 
       <PieChartCard
         title="Distribuição de Investimentos"
-        icon={<TrendingUpIcon size={20} className="text-gray-600" />}
+        icon={
+          <TrendingUpIcon
+            size={UI_CONFIG.ICON_SIZES.MEDIUM}
+            className="text-gray-600"
+          />
+        }
         data={investmentTypesWithTotal}
         originalItems={investmentTypes}
         hiddenItems={hiddenItems.investment}
@@ -67,7 +78,12 @@ export function ChartsGrid({
 
       <PieChartCard
         title="Despesas por Categoria"
-        icon={<BarChart3 size={20} className="text-gray-600" />}
+        icon={
+          <BarChart3
+            size={UI_CONFIG.ICON_SIZES.MEDIUM}
+            className="text-gray-600"
+          />
+        }
         data={expenseCategoriesWithTotal}
         originalItems={expenseCategories}
         hiddenItems={hiddenItems.expense}

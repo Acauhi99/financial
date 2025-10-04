@@ -1,4 +1,5 @@
 import { MetricCard } from "./MetricCard";
+import { CSS_CLASSES, METRICS_CONFIG, UI_CONFIG } from "../constants";
 import {
   Wallet,
   DollarSign,
@@ -24,45 +25,49 @@ export function MetricsCards({
 }: Readonly<MetricsCardsProps>) {
   const metricsConfig = [
     {
-      key: "saldo",
-      title: "Saldo Total",
+      ...METRICS_CONFIG.BALANCE,
       value: summary.balance,
-      icon: <Wallet size={16} className="text-gray-600" />,
-      iconBgColor: "bg-gray-100",
-      valueColor: "text-gray-900",
-      toggleColor: "bg-blue-500",
+      icon: (
+        <Wallet
+          size={UI_CONFIG.ICON_SIZES.SMALL}
+          className={METRICS_CONFIG.BALANCE.iconColor}
+        />
+      ),
     },
     {
-      key: "receitas",
-      title: "Receitas",
+      ...METRICS_CONFIG.INCOME,
       value: summary.totalIncome,
-      icon: <DollarSign size={16} className="text-green-600" />,
-      iconBgColor: "bg-green-100",
-      valueColor: "text-green-600",
-      toggleColor: "bg-green-500",
+      icon: (
+        <DollarSign
+          size={UI_CONFIG.ICON_SIZES.SMALL}
+          className={METRICS_CONFIG.INCOME.iconColor}
+        />
+      ),
     },
     {
-      key: "despesas",
-      title: "Despesas",
+      ...METRICS_CONFIG.EXPENSES,
       value: summary.totalExpenses,
-      icon: <TrendingUp size={16} className="text-red-600" />,
-      iconBgColor: "bg-red-100",
-      valueColor: "text-red-600",
-      toggleColor: "bg-red-500",
+      icon: (
+        <TrendingUp
+          size={UI_CONFIG.ICON_SIZES.SMALL}
+          className={METRICS_CONFIG.EXPENSES.iconColor}
+        />
+      ),
     },
     {
-      key: "investimentos",
-      title: "Investimentos",
+      ...METRICS_CONFIG.INVESTMENTS,
       value: summary.totalInvestments,
-      icon: <TrendingUpIcon size={16} className="text-purple-600" />,
-      iconBgColor: "bg-purple-100",
-      valueColor: "text-purple-600",
-      toggleColor: "bg-purple-500",
+      icon: (
+        <TrendingUpIcon
+          size={UI_CONFIG.ICON_SIZES.SMALL}
+          className={METRICS_CONFIG.INVESTMENTS.iconColor}
+        />
+      ),
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 flex-shrink-0">
+    <div className={CSS_CLASSES.GRID_METRICS}>
       {metricsConfig.map((metric) => {
         const isHidden = hiddenMonthlyItems.has(metric.key);
 
@@ -78,10 +83,10 @@ export function MetricsCards({
             />
             <button
               onClick={() => onToggleMonthlyItem(metric.key)}
-              className={`absolute top-2 right-2 w-6 h-6 rounded-full text-xs font-bold transition-colors cursor-pointer ${
+              className={`${CSS_CLASSES.TOGGLE_BUTTON} ${
                 isHidden
-                  ? "bg-gray-300 text-gray-600"
-                  : `${metric.toggleColor} text-white`
+                  ? CSS_CLASSES.TOGGLE_INACTIVE
+                  : `${metric.toggleColor} ${CSS_CLASSES.TOGGLE_ACTIVE}`
               }`}
             >
               {isHidden ? "✕" : "✓"}

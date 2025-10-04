@@ -1,7 +1,7 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { PieTooltip } from "./PieTooltip";
 import { InteractiveChartLegend } from "./InteractiveChartLegend";
-import { formatCurrency } from "../../constants";
+import { formatCurrency, CSS_CLASSES, UI_CONFIG } from "../../constants";
 import type { ReactNode } from "react";
 
 interface ChartData {
@@ -38,10 +38,10 @@ export function PieChartCard({
   innerRadius = 0,
 }: Readonly<PieChartCardProps>) {
   return (
-    <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:shadow-lg hover:shadow-gray-200/60 transition-all duration-300 flex flex-col">
-      <div className="flex items-center space-x-2 mb-3 flex-shrink-0">
+    <div className={CSS_CLASSES.CHART_CONTAINER}>
+      <div className={CSS_CLASSES.CHART_HEADER}>
         {icon}
-        <h3 className="text-sm font-semibold text-gray-900">{title}</h3>
+        <h3 className={CSS_CLASSES.CHART_TITLE}>{title}</h3>
       </div>
       <div className="flex-1 min-h-0">
         <ResponsiveContainer width="100%" height="100%">
@@ -51,11 +51,11 @@ export function PieChartCard({
               cx="50%"
               cy="50%"
               innerRadius={innerRadius}
-              outerRadius={78}
-              paddingAngle={1}
+              outerRadius={UI_CONFIG.CHART.PIE_OUTER_RADIUS}
+              paddingAngle={UI_CONFIG.CHART.PIE_PADDING_ANGLE}
               dataKey="value"
-              stroke="#ffffff"
-              strokeWidth={1}
+              stroke={UI_CONFIG.CHART.PIE_STROKE_COLOR}
+              strokeWidth={UI_CONFIG.CHART.PIE_STROKE_WIDTH}
             >
               {data?.map((entry) => (
                 <Cell key={entry.name} fill={entry.color} />

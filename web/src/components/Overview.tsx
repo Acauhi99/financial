@@ -3,6 +3,7 @@ import { MetricsCards } from "./MetricsCards";
 import { MonthlyEvolutionChart } from "./charts/MonthlyEvolutionChart";
 import { ChartsGrid } from "./charts/ChartsGrid";
 import { useOverview } from "../hooks/useOverview";
+import { CSS_CLASSES } from "../constants";
 import { useState } from "react";
 
 export function Overview() {
@@ -41,7 +42,7 @@ export function Overview() {
 
   if (error) {
     return (
-      <div className="text-red-600 text-center py-8">
+      <div className={CSS_CLASSES.ERROR_MESSAGE}>
         Erro ao carregar dados do overview
       </div>
     );
@@ -105,10 +106,10 @@ export function Overview() {
   }
 
   return (
-    <div className="h-full flex flex-col space-y-4 overflow-hidden">
-      <div className="flex-shrink-0">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Overview</h1>
-        <p className="text-gray-600 text-base">
+    <div className={CSS_CLASSES.LAYOUT_MAIN}>
+      <div className={CSS_CLASSES.PAGE_HEADER}>
+        <h1 className={CSS_CLASSES.PAGE_TITLE}>Overview</h1>
+        <p className={CSS_CLASSES.PAGE_SUBTITLE}>
           Visão geral do estado da sua conta
         </p>
       </div>
@@ -119,7 +120,7 @@ export function Overview() {
         onToggleMonthlyItem={toggleMonthlyItem}
       />
 
-      <div className="flex-1 min-h-0 flex flex-col space-y-4">
+      <div className={CSS_CLASSES.LAYOUT_CONTENT}>
         <div className="h-1/2">
           <MonthlyEvolutionChart
             data={monthlyData || []}

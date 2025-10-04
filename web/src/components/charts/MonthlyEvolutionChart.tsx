@@ -10,6 +10,7 @@ import {
 } from "recharts";
 import { LineChart as LineChartIcon } from "lucide-react";
 import { CustomTooltip } from "./CustomTooltip";
+import { CSS_CLASSES, UI_CONFIG } from "../../constants";
 
 interface MonthlyData {
   month: string;
@@ -33,33 +34,28 @@ export function MonthlyEvolutionChart({
   timePeriod,
   onTimePeriodChange,
 }: Readonly<MonthlyEvolutionChartProps>) {
-  const periodOptions = [
-    { value: "3", label: "3M" },
-    { value: "6", label: "6M" },
-    { value: "9", label: "9M" },
-    { value: "12", label: "1A" },
-    { value: "60", label: "5A" },
-  ];
+  const periodOptions = UI_CONFIG.TIME_PERIODS;
 
   const filteredData = data.slice(-parseInt(timePeriod));
   return (
-    <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:shadow-lg hover:shadow-gray-200/60 transition-all duration-300 h-full flex flex-col">
+    <div className={`${CSS_CLASSES.CHART_CONTAINER} h-full`}>
       <div className="flex items-center justify-between mb-3 flex-shrink-0">
-        <div className="flex items-center space-x-2">
-          <LineChartIcon size={20} className="text-gray-600" />
-          <h3 className="text-sm font-semibold text-gray-900">
-            Evolução Mensal
-          </h3>
+        <div className={CSS_CLASSES.CHART_HEADER}>
+          <LineChartIcon
+            size={UI_CONFIG.ICON_SIZES.MEDIUM}
+            className="text-gray-600"
+          />
+          <h3 className={CSS_CLASSES.CHART_TITLE}>Evolução Mensal</h3>
         </div>
         <div className="flex items-center space-x-1">
           {periodOptions.map((option) => (
             <button
               key={option.value}
               onClick={() => onTimePeriodChange(option.value)}
-              className={`px-2 py-1 text-xs rounded transition-colors cursor-pointer ${
+              className={`${CSS_CLASSES.BUTTON_SMALL} ${
                 timePeriod === option.value
-                  ? "bg-gray-200 text-gray-900 font-medium"
-                  : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                  ? CSS_CLASSES.BUTTON_SMALL_ACTIVE
+                  : CSS_CLASSES.BUTTON_SMALL_INACTIVE
               }`}
             >
               {option.label}
@@ -73,42 +69,61 @@ export function MonthlyEvolutionChart({
             data={filteredData}
             margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-            <XAxis dataKey="month" tick={{ fontSize: 12 }} height={25} />
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke={UI_CONFIG.CHART.GRID_COLOR}
+            />
+            <XAxis
+              dataKey="month"
+              tick={{ fontSize: UI_CONFIG.FONT_SIZES.CHART_TICK }}
+              height={25}
+            />
             <YAxis
               yAxisId="left"
-              tick={{ fontSize: 12 }}
+              tick={{ fontSize: UI_CONFIG.FONT_SIZES.CHART_TICK }}
               width={50}
               label={{
                 value: "R$ (mil)",
                 angle: -90,
                 position: "insideLeft",
-                style: { fontSize: "11px" },
+                style: { fontSize: `${UI_CONFIG.FONT_SIZES.CHART_LABEL}px` },
               }}
             />
             <YAxis
               yAxisId="right"
               orientation="right"
-              tick={{ fontSize: 12 }}
+              tick={{ fontSize: UI_CONFIG.FONT_SIZES.CHART_TICK }}
               width={50}
               label={{
                 value: "R$ (centenas)",
                 angle: 90,
                 position: "insideRight",
-                style: { fontSize: "11px" },
+                style: { fontSize: `${UI_CONFIG.FONT_SIZES.CHART_LABEL}px` },
               }}
             />
             <Tooltip content={<CustomTooltip />} />
-            <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "5px" }} />
+            <Legend
+              wrapperStyle={{
+                fontSize: `${UI_CONFIG.FONT_SIZES.CHART_LEGEND}px`,
+                paddingTop: "5px",
+              }}
+            />
             {!hiddenLines.has("receitas") && (
               <Line
                 yAxisId="left"
                 type="monotone"
                 dataKey="receitas"
-                stroke="#22c55e"
-                strokeWidth={3}
-                dot={{ fill: "#22c55e", strokeWidth: 2, r: 4 }}
-                activeDot={{ r: 6, fill: "#22c55e" }}
+                stroke={UI_CONFIG.CHART.LINES.RECEITAS}
+                strokeWidth={UI_CONFIG.CHART.LINE_STROKE_WIDTH}
+                dot={{
+                  fill: UI_CONFIG.CHART.LINES.RECEITAS,
+                  strokeWidth: 2,
+                  r: UI_CONFIG.CHART.LINE_DOT_RADIUS,
+                }}
+                activeDot={{
+                  r: UI_CONFIG.CHART.LINE_ACTIVE_DOT_RADIUS,
+                  fill: UI_CONFIG.CHART.LINES.RECEITAS,
+                }}
                 name="Receitas"
               />
             )}
@@ -117,10 +132,17 @@ export function MonthlyEvolutionChart({
                 yAxisId="left"
                 type="monotone"
                 dataKey="despesas"
-                stroke="#ef4444"
-                strokeWidth={3}
-                dot={{ fill: "#ef4444", strokeWidth: 2, r: 4 }}
-                activeDot={{ r: 6, fill: "#ef4444" }}
+                stroke={UI_CONFIG.CHART.LINES.DESPESAS}
+                strokeWidth={UI_CONFIG.CHART.LINE_STROKE_WIDTH}
+                dot={{
+                  fill: UI_CONFIG.CHART.LINES.DESPESAS,
+                  strokeWidth: 2,
+                  r: UI_CONFIG.CHART.LINE_DOT_RADIUS,
+                }}
+                activeDot={{
+                  r: UI_CONFIG.CHART.LINE_ACTIVE_DOT_RADIUS,
+                  fill: UI_CONFIG.CHART.LINES.DESPESAS,
+                }}
                 name="Despesas"
               />
             )}
@@ -129,10 +151,17 @@ export function MonthlyEvolutionChart({
                 yAxisId="right"
                 type="monotone"
                 dataKey="saldo"
-                stroke="#3b82f6"
-                strokeWidth={3}
-                dot={{ fill: "#3b82f6", strokeWidth: 2, r: 4 }}
-                activeDot={{ r: 6, fill: "#3b82f6" }}
+                stroke={UI_CONFIG.CHART.LINES.SALDO}
+                strokeWidth={UI_CONFIG.CHART.LINE_STROKE_WIDTH}
+                dot={{
+                  fill: UI_CONFIG.CHART.LINES.SALDO,
+                  strokeWidth: 2,
+                  r: UI_CONFIG.CHART.LINE_DOT_RADIUS,
+                }}
+                activeDot={{
+                  r: UI_CONFIG.CHART.LINE_ACTIVE_DOT_RADIUS,
+                  fill: UI_CONFIG.CHART.LINES.SALDO,
+                }}
                 name="Saldo"
               />
             )}
@@ -141,10 +170,17 @@ export function MonthlyEvolutionChart({
                 yAxisId="right"
                 type="monotone"
                 dataKey="investimentos"
-                stroke="#8b5cf6"
-                strokeWidth={3}
-                dot={{ fill: "#8b5cf6", strokeWidth: 2, r: 4 }}
-                activeDot={{ r: 6, fill: "#8b5cf6" }}
+                stroke={UI_CONFIG.CHART.LINES.INVESTIMENTOS}
+                strokeWidth={UI_CONFIG.CHART.LINE_STROKE_WIDTH}
+                dot={{
+                  fill: UI_CONFIG.CHART.LINES.INVESTIMENTOS,
+                  strokeWidth: 2,
+                  r: UI_CONFIG.CHART.LINE_DOT_RADIUS,
+                }}
+                activeDot={{
+                  r: UI_CONFIG.CHART.LINE_ACTIVE_DOT_RADIUS,
+                  fill: UI_CONFIG.CHART.LINES.INVESTIMENTOS,
+                }}
                 name="Investimentos"
               />
             )}
