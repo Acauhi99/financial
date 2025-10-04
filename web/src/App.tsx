@@ -52,16 +52,21 @@ function App() {
         <div
           className={`${
             sidebarCollapsed ? "w-16" : "w-64"
-          } bg-gray-900 shadow-xl transition-all duration-300 flex flex-col`}
+          } bg-gradient-to-b from-gray-900 to-gray-800 shadow-2xl transition-all duration-300 flex flex-col border-r border-gray-700`}
         >
-          <div className="p-4 flex-shrink-0">
+          <div className="p-4 flex-shrink-0 border-b border-gray-700/50">
             <div className="flex items-center justify-between">
               {!sidebarCollapsed && (
-                <h1 className="text-lg font-semibold text-white">Financeiro</h1>
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-gradient-to-br from-gray-600 to-gray-700 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">F</span>
+                  </div>
+                  <h1 className="text-lg font-bold text-white">Financeiro</h1>
+                </div>
               )}
               <button
                 onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                className="text-gray-400 hover:text-white transition-colors p-1 cursor-pointer"
+                className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition-all duration-200 shadow-sm hover:shadow-md"
               >
                 {sidebarCollapsed ? (
                   <ChevronRight size={16} />
@@ -71,26 +76,49 @@ function App() {
               </button>
             </div>
           </div>
-          <nav className="mt-4 flex-1">
+          <nav className="mt-2 flex-1 px-3 space-y-1">
             {menuItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => setCurrentPage(item.id as Page)}
-                className={`w-full flex items-center px-4 py-3 text-left hover:bg-gray-800 transition-colors cursor-pointer ${
+                className={`w-full flex items-center px-3 py-3 rounded-xl text-left transition-all duration-200 group focus:outline-none ${
                   currentPage === item.id
-                    ? "bg-gray-800 border-r-2 border-gray-400 text-white"
-                    : "text-gray-300"
+                    ? "bg-white/10 text-white shadow-lg backdrop-blur-sm"
+                    : "text-gray-300 hover:bg-white/5 hover:text-white"
                 }`}
                 title={sidebarCollapsed ? item.label : ""}
               >
-                <item.icon
-                  size={20}
-                  className={sidebarCollapsed ? "mx-auto" : "mr-3"}
-                />
-                {!sidebarCollapsed && item.label}
+                <div
+                  className={`${
+                    currentPage === item.id
+                      ? "bg-white/20"
+                      : "bg-gray-700/50 group-hover:bg-gray-600/50"
+                  } p-2 rounded-lg transition-colors duration-200 ${
+                    sidebarCollapsed ? "mx-auto" : "mr-3"
+                  }`}
+                >
+                  <item.icon size={16} />
+                </div>
+                {!sidebarCollapsed && (
+                  <span className="font-medium">{item.label}</span>
+                )}
               </button>
             ))}
           </nav>
+          <div className="p-4 border-t border-gray-700/50">
+            <div
+              className={`${
+                sidebarCollapsed
+                  ? "w-2 h-2 mx-auto"
+                  : "flex items-center space-x-2"
+              } text-gray-400`}
+            >
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              {!sidebarCollapsed && (
+                <span className="text-xs">Sistema online</span>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Main Content */}
