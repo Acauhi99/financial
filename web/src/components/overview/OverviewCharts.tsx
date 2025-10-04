@@ -3,10 +3,10 @@ import { ChartsGrid } from "../charts/ChartsGrid";
 import { CSS_CLASSES } from "../../constants";
 
 interface OverviewChartsProps {
-  monthlyData: Array<{ name: string; value: number; [key: string]: unknown }>;
-  balanceData: Array<{ name: string; value: number }>;
-  investmentTypes: Array<{ name: string; value: number }>;
-  expenseCategories: Array<{ name: string; value: number }>;
+  monthlyData: Array<{ month: string; receitas: number; despesas: number; saldo: number; investimentos: number }>;
+  balanceData: Array<{ name: string; value: number; color: string }>;
+  investmentTypes: Array<{ name: string; value: number; color: string }>;
+  expenseCategories: Array<{ name: string; value: number; color: string }>;
   hiddenItems: {
     balance: Set<string>;
     expense: Set<string>;
