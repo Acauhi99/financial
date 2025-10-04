@@ -1,4 +1,4 @@
-import { Investments } from "../components/Investments";
+import { Investments } from "../components";
 
 export function InvestmentsPage() {
   return <Investments />;

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { CSS_CLASSES, formatCurrency } from "../constants";
+import { CSS_CLASSES, formatCurrency } from "../../constants";
 
 interface MetricCardProps {
   title: string;

@@ -4,7 +4,6 @@ import {
   useTransactionForm,
   useTransactions,
 } from "../hooks";
-import { Loading } from "./Loading";
 import { PAGINATION, CSS_CLASSES } from "../constants";
 import {
   TransactionsSummary,
@@ -13,6 +12,7 @@ import {
   TransactionFilters,
   transactionColumns,
 } from "./transactions";
+import { Loading } from "./ui";
 
 export function Transactions() {
   const [currentPage, setCurrentPage] = useState(1);

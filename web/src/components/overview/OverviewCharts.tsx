@@ -3,7 +3,13 @@ import { ChartsGrid } from "../charts/ChartsGrid";
 import { CSS_CLASSES } from "../../constants";
 
 interface OverviewChartsProps {
-  monthlyData: Array<{ month: string; receitas: number; despesas: number; saldo: number; investimentos: number }>;
+  monthlyData: Array<{
+    month: string;
+    receitas: number;
+    despesas: number;
+    saldo: number;
+    investimentos: number;
+  }>;
   balanceData: Array<{ name: string; value: number; color: string }>;
   investmentTypes: Array<{ name: string; value: number; color: string }>;
   expenseCategories: Array<{ name: string; value: number; color: string }>;

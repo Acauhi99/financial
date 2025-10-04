@@ -7,9 +7,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { OverviewPage } from "./pages/OverviewPage";
-import { TransactionsPage } from "./pages/TransactionsPage";
-import { InvestmentsPage } from "./pages/InvestmentsPage";
+import { TransactionsPage, InvestmentsPage, OverviewPage } from "./pages";
 
 const queryClient = new QueryClient({
   defaultOptions: {

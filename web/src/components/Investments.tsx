@@ -2,7 +2,6 @@ import { useState, useMemo } from "react";
 import { useInvestments } from "../hooks/useInvestments";
 import { useInvestmentForm } from "../hooks/useInvestmentForm";
 import { useInvestmentFilters } from "../hooks/useInvestmentFilters";
-import { Loading } from "./Loading";
 import { PAGINATION, CSS_CLASSES } from "../constants";
 import {
   InvestmentsSummary,
@@ -11,6 +10,7 @@ import {
   InvestmentFilters,
   investmentColumns,
 } from "./investments";
+import { Loading } from "./ui";
 
 export function Investments() {
   const [currentPage, setCurrentPage] = useState(1);

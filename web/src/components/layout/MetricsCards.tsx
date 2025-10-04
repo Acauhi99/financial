@@ -1,11 +1,11 @@
-import { MetricCard } from "./MetricCard";
-import { CSS_CLASSES, METRICS_CONFIG, UI_CONFIG } from "../constants";
 import {
   Wallet,
   DollarSign,
   TrendingUp,
   TrendingUp as TrendingUpIcon,
 } from "lucide-react";
+import { CSS_CLASSES, METRICS_CONFIG, UI_CONFIG } from "../../constants";
+import { MetricCard } from "../ui";
 
 interface MetricsCardsProps {
   summary: {

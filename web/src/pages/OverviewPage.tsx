@@ -1,4 +1,4 @@
-import { Overview } from "../components/Overview";
+import { Overview } from "../components";
 
 export function OverviewPage() {
   return <Overview />;

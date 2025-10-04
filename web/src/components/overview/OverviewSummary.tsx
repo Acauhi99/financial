@@ -1,4 +1,4 @@
-import { MetricsCards } from "../MetricsCards";
+import { MetricsCards } from "../layout";
 
 interface OverviewSummaryProps {
   summary: {

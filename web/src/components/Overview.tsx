@@ -1,7 +1,7 @@
-import { Loading } from "./Loading";
 import { useOverview, useOverviewFilters } from "../hooks";
 import { CSS_CLASSES } from "../constants";
 import { OverviewSummary, OverviewCharts } from "./overview";
+import { Loading } from "./ui";
 
 export function Overview() {
   const { data, isLoading, error } = useOverview();
