@@ -17,8 +17,8 @@ export function InvestmentsSummary({
       <div className={CSS_CLASSES.CARD}>
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-gray-600">Total Investido</p>
-            <p className="text-2xl font-bold text-gray-900">
+            <p className="text-xs font-medium text-gray-600">Total Investido</p>
+            <p className="text-lg font-bold text-gray-900">
               {formatCurrency(totalInvested)}
             </p>
           </div>
@@ -30,8 +30,8 @@ export function InvestmentsSummary({
       <div className={CSS_CLASSES.CARD}>
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-gray-600">Retorno Mensal</p>
-            <p className="text-2xl font-bold text-green-600">
+            <p className="text-xs font-medium text-gray-600">Retorno Mensal</p>
+            <p className="text-lg font-bold text-green-600">
               {formatCurrency(totalMonthlyReturn)}
             </p>
           </div>
@@ -43,8 +43,8 @@ export function InvestmentsSummary({
       <div className={CSS_CLASSES.CARD}>
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-gray-600">Taxa Média</p>
-            <p className="text-2xl font-bold text-blue-600">
+            <p className="text-xs font-medium text-gray-600">Taxa Média</p>
+            <p className="text-lg font-bold text-blue-600">
               {formatPercentage(averageRate)} CDI
             </p>
           </div>

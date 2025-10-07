@@ -77,7 +77,7 @@ export function OverviewCharts({
 
   return (
     <div className={CSS_CLASSES.LAYOUT_CONTENT}>
-      <div className="h-1/2">
+      <div className="flex-1 min-h-0">
         <MonthlyEvolutionChart
           data={monthlyData}
           hiddenLines={hiddenItems.monthly}

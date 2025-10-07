@@ -17,8 +17,8 @@ export function TransactionsSummary({
       <div className={CSS_CLASSES.CARD}>
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-gray-600">Receitas</p>
-            <p className="text-2xl font-bold text-green-600">
+            <p className="text-xs font-medium text-gray-600">Receitas</p>
+            <p className="text-lg font-bold text-green-600">
               {formatCurrency(totalIncome)}
             </p>
           </div>
@@ -30,8 +30,8 @@ export function TransactionsSummary({
       <div className={CSS_CLASSES.CARD}>
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-gray-600">Despesas</p>
-            <p className="text-2xl font-bold text-red-600">
+            <p className="text-xs font-medium text-gray-600">Despesas</p>
+            <p className="text-lg font-bold text-red-600">
               {formatCurrency(totalExpenses)}
             </p>
           </div>
@@ -43,9 +43,9 @@ export function TransactionsSummary({
       <div className={CSS_CLASSES.CARD}>
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-gray-600">Saldo</p>
+            <p className="text-xs font-medium text-gray-600">Saldo</p>
             <p
-              className={`text-2xl font-bold ${
+              className={`text-lg font-bold ${
                 balance >= 0 ? "text-gray-900" : "text-red-600"
               }`}
             >

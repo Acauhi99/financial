@@ -33,8 +33,8 @@ export function MetricCard({
     >
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-600">{title}</p>
-          <p className={`text-xl font-bold ${valueColor}`}>
+          <p className="text-xs font-medium text-gray-600">{title}</p>
+          <p className={`text-lg font-bold ${valueColor}`}>
             {formatter(value)}
           </p>
         </div>

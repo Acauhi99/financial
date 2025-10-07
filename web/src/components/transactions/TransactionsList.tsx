@@ -42,12 +42,12 @@ export function TransactionsList({
   totalItems,
 }: Readonly<TransactionsListProps>) {
   return (
-    <div className="bg-white rounded-lg border border-gray-200 shadow-sm flex-1 min-h-0 overflow-hidden">
-      <div className="p-6 border-b border-gray-200">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">Histórico</h2>
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-500">
+    <div className="bg-white rounded-lg border border-gray-200 shadow-sm flex-1 min-h-0 flex flex-col">
+      <div className="p-3 border-b border-gray-200 flex-shrink-0">
+        <div className="flex items-center justify-between">
+          <h2 className="text-base font-semibold text-gray-900">Histórico</h2>
+          <div className="flex items-center space-x-3">
+            <span className="text-xs text-gray-500">
               {isLoading
                 ? "Carregando..."
                 : `${Math.min(
@@ -64,7 +64,7 @@ export function TransactionsList({
         </div>
       </div>
 
-      <div className="p-4 h-full overflow-auto">
+      <div className="p-2 flex-1 min-h-0">
         <DataTable
           data={data}
           columns={columns}

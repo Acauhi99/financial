@@ -54,13 +54,13 @@ export const CSS_CLASSES = {
   LABEL: "block text-sm font-medium text-gray-700 mb-2",
   SELECT:
     "px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-gray-500 focus:border-transparent",
-  PAGE_HEADER: "flex-shrink-0",
-  PAGE_TITLE: "text-3xl font-bold text-gray-900 mb-2",
-  PAGE_SUBTITLE: "text-gray-600 text-base",
-  GRID_METRICS: "grid grid-cols-1 md:grid-cols-4 gap-4 flex-shrink-0",
-  GRID_CHARTS: "grid grid-cols-1 lg:grid-cols-3 gap-4 h-1/2",
-  LAYOUT_MAIN: "h-full flex flex-col space-y-4 overflow-hidden",
-  LAYOUT_CONTENT: "flex-1 min-h-0 flex flex-col space-y-4",
+  PAGE_HEADER: "flex-shrink-0 mb-3",
+  PAGE_TITLE: "text-2xl font-bold text-gray-900 mb-1",
+  PAGE_SUBTITLE: "text-gray-600 text-sm",
+  GRID_METRICS: "grid grid-cols-1 md:grid-cols-4 gap-3 flex-shrink-0 mb-3",
+  GRID_CHARTS: "grid grid-cols-1 lg:grid-cols-3 gap-3 flex-1",
+  LAYOUT_MAIN: "h-screen flex flex-col p-4 gap-3",
+  LAYOUT_CONTENT: "flex-1 min-h-0 flex flex-col gap-3",
   ERROR_MESSAGE: "text-red-600 text-center py-8",
 } as const;
 
