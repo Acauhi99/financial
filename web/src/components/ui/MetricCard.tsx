@@ -26,7 +26,7 @@ export function MetricCard({
 
   return (
     <Component
-      className={`bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:shadow-lg hover:shadow-gray-200/60 transition-all duration-300 text-left ${
+      className={`bg-white p-3 rounded-lg border border-gray-200 shadow-sm hover:shadow-lg hover:shadow-gray-200/60 transition-all duration-300 text-left ${
         !isActive ? "opacity-50" : ""
       } ${onClick ? "cursor-pointer hover:bg-gray-50" : ""}`}
       onClick={onClick}

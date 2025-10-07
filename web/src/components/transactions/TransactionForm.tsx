@@ -26,52 +26,51 @@ export function TransactionForm({
 }: Readonly<TransactionFormProps>) {
   return (
     <div className={CSS_CLASSES.CARD}>
-      <div className="flex items-center mb-6">
-        <div className={`${CSS_CLASSES.ICON_CONTAINER} bg-gray-100 mr-3`}>
-          <Plus size={20} className="text-gray-600" />
+      <div className="flex items-center mb-3">
+        <div
+          className={`w-6 h-6 rounded flex items-center justify-center bg-gray-100 mr-2`}
+        >
+          <Plus size={14} className="text-gray-600" />
         </div>
         <div>
-          <h2 className="text-lg font-semibold text-gray-900">
+          <h2 className="text-sm font-semibold text-gray-900">
             Nova Transação
           </h2>
-          <p className="text-sm text-gray-500">
-            Adicione uma receita ou despesa
-          </p>
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         <fieldset>
           <legend className={CSS_CLASSES.LABEL}>Tipo</legend>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
               onClick={() => onTypeChange("income")}
-              className={`p-3 rounded border-2 transition-all flex items-center justify-center space-x-2 cursor-pointer ${
+              className={`p-2 rounded border-2 transition-all flex items-center justify-center space-x-1 cursor-pointer text-sm ${
                 type === "income"
                   ? "border-green-500 bg-green-50 text-green-700"
                   : "border-gray-200 hover:border-gray-300 text-gray-600"
               }`}
             >
-              <TrendingUp size={16} />
+              <TrendingUp size={14} />
               <span>Receita</span>
             </button>
             <button
               type="button"
               onClick={() => onTypeChange("expense")}
-              className={`p-3 rounded border-2 transition-all flex items-center justify-center space-x-2 cursor-pointer ${
+              className={`p-2 rounded border-2 transition-all flex items-center justify-center space-x-1 cursor-pointer text-sm ${
                 type === "expense"
                   ? "border-red-500 bg-red-50 text-red-700"
                   : "border-gray-200 hover:border-gray-300 text-gray-600"
               }`}
             >
-              <TrendingDown size={16} />
+              <TrendingDown size={14} />
               <span>Despesa</span>
             </button>
           </div>
         </fieldset>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
             <label
               htmlFor="transaction-description"
@@ -85,7 +84,9 @@ export function TransactionForm({
               placeholder="Ex: Salário, Aluguel, Supermercado..."
               value={description}
               onChange={(e) => onDescriptionChange(e.target.value)}
-              className={`${CSS_CLASSES.INPUT} ${errors.description ? 'border-red-500 focus:ring-red-500' : ''}`}
+              className={`${CSS_CLASSES.INPUT} ${
+                errors.description ? "border-red-500 focus:ring-red-500" : ""
+              }`}
             />
             {errors.description && (
               <p className="mt-1 text-sm text-red-600">{errors.description}</p>
@@ -106,7 +107,9 @@ export function TransactionForm({
                 placeholder="0,00"
                 value={amount}
                 onChange={(e) => onAmountChange(e.target.value)}
-                className={`${CSS_CLASSES.INPUT_WITH_ICON} ${errors.amount ? 'border-red-500 focus:ring-red-500' : ''}`}
+                className={`${CSS_CLASSES.INPUT_WITH_ICON} ${
+                  errors.amount ? "border-red-500 focus:ring-red-500" : ""
+                }`}
                 step="0.01"
                 min="0"
               />
@@ -117,7 +120,7 @@ export function TransactionForm({
           </div>
         </div>
 
-        <div className="flex justify-end pt-2">
+        <div className="flex justify-end pt-1">
           <button
             onClick={onSubmit}
             disabled={!description || !amount || isLoading}

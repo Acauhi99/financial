@@ -31,13 +31,13 @@ export const COLORS = {
 // Classes CSS reutilizáveis
 export const CSS_CLASSES = {
   INPUT:
-    "w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-gray-500 focus:border-transparent",
+    "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-gray-500 focus:border-transparent text-sm",
   INPUT_WITH_ICON:
-    "w-full pl-10 pr-3 py-3 border border-gray-300 rounded focus:ring-2 focus:ring-gray-500 focus:border-transparent",
+    "w-full pl-8 pr-2 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-gray-500 focus:border-transparent text-sm",
   BUTTON_PRIMARY:
-    "px-6 py-3 rounded font-medium transition-all flex items-center space-x-2 bg-gray-900 text-white hover:bg-gray-800 shadow-sm hover:shadow-md",
+    "px-4 py-2 rounded font-medium transition-all flex items-center space-x-1 bg-gray-900 text-white hover:bg-gray-800 shadow-sm hover:shadow-md text-sm",
   BUTTON_DISABLED:
-    "px-6 py-3 rounded font-medium transition-all flex items-center space-x-2 bg-gray-200 text-gray-400 cursor-not-allowed",
+    "px-4 py-2 rounded font-medium transition-all flex items-center space-x-1 bg-gray-200 text-gray-400 cursor-not-allowed text-sm",
   BUTTON_SMALL: "px-2 py-1 text-xs rounded transition-colors cursor-pointer",
   BUTTON_SMALL_ACTIVE: "bg-gray-200 text-gray-900 font-medium",
   BUTTON_SMALL_INACTIVE: "text-gray-500 hover:text-gray-700 hover:bg-gray-100",
@@ -51,16 +51,16 @@ export const CSS_CLASSES = {
   TOGGLE_ACTIVE: "text-white",
   TOGGLE_INACTIVE: "bg-gray-300 text-gray-600",
   ICON_CONTAINER: "w-10 h-10 rounded flex items-center justify-center",
-  LABEL: "block text-sm font-medium text-gray-700 mb-2",
+  LABEL: "block text-xs font-medium text-gray-700 mb-1",
   SELECT:
-    "px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-gray-500 focus:border-transparent",
+    "px-2 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-gray-500 focus:border-transparent text-sm",
   PAGE_HEADER: "flex-shrink-0 mb-3",
   PAGE_TITLE: "text-2xl font-bold text-gray-900 mb-1",
   PAGE_SUBTITLE: "text-gray-600 text-sm",
   GRID_METRICS: "grid grid-cols-1 md:grid-cols-4 gap-3 flex-shrink-0 mb-3",
   GRID_CHARTS: "grid grid-cols-1 lg:grid-cols-3 gap-3 flex-1",
-  LAYOUT_MAIN: "h-screen flex flex-col p-4 gap-3",
-  LAYOUT_CONTENT: "flex-1 min-h-0 flex flex-col gap-3",
+  LAYOUT_MAIN: "h-screen flex flex-col p-4 gap-3 pb-6",
+  LAYOUT_CONTENT: "flex-1 min-h-0 flex flex-col gap-3 mb-4",
   ERROR_MESSAGE: "text-red-600 text-center py-8",
 } as const;
 

@@ -26,21 +26,20 @@ export function InvestmentForm({
 }: Readonly<InvestmentFormProps>) {
   return (
     <div className={CSS_CLASSES.CARD}>
-      <div className="flex items-center mb-6">
-        <div className={`${CSS_CLASSES.ICON_CONTAINER} bg-gray-100 mr-3`}>
-          <Plus size={20} className="text-gray-600" />
+      <div className="flex items-center mb-3">
+        <div
+          className={`w-6 h-6 rounded flex items-center justify-center bg-gray-100 mr-2`}
+        >
+          <Plus size={14} className="text-gray-600" />
         </div>
         <div>
-          <h2 className="text-lg font-semibold text-gray-900">
+          <h2 className="text-sm font-semibold text-gray-900">
             Novo Investimento
           </h2>
-          <p className="text-sm text-gray-500">
-            Adicione um investimento ao seu portfólio
-          </p>
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         <div>
           <label htmlFor="investment-name" className={CSS_CLASSES.LABEL}>
             Nome do Investimento
@@ -51,14 +50,16 @@ export function InvestmentForm({
             placeholder="Ex: Tesouro Selic, CDB Banco X, Fundo Y..."
             value={name}
             onChange={(e) => onNameChange(e.target.value)}
-            className={`${CSS_CLASSES.INPUT} ${errors.name ? 'border-red-500 focus:ring-red-500' : ''}`}
+            className={`${CSS_CLASSES.INPUT} ${
+              errors.name ? "border-red-500 focus:ring-red-500" : ""
+            }`}
           />
           {errors.name && (
             <p className="mt-1 text-sm text-red-600">{errors.name}</p>
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
             <label htmlFor="investment-amount" className={CSS_CLASSES.LABEL}>
               Valor
@@ -74,7 +75,9 @@ export function InvestmentForm({
                 placeholder="0,00"
                 value={amount}
                 onChange={(e) => onAmountChange(e.target.value)}
-                className={`${CSS_CLASSES.INPUT_WITH_ICON} ${errors.amount ? 'border-red-500 focus:ring-red-500' : ''}`}
+                className={`${CSS_CLASSES.INPUT_WITH_ICON} ${
+                  errors.amount ? "border-red-500 focus:ring-red-500" : ""
+                }`}
                 step="0.01"
                 min="0"
               />
@@ -98,7 +101,9 @@ export function InvestmentForm({
                 placeholder="100"
                 value={rate}
                 onChange={(e) => onRateChange(e.target.value)}
-                className={`${CSS_CLASSES.INPUT_WITH_ICON} ${errors.rate ? 'border-red-500 focus:ring-red-500' : ''}`}
+                className={`${CSS_CLASSES.INPUT_WITH_ICON} ${
+                  errors.rate ? "border-red-500 focus:ring-red-500" : ""
+                }`}
                 step="0.01"
                 min="0"
               />
@@ -109,7 +114,7 @@ export function InvestmentForm({
           </div>
         </div>
 
-        <div className="flex justify-end pt-2">
+        <div className="flex justify-end pt-1">
           <button
             onClick={onSubmit}
             disabled={!name || !amount || !rate || isLoading}
