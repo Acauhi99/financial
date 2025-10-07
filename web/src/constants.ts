@@ -1,6 +1,6 @@
 // Configurações de paginação
 export const PAGINATION = {
-  ITEMS_PER_PAGE: 7,
+  ITEMS_PER_PAGE: 10,
 } as const;
 
 // Configurações de formatação

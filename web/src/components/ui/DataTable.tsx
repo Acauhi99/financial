@@ -93,13 +93,13 @@ export function DataTable<T extends { id?: string | number }>({
 
       {/* Table */}
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm flex-1 min-h-0">
-        <table className="w-full h-full">
+        <table className="w-full h-full table-fixed">
           <thead className="bg-gray-50">
-            <tr>
+            <tr className="h-10">
               {columns.map((column) => (
                 <th
                   key={String(column.key)}
-                  className={`px-4 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider ${
+                  className={`px-4 py-1 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider ${
                     column.sortable && !loading
                       ? "cursor-pointer hover:bg-gray-100 transition-colors"
                       : ""
@@ -121,27 +121,34 @@ export function DataTable<T extends { id?: string | number }>({
             </tr>
           </thead>
           <tbody className="bg-white">
-            {data.map((item, index) => (
-              <tr
-                key={item.id || index}
-                className={`border-t border-gray-100 transition-all duration-200 ${
-                  loading
-                    ? "opacity-60 pointer-events-none"
-                    : "hover:bg-gray-50 opacity-100"
-                }`}
-              >
-                {columns.map((column) => (
-                  <td
-                    key={String(column.key)}
-                    className="px-4 py-2 text-sm text-gray-900"
-                  >
-                    {column.render
-                      ? column.render(item)
-                      : String(item[column.key as keyof T] || "")}
-                  </td>
-                ))}
-              </tr>
-            ))}
+            {Array.from({ length: 10 }, (_, index) => {
+              const item = data[index];
+              return (
+                <tr
+                  key={item?.id || index}
+                  className={`h-8 border-t border-gray-100 transition-all duration-200 ${
+                    item
+                      ? loading
+                        ? "opacity-60 pointer-events-none"
+                        : "hover:bg-gray-50 opacity-100"
+                      : "invisible"
+                  }`}
+                >
+                  {columns.map((column) => (
+                    <td
+                      key={String(column.key)}
+                      className="px-4 py-1 text-sm text-gray-900 truncate"
+                    >
+                      {item
+                        ? column.render
+                          ? column.render(item)
+                          : String(item[column.key as keyof T] || "")
+                        : ""}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
