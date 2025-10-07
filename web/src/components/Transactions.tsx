@@ -1,10 +1,11 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import {
   useTransactionFilters,
   useTransactionForm,
   useTransactions,
   usePaginationLoading,
 } from "../hooks";
+import { useTransactionTotals } from "../hooks/useTransactionTotals";
 import { PAGINATION, CSS_CLASSES } from "../constants";
 import {
   TransactionsSummary,
@@ -57,23 +58,8 @@ export function Transactions() {
     handleSort,
   } = useTransactionFilters(data?.data);
 
-  const totalIncome = useMemo(
-    () =>
-      filteredAndSortedTransactions
-        .filter((t) => t.type === "income")
-        .reduce((sum, t) => sum + t.amount, 0),
-    [filteredAndSortedTransactions]
-  );
-
-  const totalExpenses = useMemo(
-    () =>
-      filteredAndSortedTransactions
-        .filter((t) => t.type === "expense")
-        .reduce((sum, t) => sum + t.amount, 0),
-    [filteredAndSortedTransactions]
-  );
-
-  const balance = totalIncome - totalExpenses;
+  const { data: totals } = useTransactionTotals();
+  const { totalIncome = 0, totalExpenses = 0, balance = 0 } = totals || {};
 
   const handleClearFilters = () => {
     clearFilters();

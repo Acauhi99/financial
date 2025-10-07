@@ -301,7 +301,7 @@ export const api = {
     search = "",
     type = "all"
   ): Promise<PaginatedResponse<Transaction>> {
-    await delay(800);
+    await delay(200);
 
     const filtered = mockTransactions.filter(
       (t) =>
@@ -335,7 +335,7 @@ export const api = {
     limit = 10,
     search = ""
   ): Promise<PaginatedResponse<Investment>> {
-    await delay(800);
+    await delay(200);
 
     const filtered = mockInvestments.filter((inv) =>
       inv.name.toLowerCase().includes(search.toLowerCase())

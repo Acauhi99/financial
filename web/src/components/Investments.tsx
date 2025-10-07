@@ -1,8 +1,9 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useInvestments } from "../hooks/useInvestments";
 import { useInvestmentForm } from "../hooks/useInvestmentForm";
 import { useInvestmentFilters } from "../hooks/useInvestmentFilters";
 import { usePaginationLoading } from "../hooks/usePaginationLoading";
+import { useInvestmentTotals } from "../hooks/useInvestmentTotals";
 import { PAGINATION, CSS_CLASSES } from "../constants";
 import {
   InvestmentsSummary,
@@ -54,29 +55,12 @@ export function Investments() {
     handleSort,
   } = useInvestmentFilters(data?.data);
 
-  const totalInvested = useMemo(
-    () =>
-      filteredAndSortedInvestments.reduce((sum, inv) => sum + inv.amount, 0),
-    [filteredAndSortedInvestments]
-  );
-
-  const totalMonthlyReturn = useMemo(
-    () =>
-      filteredAndSortedInvestments.reduce(
-        (sum, inv) => sum + inv.monthlyReturn,
-        0
-      ),
-    [filteredAndSortedInvestments]
-  );
-
-  const averageRate = useMemo(
-    () =>
-      filteredAndSortedInvestments.length > 0
-        ? filteredAndSortedInvestments.reduce((sum, inv) => sum + inv.rate, 0) /
-          filteredAndSortedInvestments.length
-        : 0,
-    [filteredAndSortedInvestments]
-  );
+  const { data: totals } = useInvestmentTotals();
+  const {
+    totalInvested = 0,
+    totalMonthlyReturn = 0,
+    averageRate = 0,
+  } = totals || {};
 
   const handleClearFilters = () => {
     clearFilters();
