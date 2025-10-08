@@ -175,5 +175,3 @@ export const formatDate = (date: string | Date) => {
 export const formatPercentage = (value: number) => {
   return `${value.toFixed(2)}%`;
 };
-
-// Moved to utils/filters.ts

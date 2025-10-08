@@ -66,19 +66,15 @@ export function InvestmentsContainer() {
 
   return (
     <InvestmentsView
-      // Data
       data={data}
       filteredData={filteredData}
       totals={totals}
       isLoading={isLoading}
       error={error}
       paginationLoading={paginationLoading}
-      // Pagination
       currentPage={currentPage}
       onPageChange={setCurrentPage}
-      // Form
       formHook={formHook}
-      // Filters
       filterState={filterState}
       onClearFilters={handleClearFilters}
     />
