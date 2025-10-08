@@ -7,7 +7,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { TransactionsPage, InvestmentsPage, OverviewPage } from "./pages";
+import { Investments, Overview, Transactions } from "./components";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -41,13 +41,13 @@ function App() {
   const currentPageComponent = useMemo(() => {
     switch (currentPage) {
       case "overview":
-        return <OverviewPage />;
+        return <Overview />;
       case "transactions":
-        return <TransactionsPage />;
+        return <Transactions />;
       case "investments":
-        return <InvestmentsPage />;
+        return <Investments />;
       default:
-        return <OverviewPage />;
+        return <Overview />;
     }
   }, [currentPage]);
 
