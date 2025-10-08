@@ -1,4 +1,4 @@
-import { CSS_CLASSES } from "../constants";
+import { CSS_CLASSES } from "../utils/constants";
 import { OverviewSummary, OverviewCharts } from "./overview";
 import { Loading } from "./ui";
 import { type OverviewData } from "../services/api";

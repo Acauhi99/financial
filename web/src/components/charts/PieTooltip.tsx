@@ -1,4 +1,4 @@
-import { formatCurrency } from "../../constants";
+import { formatCurrency } from "../../utils/constants";
 
 interface TooltipPayload {
   value: number;

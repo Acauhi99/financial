@@ -1,5 +1,9 @@
 import { type Investment } from "../../services/api";
-import { formatCurrency, formatPercentage, formatDate } from "../../constants";
+import {
+  formatCurrency,
+  formatPercentage,
+  formatDate,
+} from "../../utils/constants";
 import type { Column } from "../ui/DataTable";
 
 export const investmentColumns: Column<Investment>[] = [

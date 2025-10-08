@@ -1,6 +1,6 @@
 import { MonthlyEvolutionChart } from "../charts/MonthlyEvolutionChart";
 import { ChartsGrid } from "../charts/ChartsGrid";
-import { CSS_CLASSES } from "../../constants";
+import { CSS_CLASSES } from "../../utils/constants";
 
 interface OverviewChartsProps {
   monthlyData: Array<{

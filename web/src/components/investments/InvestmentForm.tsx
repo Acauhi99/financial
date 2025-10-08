@@ -1,5 +1,5 @@
 import { Plus, DollarSign, Percent } from "lucide-react";
-import { CSS_CLASSES } from "../../constants";
+import { CSS_CLASSES } from "../../utils/constants";
 
 interface InvestmentFormProps {
   name: string;

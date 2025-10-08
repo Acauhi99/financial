@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { CSS_CLASSES } from "../../constants";
+import { CSS_CLASSES } from "../../utils/constants";
 
 interface ChartContainerProps {
   title: string;

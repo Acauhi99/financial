@@ -13,7 +13,7 @@ import {
   filterByDateRange,
 } from "../utils/filters";
 import { type Investment } from "../services/api";
-import { PAGINATION } from "../constants";
+import { PAGINATION } from "../utils/constants";
 import { InvestmentsView } from "./InvestmentsView";
 
 export function InvestmentsContainer() {

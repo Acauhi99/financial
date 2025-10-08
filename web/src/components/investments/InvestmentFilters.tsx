@@ -1,4 +1,4 @@
-import { FILTER_OPTIONS } from "../../constants";
+import { FILTER_OPTIONS } from "../../utils/constants";
 import { GenericFilters } from "../ui/GenericFilters";
 
 type AmountRangeType =

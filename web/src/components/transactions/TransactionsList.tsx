@@ -1,6 +1,6 @@
 import { Wallet } from "lucide-react";
 import { type Transaction } from "../../services/api";
-import { PAGINATION } from "../../constants";
+import { PAGINATION } from "../../utils/constants";
 import { DataTable, type Column } from "../ui/DataTable";
 
 interface TransactionsListProps {

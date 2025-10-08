@@ -1,5 +1,9 @@
 import { PiggyBank, TrendingUp, Percent } from "lucide-react";
-import { formatCurrency, formatPercentage, CSS_CLASSES } from "../../constants";
+import {
+  formatCurrency,
+  formatPercentage,
+  CSS_CLASSES,
+} from "../../utils/constants";
 
 interface InvestmentsSummaryProps {
   totalInvested: number;

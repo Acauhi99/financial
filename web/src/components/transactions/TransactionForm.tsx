@@ -1,5 +1,5 @@
 import { TrendingUp, TrendingDown, Plus, DollarSign } from "lucide-react";
-import { CSS_CLASSES } from "../../constants";
+import { CSS_CLASSES } from "../../utils/constants";
 
 interface TransactionFormProps {
   description: string;

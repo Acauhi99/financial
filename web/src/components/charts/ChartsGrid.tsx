@@ -4,7 +4,7 @@ import {
   CircleDollarSign,
 } from "lucide-react";
 import { PieChartCard } from "./PieChartCard";
-import { CSS_CLASSES, UI_CONFIG } from "../../constants";
+import { CSS_CLASSES, UI_CONFIG } from "../../utils/constants";
 
 interface ChartItem {
   name: string;

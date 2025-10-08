@@ -6,7 +6,7 @@ import {
   CSS_CLASSES,
   UI_CONFIG,
   COLORS,
-} from "../../constants";
+} from "../../utils/constants";
 import type { ReactNode } from "react";
 
 interface ChartData {

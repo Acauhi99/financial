@@ -1,5 +1,5 @@
 import { TrendingUp, TrendingDown, Wallet } from "lucide-react";
-import { formatCurrency, CSS_CLASSES } from "../../constants";
+import { formatCurrency, CSS_CLASSES } from "../../utils/constants";
 
 interface TransactionsSummaryProps {
   totalIncome: number;

@@ -1,6 +1,6 @@
 import { PiggyBank } from "lucide-react";
 import { type Investment } from "../../services/api";
-import { PAGINATION } from "../../constants";
+import { PAGINATION } from "../../utils/constants";
 import { DataTable, type Column } from "../ui/DataTable";
 
 interface InvestmentsListProps {

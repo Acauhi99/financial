@@ -1,5 +1,5 @@
 import { Filter, X } from "lucide-react";
-import { CSS_CLASSES } from "../../constants";
+import { CSS_CLASSES } from "../../utils/constants";
 
 interface FilterOption {
   value: string;

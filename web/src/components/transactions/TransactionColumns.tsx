@@ -1,6 +1,6 @@
 import { TrendingUp, TrendingDown } from "lucide-react";
 import { type Transaction } from "../../services/api";
-import { formatCurrency, formatDate } from "../../constants";
+import { formatCurrency, formatDate } from "../../utils/constants";
 import type { Column } from "../ui/DataTable";
 
 export const transactionColumns: Column<Transaction>[] = [

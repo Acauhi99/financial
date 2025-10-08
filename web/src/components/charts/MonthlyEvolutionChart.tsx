@@ -15,7 +15,7 @@ import {
   UI_CONFIG,
   COLORS,
   METRICS_CONFIG,
-} from "../../constants";
+} from "../../utils/constants";
 
 interface MonthlyData {
   month: string;
