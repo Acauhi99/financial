@@ -63,7 +63,7 @@ export function InvestmentFilters({
             onChange={(e) =>
               onAmountRangeChange(e.target.value as AmountRangeType)
             }
-            className={CSS_CLASSES.SELECT}
+            className={`${CSS_CLASSES.SELECT} cursor-pointer`}
           >
             {FILTER_OPTIONS.AMOUNT_RANGES.map((option) => (
               <option key={option.value} value={option.value}>
@@ -75,7 +75,7 @@ export function InvestmentFilters({
           <select
             value={rateRange}
             onChange={(e) => onRateRangeChange(e.target.value as RateRangeType)}
-            className={CSS_CLASSES.SELECT}
+            className={`${CSS_CLASSES.SELECT} cursor-pointer`}
           >
             {FILTER_OPTIONS.INVESTMENT_RATES.map((option) => (
               <option key={option.value} value={option.value}>

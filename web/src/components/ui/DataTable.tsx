@@ -173,14 +173,14 @@ export function DataTable<T extends { id?: string | number }>({
           <button
             onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage === 1 || loading}
-            className="px-2 py-1 border border-gray-300 rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white transition-all bg-white"
+            className="px-2 py-1 border border-gray-300 rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white transition-all bg-white cursor-pointer"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
           <button
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages || loading}
-            className="px-2 py-1 border border-gray-300 rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white transition-all bg-white"
+            className="px-2 py-1 border border-gray-300 rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white transition-all bg-white cursor-pointer"
           >
             <ChevronRight className="h-4 w-4" />
           </button>

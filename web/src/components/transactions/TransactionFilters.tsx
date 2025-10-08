@@ -61,7 +61,7 @@ export function TransactionFilters({
           <select
             value={filterType}
             onChange={(e) => onFilterTypeChange(e.target.value as FilterType)}
-            className={CSS_CLASSES.SELECT}
+            className={`${CSS_CLASSES.SELECT} cursor-pointer`}
           >
             {FILTER_OPTIONS.TRANSACTION_TYPES.map((option) => (
               <option key={option.value} value={option.value}>
@@ -75,7 +75,7 @@ export function TransactionFilters({
             onChange={(e) =>
               onAmountRangeChange(e.target.value as AmountRangeType)
             }
-            className={CSS_CLASSES.SELECT}
+            className={`${CSS_CLASSES.SELECT} cursor-pointer`}
           >
             {FILTER_OPTIONS.AMOUNT_RANGES.map((option) => (
               <option key={option.value} value={option.value}>
