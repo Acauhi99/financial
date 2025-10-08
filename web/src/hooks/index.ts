@@ -9,3 +9,7 @@ export { useTransactions, useCreateTransaction } from "./useTransactions";
 export { useTransactionFilters } from "./useTransactionFilters";
 export { useTransactionForm } from "./useTransactionForm";
 export { useTransactionTotals } from "./useTransactionTotals";
+export { useFilterState } from "./useFilterState";
+export { useTransactionFilterState } from "./useTransactionFilterState";
+export { useInvestmentFilterState } from "./useInvestmentFilterState";
+export { useFilterLogic } from "./useFilterLogic";
