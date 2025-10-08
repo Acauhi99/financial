@@ -1,6 +1,6 @@
 import { TrendingUp, TrendingDown } from "lucide-react";
 import { type Transaction } from "../../services/api";
-import { formatCurrency } from "../../constants";
+import { formatCurrency, formatDate } from "../../constants";
 import type { Column } from "../ui/DataTable";
 
 export const transactionColumns: Column<Transaction>[] = [
@@ -45,6 +45,16 @@ export const transactionColumns: Column<Transaction>[] = [
       >
         {transaction.type === "income" ? "+" : "-"}
         {formatCurrency(transaction.amount)}
+      </div>
+    ),
+  },
+  {
+    key: "date",
+    label: "Data",
+    sortable: true,
+    render: (transaction) => (
+      <div className="text-sm text-gray-600">
+        {formatDate(transaction.date)}
       </div>
     ),
   },

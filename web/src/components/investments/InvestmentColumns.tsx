@@ -1,5 +1,5 @@
 import { type Investment } from "../../services/api";
-import { formatCurrency, formatPercentage } from "../../constants";
+import { formatCurrency, formatPercentage, formatDate } from "../../constants";
 import type { Column } from "../ui/DataTable";
 
 export const investmentColumns: Column<Investment>[] = [
@@ -50,6 +50,14 @@ export const investmentColumns: Column<Investment>[] = [
       <span className="text-green-600 font-bold">
         {formatCurrency(inv.monthlyReturn)}
       </span>
+    ),
+  },
+  {
+    key: "date",
+    label: "Data",
+    sortable: true,
+    render: (inv) => (
+      <div className="text-sm text-gray-600">{formatDate(inv.date)}</div>
     ),
   },
 ];

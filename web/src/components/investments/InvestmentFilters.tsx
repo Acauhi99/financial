@@ -9,15 +9,18 @@ type AmountRangeType =
   | "1000-5000"
   | "5000+";
 type RateRangeType = "all" | "0-50" | "50-80" | "80-100" | "100+";
+type DateRangeType = "all" | "today" | "week" | "month" | "3months";
 
 interface InvestmentFiltersProps {
   amountRange: AmountRangeType;
   rateRange: RateRangeType;
+  dateRange: DateRangeType;
   searchTerm: string;
   showFilters: boolean;
   hasActiveFilters: boolean | string;
   onAmountRangeChange: (range: AmountRangeType) => void;
   onRateRangeChange: (range: RateRangeType) => void;
+  onDateRangeChange: (range: DateRangeType) => void;
   onToggleFilters: () => void;
   onClearFilters: () => void;
 }
@@ -25,11 +28,13 @@ interface InvestmentFiltersProps {
 export function InvestmentFilters({
   amountRange,
   rateRange,
+  dateRange,
   searchTerm,
   showFilters,
   hasActiveFilters,
   onAmountRangeChange,
   onRateRangeChange,
+  onDateRangeChange,
   onToggleFilters,
   onClearFilters,
 }: Readonly<InvestmentFiltersProps>) {
@@ -48,9 +53,12 @@ export function InvestmentFilters({
         {hasActiveFilters && (
           <span className="bg-gray-500 text-white text-xs px-1.5 py-0.5 rounded-full">
             {
-              [amountRange !== "all", rateRange !== "all", searchTerm].filter(
-                Boolean
-              ).length
+              [
+                amountRange !== "all",
+                rateRange !== "all",
+                dateRange !== "all",
+                searchTerm,
+              ].filter(Boolean).length
             }
           </span>
         )}
@@ -78,6 +86,18 @@ export function InvestmentFilters({
             className={`${CSS_CLASSES.SELECT} cursor-pointer`}
           >
             {FILTER_OPTIONS.INVESTMENT_RATES.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={dateRange}
+            onChange={(e) => onDateRangeChange(e.target.value as DateRangeType)}
+            className={`${CSS_CLASSES.SELECT} cursor-pointer`}
+          >
+            {FILTER_OPTIONS.DATE_RANGES.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>

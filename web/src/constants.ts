@@ -141,6 +141,13 @@ export const FILTER_OPTIONS = {
     { value: "80-100", label: "80% - 100% CDI" },
     { value: "100+", label: "Acima de 100% CDI" },
   ],
+  DATE_RANGES: [
+    { value: "all", label: "Todas as datas" },
+    { value: "today", label: "Hoje" },
+    { value: "week", label: "Última semana" },
+    { value: "month", label: "Último mês" },
+    { value: "3months", label: "Últimos 3 meses" },
+  ],
   SORT_OPTIONS: [
     { value: "newest", label: "Mais recentes" },
     { value: "oldest", label: "Mais antigos" },
@@ -191,4 +198,33 @@ export const filterByRateRange = (rate: number, range: string) => {
   }
 
   return rate >= parseFloat(min) && rate <= parseFloat(max);
+};
+
+export const filterByDateRange = (date: string, range: string) => {
+  if (range === "all") return true;
+
+  const itemDate = new Date(date);
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  switch (range) {
+    case "today":
+      return itemDate >= today;
+    case "week": {
+      const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+      return itemDate >= weekAgo;
+    }
+    case "month": {
+      const monthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+      return itemDate >= monthAgo;
+    }
+    case "3months": {
+      const threeMonthsAgo = new Date(
+        today.getTime() - 90 * 24 * 60 * 60 * 1000
+      );
+      return itemDate >= threeMonthsAgo;
+    }
+    default:
+      return true;
+  }
 };

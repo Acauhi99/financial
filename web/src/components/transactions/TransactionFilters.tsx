@@ -9,15 +9,18 @@ type AmountRangeType =
   | "500-1000"
   | "1000-5000"
   | "5000+";
+type DateRangeType = "all" | "today" | "week" | "month" | "3months";
 
 interface TransactionFiltersProps {
   filterType: FilterType;
   amountRange: AmountRangeType;
+  dateRange: DateRangeType;
   searchTerm: string;
   showFilters: boolean;
   hasActiveFilters: boolean | string;
   onFilterTypeChange: (type: FilterType) => void;
   onAmountRangeChange: (range: AmountRangeType) => void;
+  onDateRangeChange: (range: DateRangeType) => void;
   onToggleFilters: () => void;
   onClearFilters: () => void;
 }
@@ -25,11 +28,13 @@ interface TransactionFiltersProps {
 export function TransactionFilters({
   filterType,
   amountRange,
+  dateRange,
   searchTerm,
   showFilters,
   hasActiveFilters,
   onFilterTypeChange,
   onAmountRangeChange,
+  onDateRangeChange,
   onToggleFilters,
   onClearFilters,
 }: Readonly<TransactionFiltersProps>) {
@@ -48,9 +53,12 @@ export function TransactionFilters({
         {hasActiveFilters && (
           <span className="bg-gray-500 text-white text-xs px-1.5 py-0.5 rounded-full">
             {
-              [filterType !== "all", amountRange !== "all", searchTerm].filter(
-                Boolean
-              ).length
+              [
+                filterType !== "all",
+                amountRange !== "all",
+                dateRange !== "all",
+                searchTerm,
+              ].filter(Boolean).length
             }
           </span>
         )}
@@ -78,6 +86,18 @@ export function TransactionFilters({
             className={`${CSS_CLASSES.SELECT} cursor-pointer`}
           >
             {FILTER_OPTIONS.AMOUNT_RANGES.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={dateRange}
+            onChange={(e) => onDateRangeChange(e.target.value as DateRangeType)}
+            className={`${CSS_CLASSES.SELECT} cursor-pointer`}
+          >
+            {FILTER_OPTIONS.DATE_RANGES.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
