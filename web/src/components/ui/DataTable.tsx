@@ -57,6 +57,20 @@ export function DataTable<T extends { id?: string | number }>({
     );
   };
 
+  const getCellContent = (item: T | undefined, column: Column<T>) => {
+    if (!item) return "";
+    if (column.render) return column.render(item);
+    return String(item[column.key as keyof T] || "");
+  };
+
+  const getRowClassName = (item: T | undefined) => {
+    const baseClasses =
+      "h-8 border-t border-gray-100 transition-all duration-200";
+    if (!item) return `${baseClasses} invisible`;
+    if (loading) return `${baseClasses} opacity-60 pointer-events-none`;
+    return `${baseClasses} hover:bg-gray-50 opacity-100`;
+  };
+
   if (loading && data.length === 0) {
     return <Loading />;
   }
@@ -124,26 +138,13 @@ export function DataTable<T extends { id?: string | number }>({
             {Array.from({ length: 10 }, (_, index) => {
               const item = data[index];
               return (
-                <tr
-                  key={item?.id || index}
-                  className={`h-8 border-t border-gray-100 transition-all duration-200 ${
-                    item
-                      ? loading
-                        ? "opacity-60 pointer-events-none"
-                        : "hover:bg-gray-50 opacity-100"
-                      : "invisible"
-                  }`}
-                >
+                <tr key={item?.id || index} className={getRowClassName(item)}>
                   {columns.map((column) => (
                     <td
                       key={String(column.key)}
                       className="px-4 py-1 text-sm text-gray-900 truncate"
                     >
-                      {item
-                        ? column.render
-                          ? column.render(item)
-                          : String(item[column.key as keyof T] || "")
-                        : ""}
+                      {getCellContent(item, column)}
                     </td>
                   ))}
                 </tr>

@@ -1,13 +1,13 @@
-import { CSS_CLASSES } from "../utils/constants";
+import { CSS_CLASSES } from "../../utils/constants";
 import {
   InvestmentsSummary,
   InvestmentForm,
   InvestmentsList,
   InvestmentFilters,
   investmentColumns,
-} from "./investments";
-import { Loading } from "./ui";
-import { type Investment, type PaginatedResponse } from "../services/api";
+} from ".";
+import { Loading } from "../ui";
+import { type Investment, type PaginatedResponse } from "../../services/api";
 
 interface InvestmentsViewProps {
   data: PaginatedResponse<Investment> | undefined;

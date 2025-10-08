@@ -1,4 +1,4 @@
-import { InvestmentsContainer } from "./InvestmentsContainer";
+import { InvestmentsContainer } from "./investments/InvestmentsContainer";
 
 export function Investments() {
   return <InvestmentsContainer />;

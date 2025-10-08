@@ -1,13 +1,13 @@
-import { CSS_CLASSES } from "../utils/constants";
+import { CSS_CLASSES } from "../../utils/constants";
 import {
   TransactionsSummary,
   TransactionForm,
   TransactionsList,
   TransactionFilters,
   transactionColumns,
-} from "./transactions";
-import { Loading } from "./ui";
-import { type Transaction, type PaginatedResponse } from "../services/api";
+} from ".";
+import { Loading } from "../ui";
+import { type Transaction, type PaginatedResponse } from "../../services/api";
 
 interface TransactionsViewProps {
   data: PaginatedResponse<Transaction> | undefined;

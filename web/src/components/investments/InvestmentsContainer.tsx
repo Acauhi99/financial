@@ -4,16 +4,16 @@ import {
   useInvestmentForm,
   useInvestmentTotals,
   usePaginationLoading,
-} from "../hooks";
-import { useInvestmentFilterState } from "../hooks/useInvestmentFilterState";
-import { useFilterLogic } from "../hooks/useFilterLogic";
+} from "../../hooks";
+import { useInvestmentFilterState } from "../../hooks/useInvestmentFilterState";
+import { useFilterLogic } from "../../hooks/useFilterLogic";
 import {
   filterByAmountRange,
   filterByRateRange,
   filterByDateRange,
-} from "../utils/filters";
-import { type Investment } from "../services/api";
-import { PAGINATION } from "../utils/constants";
+} from "../../utils/filters";
+import { type Investment } from "../../services/api";
+import { PAGINATION } from "../../utils/constants";
 import { InvestmentsView } from "./InvestmentsView";
 
 export function InvestmentsContainer() {

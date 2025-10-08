@@ -1,7 +1,7 @@
-import { CSS_CLASSES } from "../utils/constants";
-import { OverviewSummary, OverviewCharts } from "./overview";
-import { Loading } from "./ui";
-import { type OverviewData } from "../services/api";
+import { CSS_CLASSES } from "../../utils/constants";
+import { OverviewSummary, OverviewCharts } from ".";
+import { Loading } from "../ui";
+import { type OverviewData } from "../../services/api";
 
 interface OverviewViewProps {
   data: OverviewData | undefined;

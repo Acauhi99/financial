@@ -1,4 +1,4 @@
-import { useOverview, useOverviewFilters } from "../hooks";
+import { useOverview, useOverviewFilters } from "../../hooks";
 import { OverviewView } from "./OverviewView";
 
 export function OverviewContainer() {

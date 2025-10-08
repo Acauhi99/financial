@@ -3,3 +3,5 @@ export { TransactionForm } from "./TransactionForm";
 export { TransactionsList } from "./TransactionsList";
 export { TransactionFilters } from "./TransactionFilters";
 export { transactionColumns } from "./TransactionColumns";
+export { TransactionsView } from "./TransactionsView";
+export { TransactionsContainer } from "./TransactionsContainer";
