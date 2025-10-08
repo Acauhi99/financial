@@ -12,7 +12,7 @@ export function useInvestmentForm() {
 
   const addInvestment = () => {
     const result = investmentSchema.safeParse({ name, amount, rate });
-    
+
     if (!result.success) {
       const fieldErrors: Record<string, string> = {};
       result.error.issues.forEach((error) => {
@@ -26,10 +26,11 @@ export function useInvestmentForm() {
 
     setErrors({});
     createMutation.mutate(
-      { 
-        name: result.data.name, 
-        amount: parseFloat(result.data.amount), 
-        rate: parseFloat(result.data.rate) 
+      {
+        name: result.data.name,
+        amount: parseFloat(result.data.amount),
+        rate: parseFloat(result.data.rate),
+        date: new Date().toISOString().split("T")[0],
       },
       {
         onSuccess: () => {

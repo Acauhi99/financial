@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { type Transaction } from "../services/api";
-import { filterByAmountRange } from "../constants";
+import { filterByAmountRange } from "../utils/filters";
 
 type FilterType = "all" | "income" | "expense";
 type AmountRangeType =

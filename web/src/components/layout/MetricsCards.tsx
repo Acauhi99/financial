@@ -28,10 +28,7 @@ export function MetricsCards({
       ...METRICS_CONFIG.BALANCE,
       value: summary.balance,
       icon: (
-        <Wallet
-          size={UI_CONFIG.SIZES.ICON_SMALL}
-          className="text-gray-600"
-        />
+        <Wallet size={UI_CONFIG.SIZES.ICON_SMALL} className="text-gray-600" />
       ),
       iconBgColor: "bg-gray-100",
       valueColor: "text-gray-900",

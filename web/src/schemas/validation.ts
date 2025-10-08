@@ -9,7 +9,10 @@ export const transactionSchema = z.object({
   amount: z
     .string()
     .min(1, "Valor é obrigatório")
-    .refine((val) => !isNaN(Number(val)) && Number(val) > 0, "Valor deve ser maior que zero"),
+    .refine(
+      (val) => !isNaN(Number(val)) && Number(val) > 0,
+      "Valor deve ser maior que zero"
+    ),
   type: z.enum(["income", "expense"], {
     message: "Tipo deve ser receita ou despesa",
   }),
@@ -24,11 +27,17 @@ export const investmentSchema = z.object({
   amount: z
     .string()
     .min(1, "Valor é obrigatório")
-    .refine((val) => !isNaN(Number(val)) && Number(val) > 0, "Valor deve ser maior que zero"),
+    .refine(
+      (val) => !isNaN(Number(val)) && Number(val) > 0,
+      "Valor deve ser maior que zero"
+    ),
   rate: z
     .string()
     .min(1, "Taxa é obrigatória")
-    .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, "Taxa deve ser maior ou igual a zero"),
+    .refine(
+      (val) => !isNaN(Number(val)) && Number(val) >= 0,
+      "Taxa deve ser maior ou igual a zero"
+    ),
 });
 
 export type TransactionFormData = z.infer<typeof transactionSchema>;

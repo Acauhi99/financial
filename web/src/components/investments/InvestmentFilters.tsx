@@ -44,19 +44,19 @@ export function InvestmentFilters({
       value: amountRange,
       onChange: (value: string) =>
         onAmountRangeChange(value as AmountRangeType),
-      options: FILTER_OPTIONS.AMOUNT_RANGES,
+      options: [...FILTER_OPTIONS.AMOUNT_RANGES],
     },
     {
       id: "rate",
       value: rateRange,
       onChange: (value: string) => onRateRangeChange(value as RateRangeType),
-      options: FILTER_OPTIONS.INVESTMENT_RATES,
+      options: [...FILTER_OPTIONS.INVESTMENT_RATES],
     },
     {
       id: "date",
       value: dateRange,
       onChange: (value: string) => onDateRangeChange(value as DateRangeType),
-      options: FILTER_OPTIONS.DATE_RANGES,
+      options: [...FILTER_OPTIONS.DATE_RANGES],
     },
   ];
 

@@ -43,20 +43,20 @@ export function TransactionFilters({
       id: "type",
       value: filterType,
       onChange: (value: string) => onFilterTypeChange(value as FilterType),
-      options: FILTER_OPTIONS.TRANSACTION_TYPES,
+      options: [...FILTER_OPTIONS.TRANSACTION_TYPES],
     },
     {
       id: "amount",
       value: amountRange,
       onChange: (value: string) =>
         onAmountRangeChange(value as AmountRangeType),
-      options: FILTER_OPTIONS.AMOUNT_RANGES,
+      options: [...FILTER_OPTIONS.AMOUNT_RANGES],
     },
     {
       id: "date",
       value: dateRange,
       onChange: (value: string) => onDateRangeChange(value as DateRangeType),
-      options: FILTER_OPTIONS.DATE_RANGES,
+      options: [...FILTER_OPTIONS.DATE_RANGES],
     },
   ];
 

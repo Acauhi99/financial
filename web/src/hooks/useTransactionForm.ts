@@ -30,6 +30,7 @@ export function useTransactionForm() {
         type: result.data.type,
         description: result.data.description,
         amount: parseFloat(result.data.amount),
+        date: new Date().toISOString().split('T')[0]
       },
       {
         onSuccess: () => {
