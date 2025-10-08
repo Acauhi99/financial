@@ -1,11 +1,13 @@
 import { useState, useCallback } from "react";
 import {
   useInvestments,
-  useInvestmentForm,
+  useCreateInvestment,
   useInvestmentTotals,
   usePaginationLoading,
 } from "../../hooks";
-import { useInvestmentFilterState } from "../../hooks/useInvestmentFilterState";
+import { useGenericForm } from "../../hooks/useGenericForm";
+import { investmentSchema } from "../../schemas/validation";
+import { useGenericFilterState } from "../../hooks/useGenericFilterState";
 import { useFilterLogic } from "../../hooks/useFilterLogic";
 import {
   filterByAmountRange,
@@ -26,24 +28,58 @@ export function InvestmentsContainer() {
     ""
   );
   const paginationLoading = usePaginationLoading(isLoading, currentPage);
-  const formHook = useInvestmentForm();
+  const createMutation = useCreateInvestment();
+  const formHook = useGenericForm(
+    { name: "", amount: "", rate: "" },
+    investmentSchema,
+    (data) =>
+      createMutation.mutateAsync({
+        name: data.name,
+        amount: parseFloat(data.amount),
+        rate: parseFloat(data.rate),
+        date: new Date().toISOString().split("T")[0],
+      })
+  );
   const { data: totals } = useInvestmentTotals();
-  const filterState = useInvestmentFilterState();
+  const filterState = useGenericFilterState({
+    amountRange: "all" as
+      | "all"
+      | "0-100"
+      | "100-500"
+      | "500-1000"
+      | "1000-5000"
+      | "5000+",
+    rateRange: "all" as "all" | "0-50" | "50-80" | "80-100" | "100+",
+    dateRange: "all" as "all" | "today" | "week" | "month" | "3months",
+  });
 
   const filterFn = useCallback(
     (investment: Investment) => {
-      if (!filterByAmountRange(investment.amount, filterState.amountRange)) {
+      if (
+        !filterByAmountRange(
+          investment.amount,
+          filterState.customFilters.amountRange
+        )
+      ) {
         return false;
       }
-      if (!filterByRateRange(investment.rate, filterState.rateRange)) {
+      if (
+        !filterByRateRange(investment.rate, filterState.customFilters.rateRange)
+      ) {
         return false;
       }
-      if (!filterByDateRange(investment.date, filterState.dateRange)) {
+      if (
+        !filterByDateRange(investment.date, filterState.customFilters.dateRange)
+      ) {
         return false;
       }
       return true;
     },
-    [filterState.amountRange, filterState.rateRange, filterState.dateRange]
+    [
+      filterState.customFilters.amountRange,
+      filterState.customFilters.rateRange,
+      filterState.customFilters.dateRange,
+    ]
   );
 
   const searchFn = useCallback((investment: Investment, term: string) => {

@@ -20,43 +20,8 @@ interface TransactionsViewProps {
   paginationLoading: boolean;
   currentPage: number;
   onPageChange: (page: number) => void;
-  formHook: {
-    description: string;
-    amount: string;
-    type: "income" | "expense";
-    isLoading: boolean;
-    errors: Record<string, string>;
-    setDescription: (value: string) => void;
-    setAmount: (value: string) => void;
-    setType: (type: "income" | "expense") => void;
-    addTransaction: () => void;
-  };
-  filterState: {
-    filterType: "all" | "income" | "expense";
-    amountRange:
-      | "all"
-      | "0-100"
-      | "100-500"
-      | "500-1000"
-      | "1000-5000"
-      | "5000+";
-    dateRange: "all" | "today" | "week" | "month" | "3months";
-    searchTerm: string;
-    showFilters: boolean;
-    hasActiveFilters: boolean;
-    setFilterType: (type: "all" | "income" | "expense") => void;
-    setAmountRange: (
-      range: "all" | "0-100" | "100-500" | "500-1000" | "1000-5000" | "5000+"
-    ) => void;
-    setDateRange: (
-      range: "all" | "today" | "week" | "month" | "3months"
-    ) => void;
-    setSearchTerm: (term: string) => void;
-    setShowFilters: (show: boolean) => void;
-    sortBy: string;
-    sortOrder: "asc" | "desc";
-    handleSort: (key: string) => void;
-  };
+  formHook: any;
+  filterState: any;
   onClearFilters: () => void;
 }
 
@@ -77,22 +42,22 @@ export function TransactionsView({
 
   const filters = (
     <TransactionFilters
-      filterType={filterState.filterType}
-      amountRange={filterState.amountRange}
-      dateRange={filterState.dateRange}
+      filterType={filterState.customFilters.filterType}
+      amountRange={filterState.customFilters.amountRange}
+      dateRange={filterState.customFilters.dateRange}
       searchTerm={filterState.searchTerm}
       showFilters={filterState.showFilters}
       hasActiveFilters={filterState.hasActiveFilters}
       onFilterTypeChange={(type) => {
-        filterState.setFilterType(type);
+        filterState.setCustomFilter("filterType", type);
         onPageChange(1);
       }}
       onAmountRangeChange={(range) => {
-        filterState.setAmountRange(range);
+        filterState.setCustomFilter("amountRange", range);
         onPageChange(1);
       }}
       onDateRangeChange={(range) => {
-        filterState.setDateRange(range);
+        filterState.setCustomFilter("dateRange", range);
         onPageChange(1);
       }}
       onToggleFilters={() =>
@@ -130,15 +95,15 @@ export function TransactionsView({
       />
 
       <TransactionForm
-        description={formHook.description}
-        amount={formHook.amount}
-        type={formHook.type}
+        description={formHook.values.description}
+        amount={formHook.values.amount}
+        type={formHook.values.type}
         isLoading={formHook.isLoading}
         errors={formHook.errors}
-        onDescriptionChange={formHook.setDescription}
-        onAmountChange={formHook.setAmount}
-        onTypeChange={formHook.setType}
-        onSubmit={formHook.addTransaction}
+        onDescriptionChange={(value) => formHook.setValue("description", value)}
+        onAmountChange={(value) => formHook.setValue("amount", value)}
+        onTypeChange={(value) => formHook.setValue("type", value)}
+        onSubmit={formHook.handleSubmit}
       />
 
       <div className={CSS_CLASSES.LAYOUT_CONTENT}>

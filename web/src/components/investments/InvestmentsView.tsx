@@ -20,43 +20,8 @@ interface InvestmentsViewProps {
   paginationLoading: boolean;
   currentPage: number;
   onPageChange: (page: number) => void;
-  formHook: {
-    name: string;
-    amount: string;
-    rate: string;
-    isLoading: boolean;
-    errors: Record<string, string>;
-    setName: (value: string) => void;
-    setAmount: (value: string) => void;
-    setRate: (value: string) => void;
-    addInvestment: () => void;
-  };
-  filterState: {
-    amountRange:
-      | "all"
-      | "0-100"
-      | "100-500"
-      | "500-1000"
-      | "1000-5000"
-      | "5000+";
-    rateRange: "all" | "0-50" | "50-80" | "80-100" | "100+";
-    dateRange: "all" | "today" | "week" | "month" | "3months";
-    searchTerm: string;
-    showFilters: boolean;
-    hasActiveFilters: boolean;
-    setAmountRange: (
-      range: "all" | "0-100" | "100-500" | "500-1000" | "1000-5000" | "5000+"
-    ) => void;
-    setRateRange: (range: "all" | "0-50" | "50-80" | "80-100" | "100+") => void;
-    setDateRange: (
-      range: "all" | "today" | "week" | "month" | "3months"
-    ) => void;
-    setSearchTerm: (term: string) => void;
-    setShowFilters: (show: boolean) => void;
-    sortBy: string;
-    sortOrder: "asc" | "desc";
-    handleSort: (key: string) => void;
-  };
+  formHook: any;
+  filterState: any;
   onClearFilters: () => void;
 }
 
@@ -81,22 +46,22 @@ export function InvestmentsView({
 
   const filters = (
     <InvestmentFilters
-      amountRange={filterState.amountRange}
-      rateRange={filterState.rateRange}
-      dateRange={filterState.dateRange}
+      amountRange={filterState.customFilters.amountRange}
+      rateRange={filterState.customFilters.rateRange}
+      dateRange={filterState.customFilters.dateRange}
       searchTerm={filterState.searchTerm}
       showFilters={filterState.showFilters}
       hasActiveFilters={filterState.hasActiveFilters}
       onAmountRangeChange={(range) => {
-        filterState.setAmountRange(range);
+        filterState.setCustomFilter("amountRange", range);
         onPageChange(1);
       }}
       onRateRangeChange={(range) => {
-        filterState.setRateRange(range);
+        filterState.setCustomFilter("rateRange", range);
         onPageChange(1);
       }}
       onDateRangeChange={(range) => {
-        filterState.setDateRange(range);
+        filterState.setCustomFilter("dateRange", range);
         onPageChange(1);
       }}
       onToggleFilters={() =>
@@ -134,15 +99,15 @@ export function InvestmentsView({
       />
 
       <InvestmentForm
-        name={formHook.name}
-        amount={formHook.amount}
-        rate={formHook.rate}
+        name={formHook.values.name}
+        amount={formHook.values.amount}
+        rate={formHook.values.rate}
         isLoading={formHook.isLoading}
         errors={formHook.errors}
-        onNameChange={formHook.setName}
-        onAmountChange={formHook.setAmount}
-        onRateChange={formHook.setRate}
-        onSubmit={formHook.addInvestment}
+        onNameChange={(value) => formHook.setValue("name", value)}
+        onAmountChange={(value) => formHook.setValue("amount", value)}
+        onRateChange={(value) => formHook.setValue("rate", value)}
+        onSubmit={formHook.handleSubmit}
       />
 
       <div className={CSS_CLASSES.LAYOUT_CONTENT}>

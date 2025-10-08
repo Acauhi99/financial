@@ -1,11 +1,13 @@
 import { useState, useCallback } from "react";
 import {
   useTransactions,
-  useTransactionForm,
+  useCreateTransaction,
   useTransactionTotals,
   usePaginationLoading,
 } from "../../hooks";
-import { useTransactionFilterState } from "../../hooks/useTransactionFilterState";
+import { useGenericForm } from "../../hooks/useGenericForm";
+import { transactionSchema } from "../../schemas/validation";
+import { useGenericFilterState } from "../../hooks/useGenericFilterState";
 import { useFilterLogic } from "../../hooks/useFilterLogic";
 import { filterByAmountRange, filterByDateRange } from "../../utils/filters";
 import { type Transaction } from "../../services/api";
@@ -23,27 +25,62 @@ export function TransactionsContainer() {
     "all"
   );
   const paginationLoading = usePaginationLoading(isLoading, currentPage);
-  const formHook = useTransactionForm();
+  const createMutation = useCreateTransaction();
+  const formHook = useGenericForm(
+    { description: "", amount: "", type: "expense" as "income" | "expense" },
+    transactionSchema,
+    (data) =>
+      createMutation.mutateAsync({
+        type: data.type,
+        description: data.description,
+        amount: parseFloat(data.amount),
+        date: new Date().toISOString().split("T")[0],
+      })
+  );
   const { data: totals } = useTransactionTotals();
-  const filterState = useTransactionFilterState();
+  const filterState = useGenericFilterState({
+    filterType: "all" as "all" | "income" | "expense",
+    amountRange: "all" as
+      | "all"
+      | "0-100"
+      | "100-500"
+      | "500-1000"
+      | "1000-5000"
+      | "5000+",
+    dateRange: "all" as "all" | "today" | "week" | "month" | "3months",
+  });
 
   const filterFn = useCallback(
     (transaction: Transaction) => {
       if (
-        filterState.filterType !== "all" &&
-        transaction.type !== filterState.filterType
+        filterState.customFilters.filterType !== "all" &&
+        transaction.type !== filterState.customFilters.filterType
       ) {
         return false;
       }
-      if (!filterByAmountRange(transaction.amount, filterState.amountRange)) {
+      if (
+        !filterByAmountRange(
+          transaction.amount,
+          filterState.customFilters.amountRange
+        )
+      ) {
         return false;
       }
-      if (!filterByDateRange(transaction.date, filterState.dateRange)) {
+      if (
+        !filterByDateRange(
+          transaction.date,
+          filterState.customFilters.dateRange
+        )
+      ) {
         return false;
       }
       return true;
     },
-    [filterState.filterType, filterState.amountRange, filterState.dateRange]
+    [
+      filterState.customFilters.filterType,
+      filterState.customFilters.amountRange,
+      filterState.customFilters.dateRange,
+    ]
   );
 
   const searchFn = useCallback((transaction: Transaction, term: string) => {

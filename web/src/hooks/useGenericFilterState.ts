@@ -1,10 +1,13 @@
 import { useState } from "react";
 
-export function useFilterState() {
+export function useGenericFilterState<T extends Record<string, any>>(
+  initialCustomFilters: T
+) {
   const [searchTerm, setSearchTerm] = useState("");
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [customFilters, setCustomFilters] = useState<T>(initialCustomFilters);
 
   const handleSort = (key: string) => {
     if (sortBy === key) {
@@ -15,9 +18,20 @@ export function useFilterState() {
     }
   };
 
+  const setCustomFilter = <K extends keyof T>(key: K, value: T[K]) => {
+    setCustomFilters((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const hasActiveFilters =
+    searchTerm !== "" ||
+    Object.values(customFilters as Record<string, any>).some((value) =>
+      Array.isArray(value) ? value.length > 0 : value !== "all"
+    );
+
   const clearFilters = () => {
     setSearchTerm("");
     setShowFilters(false);
+    setCustomFilters(initialCustomFilters);
   };
 
   return {
@@ -28,6 +42,9 @@ export function useFilterState() {
     sortBy,
     sortOrder,
     handleSort,
+    customFilters,
+    setCustomFilter,
+    hasActiveFilters,
     clearFilters,
   };
 }
