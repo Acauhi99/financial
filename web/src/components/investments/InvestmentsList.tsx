@@ -55,11 +55,6 @@ export function InvestmentsList({
                     totalItems
                   )} de ${totalItems} investimentos`}
             </span>
-            {hasActiveFilters && (
-              <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                Filtros ativos
-              </span>
-            )}
           </div>
         </div>
       </div>
