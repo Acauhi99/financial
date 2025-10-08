@@ -5,7 +5,7 @@ import {
   TrendingUp as TrendingUpIcon,
 } from "lucide-react";
 import { CSS_CLASSES, METRICS_CONFIG, UI_CONFIG } from "../../utils/constants";
-import { MetricCard } from "../ui";
+import { MetricCard } from ".";
 
 interface MetricsCardsProps {
   summary: {
