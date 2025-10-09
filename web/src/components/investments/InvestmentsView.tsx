@@ -8,6 +8,12 @@ import {
 } from ".";
 import { Loading } from "../ui";
 import { type Investment, type PaginatedResponse } from "../../services/api";
+import {
+  type GenericFormHook,
+  type GenericFilterState,
+  type InvestmentFormData,
+  type InvestmentFilters as IFilters,
+} from "../../types/hooks";
 
 interface InvestmentsViewProps {
   data: PaginatedResponse<Investment> | undefined;
@@ -20,8 +26,8 @@ interface InvestmentsViewProps {
   paginationLoading: boolean;
   currentPage: number;
   onPageChange: (page: number) => void;
-  formHook: any;
-  filterState: any;
+  formHook: GenericFormHook<InvestmentFormData>;
+  filterState: GenericFilterState<IFilters>;
   onClearFilters: () => void;
 }
 

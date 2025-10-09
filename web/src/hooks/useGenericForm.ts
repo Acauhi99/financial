@@ -1,20 +1,20 @@
 import { useState } from "react";
 import { z } from "zod";
 
-export function useGenericForm<T extends Record<string, any>>(
+export function useGenericForm<T extends Record<string, unknown>>(
   initialValues: T,
   schema: z.ZodSchema<T>,
-  onSubmit: (data: T) => Promise<any> | void,
+  onSubmit: (data: T) => Promise<unknown> | void,
   onSuccess?: () => void
 ) {
   const [values, setValues] = useState<T>(initialValues);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const setValue = (key: string, value: any) => {
+  const setValue = <K extends keyof T>(key: K, value: T[K]) => {
     setValues((prev) => ({ ...prev, [key]: value }));
-    if (errors[key]) {
-      setErrors((prev) => ({ ...prev, [key]: "" }));
+    if (errors[key as string]) {
+      setErrors((prev) => ({ ...prev, [key as string]: "" }));
     }
   };
 

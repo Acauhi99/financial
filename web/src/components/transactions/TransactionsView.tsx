@@ -8,6 +8,12 @@ import {
 } from ".";
 import { Loading } from "../ui";
 import { type Transaction, type PaginatedResponse } from "../../services/api";
+import {
+  type GenericFormHook,
+  type GenericFilterState,
+  type TransactionFormData,
+  type TransactionFilters as TFilters,
+} from "../../types/hooks";
 
 interface TransactionsViewProps {
   data: PaginatedResponse<Transaction> | undefined;
@@ -20,8 +26,8 @@ interface TransactionsViewProps {
   paginationLoading: boolean;
   currentPage: number;
   onPageChange: (page: number) => void;
-  formHook: any;
-  filterState: any;
+  formHook: GenericFormHook<TransactionFormData>;
+  filterState: GenericFilterState<TFilters>;
   onClearFilters: () => void;
 }
 

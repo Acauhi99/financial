@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export function useGenericFilterState<T extends Record<string, any>>(
+export function useGenericFilterState<T extends Record<string, unknown>>(
   initialCustomFilters: T
 ) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -24,7 +24,7 @@ export function useGenericFilterState<T extends Record<string, any>>(
 
   const hasActiveFilters =
     searchTerm !== "" ||
-    Object.values(customFilters as Record<string, any>).some((value) =>
+    Object.values(customFilters as Record<string, unknown>).some((value) =>
       Array.isArray(value) ? value.length > 0 : value !== "all"
     );
 
