@@ -1,4 +1,3 @@
-// Transactions - Gestão de transações
 export { TransactionsContainer } from "./TransactionsContainer";
 export { TransactionsView } from "./TransactionsView";
 export { TransactionForm } from "./TransactionForm";
