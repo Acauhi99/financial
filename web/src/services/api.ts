@@ -1,19 +1,35 @@
 // Interfaces
+export interface Category {
+  id: string;
+  name: string;
+  color: string;
+  type: "income" | "expense";
+}
+
 export interface Transaction {
-  id: number;
+  id: number | string;
   type: "income" | "expense";
   description: string;
   amount: number;
   date: string;
+  categoryId?: string;
+  category?: Category;
+  userId?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Investment {
-  id: number;
+  id: number | string;
   name: string;
   amount: number;
   rate: number;
   monthlyReturn: number;
   date: string;
+  type?: string;
+  userId?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface PaginatedResponse<T> {
@@ -24,6 +40,18 @@ export interface PaginatedResponse<T> {
     total: number;
     totalPages: number;
   };
+}
+
+export interface DashboardSummary {
+  totals: {
+    balance: number;
+    totalIncome: number;
+    totalExpenses: number;
+    totalInvestments: number;
+    totalMonthlyReturn: number;
+    averageRate: number;
+  };
+  categories: Category[];
 }
 
 export interface OverviewData {
@@ -58,63 +86,75 @@ export interface OverviewData {
   }>;
 }
 
+const mockCategories: Category[] = [
+  { id: "cat-1", name: "Salário", color: "#10b981", type: "income" },
+  { id: "cat-2", name: "Freelance", color: "#059669", type: "income" },
+  { id: "cat-3", name: "Investimentos", color: "#047857", type: "income" },
+  { id: "cat-4", name: "Moradia", color: "#ef4444", type: "expense" },
+  { id: "cat-5", name: "Alimentação", color: "#f97316", type: "expense" },
+  { id: "cat-6", name: "Transporte", color: "#eab308", type: "expense" },
+  { id: "cat-7", name: "Saúde", color: "#3b82f6", type: "expense" },
+  { id: "cat-8", name: "Lazer", color: "#8b5cf6", type: "expense" },
+  { id: "cat-9", name: "Outros", color: "#6b7280", type: "expense" },
+];
+
+// Helper para gerar transações com nova estrutura
+const createTransactionMock = (
+  id: number,
+  type: "income" | "expense",
+  description: string,
+  amount: number,
+  date: string,
+  categoryId: string
+): Transaction => ({
+  id: `txn-${id}`,
+  type,
+  description,
+  amount,
+  date,
+  categoryId,
+  userId: "user-1",
+  createdAt: `${date}T10:00:00Z`,
+  updatedAt: `${date}T10:00:00Z`,
+});
+
 const mockTransactions: Transaction[] = [
-  {
-    id: 1,
-    type: "income",
-    description: "Salário",
-    amount: 8500,
-    date: "2024-12-15",
-  },
-  {
-    id: 2,
-    type: "expense",
-    description: "Aluguel",
-    amount: 2200,
-    date: "2024-12-14",
-  },
-  {
-    id: 3,
-    type: "expense",
-    description: "Supermercado Extra",
-    amount: 450,
-    date: "2024-12-13",
-  },
-  {
-    id: 4,
-    type: "income",
-    description: "Freelance Design",
-    amount: 1200,
-    date: "2024-12-12",
-  },
-  {
-    id: 5,
-    type: "expense",
-    description: "Conta de Luz",
-    amount: 180,
-    date: "2024-12-11",
-  },
-  {
-    id: 6,
-    type: "expense",
-    description: "Internet",
-    amount: 120,
-    date: "2024-12-10",
-  },
-  {
-    id: 7,
-    type: "expense",
-    description: "Gasolina",
-    amount: 320,
-    date: "2024-12-09",
-  },
-  {
-    id: 8,
-    type: "income",
-    description: "Dividendos Ações",
-    amount: 280,
-    date: "2024-12-08",
-  },
+  createTransactionMock(1, "income", "Salário", 8500, "2024-12-15", "cat-1"),
+  createTransactionMock(2, "expense", "Aluguel", 2200, "2024-12-14", "cat-4"),
+  createTransactionMock(
+    3,
+    "expense",
+    "Supermercado Extra",
+    450,
+    "2024-12-13",
+    "cat-5"
+  ),
+  createTransactionMock(
+    4,
+    "income",
+    "Freelance Design",
+    1200,
+    "2024-12-12",
+    "cat-2"
+  ),
+  createTransactionMock(
+    5,
+    "expense",
+    "Conta de Luz",
+    180,
+    "2024-12-11",
+    "cat-4"
+  ),
+  createTransactionMock(6, "expense", "Internet", 120, "2024-12-10", "cat-4"),
+  createTransactionMock(7, "expense", "Gasolina", 320, "2024-12-09", "cat-6"),
+  createTransactionMock(
+    8,
+    "income",
+    "Dividendos Ações",
+    280,
+    "2024-12-08",
+    "cat-3"
+  ),
   {
     id: 9,
     type: "expense",
@@ -411,15 +451,36 @@ const mockTransactions: Transaction[] = [
   },
 ];
 
+// Helper para gerar investimentos com nova estrutura
+const createInvestmentMock = (
+  id: number,
+  name: string,
+  amount: number,
+  rate: number,
+  date: string,
+  type: string
+): Investment => ({
+  id: `inv-${id}`,
+  name,
+  amount,
+  rate,
+  monthlyReturn: (amount * (rate / 100)) / 12,
+  date,
+  type,
+  userId: "user-1",
+  createdAt: `${date}T10:00:00Z`,
+  updatedAt: `${date}T10:00:00Z`,
+});
+
 const mockInvestments: Investment[] = [
-  {
-    id: 1,
-    name: "Tesouro Selic 2029",
-    amount: 15000,
-    rate: 100,
-    monthlyReturn: 125,
-    date: "2024-12-15",
-  },
+  createInvestmentMock(
+    1,
+    "Tesouro Selic 2029",
+    15000,
+    100,
+    "2024-12-15",
+    "Tesouro Direto"
+  ),
   {
     id: 2,
     name: "CDB Banco Inter",
@@ -689,7 +750,14 @@ export const api = {
     transaction: Omit<Transaction, "id">
   ): Promise<Transaction> {
     await delay(500);
-    const newTransaction = { ...transaction, id: Date.now() };
+    const newTransaction = createTransactionMock(
+      Date.now(),
+      transaction.type,
+      transaction.description,
+      transaction.amount,
+      transaction.date,
+      transaction.categoryId || "cat-9"
+    );
     mockTransactions.unshift(newTransaction);
     return newTransaction;
   },
@@ -721,10 +789,63 @@ export const api = {
     investment: Omit<Investment, "id" | "monthlyReturn">
   ): Promise<Investment> {
     await delay(500);
-    const monthlyReturn = (investment.amount * (investment.rate / 100)) / 12;
-    const newInvestment = { ...investment, id: Date.now(), monthlyReturn };
+    const newInvestment = createInvestmentMock(
+      Date.now(),
+      investment.name,
+      investment.amount,
+      investment.rate,
+      investment.date,
+      investment.type || "Outros"
+    );
     mockInvestments.unshift(newInvestment);
     return newInvestment;
+  },
+
+  // Novo endpoint consolidado
+  async getDashboardSummary(): Promise<DashboardSummary> {
+    await delay(300);
+
+    const totalIncome = mockTransactions
+      .filter((t) => t.type === "income")
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    const totalExpenses = mockTransactions
+      .filter((t) => t.type === "expense")
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    const totalInvestments = mockInvestments.reduce(
+      (sum, inv) => sum + inv.amount,
+      0
+    );
+
+    const totalMonthlyReturn = mockInvestments.reduce(
+      (sum, inv) => sum + inv.monthlyReturn,
+      0
+    );
+
+    const averageRate =
+      mockInvestments.length > 0
+        ? mockInvestments.reduce((sum, inv) => sum + inv.rate, 0) /
+          mockInvestments.length
+        : 0;
+
+    return {
+      totals: {
+        balance: totalIncome - totalExpenses,
+        totalIncome,
+        totalExpenses,
+        totalInvestments,
+        totalMonthlyReturn,
+        averageRate,
+      },
+      categories: mockCategories,
+    };
+  },
+
+  // Endpoint para categorias
+  async getCategories(): Promise<Category[]> {
+    await delay(100);
+    return mockCategories;
   },
 
   // Overview

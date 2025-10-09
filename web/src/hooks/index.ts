@@ -8,3 +8,5 @@ export { useTransactionTotals } from "./useTransactionTotals";
 export { useFilterLogic } from "./useFilterLogic";
 export { useGenericFilterState } from "./useGenericFilterState";
 export { useGenericForm } from "./useGenericForm";
+export { useDashboardSummary } from "./useDashboardSummary";
+export { useCategories } from "./useCategories";
