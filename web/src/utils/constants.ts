@@ -35,7 +35,7 @@ export const CSS_CLASSES = {
   INPUT_WITH_ICON:
     "w-full pl-8 pr-2 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-gray-500 focus:border-transparent text-sm",
   BUTTON_PRIMARY:
-    "px-4 py-2 rounded font-medium transition-all flex items-center space-x-1 bg-gray-900 text-white hover:bg-gray-800 shadow-sm hover:shadow-md text-sm",
+    "px-4 py-2 rounded font-medium transition-all flex items-center space-x-1 bg-gray-900 text-white hover:bg-gray-800 shadow-sm hover:shadow-md text-sm cursor-pointer",
   BUTTON_DISABLED:
     "px-4 py-2 rounded font-medium transition-all flex items-center space-x-1 bg-gray-200 text-gray-400 cursor-not-allowed text-sm",
   BUTTON_SMALL: "px-2 py-1 text-xs rounded transition-colors cursor-pointer",
