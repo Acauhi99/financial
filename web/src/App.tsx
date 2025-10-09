@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   LayoutDashboard,
@@ -7,9 +7,22 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { InvestmentsContainer } from "./components/investments/InvestmentsContainer";
-import { OverviewContainer } from "./components/overview/OverviewContainer";
-import { TransactionsContainer } from "./components/transactions/TransactionsContainer";
+
+const InvestmentsContainer = lazy(() =>
+  import("./components/investments/InvestmentsContainer").then((m) => ({
+    default: m.InvestmentsContainer,
+  }))
+);
+const OverviewContainer = lazy(() =>
+  import("./components/overview/OverviewContainer").then((m) => ({
+    default: m.OverviewContainer,
+  }))
+);
+const TransactionsContainer = lazy(() =>
+  import("./components/transactions/TransactionsContainer").then((m) => ({
+    default: m.TransactionsContainer,
+  }))
+);
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -147,7 +160,15 @@ function App() {
         {/* Main Content */}
         <div className="flex-1 overflow-hidden">
           <div className="h-full max-w-7xl mx-auto p-6">
-            {currentPageComponent}
+            <Suspense
+              fallback={
+                <div className="flex items-center justify-center h-full">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+                </div>
+              }
+            >
+              {currentPageComponent}
+            </Suspense>
           </div>
         </div>
       </div>
