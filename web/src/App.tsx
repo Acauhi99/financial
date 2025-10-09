@@ -58,7 +58,7 @@ function App() {
         <div
           className={`${
             sidebarCollapsed ? "w-16" : "w-64"
-          } bg-gradient-to-b from-gray-900 to-gray-800 shadow-2xl transition-all duration-300 flex flex-col border-r border-gray-700`}
+          } bg-gradient-to-b from-gray-900 to-gray-800 shadow-2xl transition-[width] duration-200 ease-out flex flex-col border-r border-gray-700 will-change-[width]`}
         >
           <div className="p-4 flex-shrink-0 border-b border-gray-700/50">
             <div
@@ -76,7 +76,7 @@ function App() {
               )}
               <button
                 onClick={toggleSidebar}
-                className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer"
+                className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition-colors duration-150 shadow-sm hover:shadow-md cursor-pointer"
               >
                 {sidebarCollapsed ? (
                   <ChevronRight size={16} />
@@ -92,7 +92,7 @@ function App() {
                 key={item.id}
                 onClick={() => handlePageChange(item.id as Page)}
                 className={(() => {
-                  const baseClasses = `w-full flex items-center py-3 rounded-xl text-left transition-all duration-200 group focus:outline-none cursor-pointer`;
+                  const baseClasses = `w-full flex items-center py-3 rounded-xl text-left transition-colors duration-150 group focus:outline-none cursor-pointer`;
                   const positionClasses = sidebarCollapsed
                     ? "justify-center px-2"
                     : "px-3";
@@ -114,7 +114,7 @@ function App() {
                     currentPage === item.id
                       ? "bg-white/20"
                       : "bg-gray-700/50 group-hover:bg-gray-600/50"
-                  } p-2 rounded-lg transition-colors duration-200 ${
+                  } p-2 rounded-lg transition-colors duration-150 ${
                     sidebarCollapsed ? "" : "mr-3"
                   }`}
                 >
