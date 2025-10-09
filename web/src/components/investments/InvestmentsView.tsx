@@ -25,21 +25,24 @@ interface InvestmentsViewProps {
   error: Error | null;
   paginationLoading: boolean;
   currentPage: number;
+  itemsPerPage: number;
   onPageChange: (page: number) => void;
+  setCurrentPage: (page: number) => void;
   formHook: GenericFormHook<InvestmentFormData>;
   filterState: GenericFilterState<IFilters>;
   onClearFilters: () => void;
 }
 
 export function InvestmentsView({
-  data,
   filteredData,
   totals,
   isLoading,
   error,
   paginationLoading,
   currentPage,
+  itemsPerPage,
   onPageChange,
+  setCurrentPage,
   formHook,
   filterState,
   onClearFilters,
@@ -118,25 +121,28 @@ export function InvestmentsView({
 
       <div className={CSS_CLASSES.LAYOUT_CONTENT}>
         <InvestmentsList
-          data={filteredData}
+          data={filteredData.slice(
+            (currentPage - 1) * itemsPerPage,
+            currentPage * itemsPerPage
+          )}
           columns={investmentColumns}
           isLoading={isLoading}
           error={error}
           searchTerm={filterState.searchTerm}
           onSearchChange={(value) => {
             filterState.setSearchTerm(value);
-            onPageChange(1);
+            setCurrentPage(1);
           }}
           sortBy={filterState.sortBy}
           sortOrder={filterState.sortOrder}
           onSort={filterState.handleSort}
           currentPage={currentPage}
-          totalPages={data?.pagination.totalPages || 1}
+          totalPages={Math.ceil(filteredData.length / itemsPerPage)}
           onPageChange={onPageChange}
           filters={filters}
           hasActiveFilters={filterState.hasActiveFilters}
           onClearFilters={onClearFilters}
-          totalItems={data?.pagination.total || 0}
+          totalItems={filteredData.length}
           paginationLoading={paginationLoading}
         />
       </div>

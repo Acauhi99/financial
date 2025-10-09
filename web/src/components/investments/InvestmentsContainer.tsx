@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useMemo } from "react";
 import {
   useInvestments,
   useCreateInvestment,
@@ -22,11 +22,7 @@ export function InvestmentsContainer() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = PAGINATION.ITEMS_PER_PAGE;
 
-  const { data, isLoading, error } = useInvestments(
-    currentPage,
-    itemsPerPage,
-    ""
-  );
+  const { data, isLoading, error } = useInvestments(1, 1000, "");
   const paginationLoading = usePaginationLoading(isLoading, currentPage);
   const createMutation = useCreateInvestment();
   const formHook = useGenericForm(
@@ -53,38 +49,30 @@ export function InvestmentsContainer() {
     dateRange: "all" as "all" | "today" | "week" | "month" | "3months",
   });
 
-  const filterFn = useCallback(
-    (investment: Investment) => {
-      if (
-        !filterByAmountRange(
-          investment.amount,
-          filterState.customFilters.amountRange
-        )
-      ) {
+  const { amountRange, rateRange, dateRange } = filterState.customFilters;
+
+  const filterFn = useMemo(
+    () => (investment: Investment) => {
+      if (!filterByAmountRange(investment.amount, amountRange)) {
         return false;
       }
-      if (
-        !filterByRateRange(investment.rate, filterState.customFilters.rateRange)
-      ) {
+      if (!filterByRateRange(investment.rate, rateRange)) {
         return false;
       }
-      if (
-        !filterByDateRange(investment.date, filterState.customFilters.dateRange)
-      ) {
+      if (!filterByDateRange(investment.date, dateRange)) {
         return false;
       }
       return true;
     },
-    [
-      filterState.customFilters.amountRange,
-      filterState.customFilters.rateRange,
-      filterState.customFilters.dateRange,
-    ]
+    [amountRange, rateRange, dateRange]
   );
 
-  const searchFn = useCallback((investment: Investment, term: string) => {
-    return investment.name.toLowerCase().includes(term.toLowerCase());
-  }, []);
+  const searchFn = useMemo(
+    () => (investment: Investment, term: string) => {
+      return investment.name.toLowerCase().includes(term.toLowerCase());
+    },
+    []
+  );
 
   const filteredData = useFilterLogic({
     data: data?.data,
@@ -109,7 +97,9 @@ export function InvestmentsContainer() {
       error={error}
       paginationLoading={paginationLoading}
       currentPage={currentPage}
+      itemsPerPage={itemsPerPage}
       onPageChange={setCurrentPage}
+      setCurrentPage={setCurrentPage}
       formHook={formHook}
       filterState={filterState}
       onClearFilters={handleClearFilters}

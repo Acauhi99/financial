@@ -31,26 +31,31 @@ export const filterByDateRange = (date: string, range: string) => {
     return true;
   }
 
-  const itemDate = new Date(date);
+  const itemDate = new Date(date + "T00:00:00");
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
   switch (range) {
-    case "today":
-      return itemDate >= today;
+    case "today": {
+      const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
+      return itemDate >= today && itemDate < tomorrow;
+    }
     case "week": {
-      const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-      return itemDate >= weekAgo;
+      const weekAgo = new Date(today.getTime() - 6 * 24 * 60 * 60 * 1000);
+      const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
+      return itemDate >= weekAgo && itemDate < tomorrow;
     }
     case "month": {
-      const monthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
-      return itemDate >= monthAgo;
+      const monthAgo = new Date(today.getTime() - 29 * 24 * 60 * 60 * 1000);
+      const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
+      return itemDate >= monthAgo && itemDate < tomorrow;
     }
     case "3months": {
       const threeMonthsAgo = new Date(
-        today.getTime() - 90 * 24 * 60 * 60 * 1000
+        today.getTime() - 89 * 24 * 60 * 60 * 1000
       );
-      return itemDate >= threeMonthsAgo;
+      const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
+      return itemDate >= threeMonthsAgo && itemDate < tomorrow;
     }
     default:
       return true;

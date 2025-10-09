@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useMemo } from "react";
 import {
   useTransactions,
   useCreateTransaction,
@@ -18,12 +18,7 @@ export function TransactionsContainer() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = PAGINATION.ITEMS_PER_PAGE;
 
-  const { data, isLoading, error } = useTransactions(
-    currentPage,
-    itemsPerPage,
-    "",
-    "all"
-  );
+  const { data, isLoading, error } = useTransactions(1, 1000, "", "all");
   const paginationLoading = usePaginationLoading(isLoading, currentPage);
   const createMutation = useCreateTransaction();
   const formHook = useGenericForm(
@@ -50,42 +45,30 @@ export function TransactionsContainer() {
     dateRange: "all" as "all" | "today" | "week" | "month" | "3months",
   });
 
-  const filterFn = useCallback(
-    (transaction: Transaction) => {
-      if (
-        filterState.customFilters.filterType !== "all" &&
-        transaction.type !== filterState.customFilters.filterType
-      ) {
+  const { filterType, amountRange, dateRange } = filterState.customFilters;
+
+  const filterFn = useMemo(
+    () => (transaction: Transaction) => {
+      if (filterType !== "all" && transaction.type !== filterType) {
         return false;
       }
-      if (
-        !filterByAmountRange(
-          transaction.amount,
-          filterState.customFilters.amountRange
-        )
-      ) {
+      if (!filterByAmountRange(transaction.amount, amountRange)) {
         return false;
       }
-      if (
-        !filterByDateRange(
-          transaction.date,
-          filterState.customFilters.dateRange
-        )
-      ) {
+      if (!filterByDateRange(transaction.date, dateRange)) {
         return false;
       }
       return true;
     },
-    [
-      filterState.customFilters.filterType,
-      filterState.customFilters.amountRange,
-      filterState.customFilters.dateRange,
-    ]
+    [filterType, amountRange, dateRange]
   );
 
-  const searchFn = useCallback((transaction: Transaction, term: string) => {
-    return transaction.description.toLowerCase().includes(term.toLowerCase());
-  }, []);
+  const searchFn = useMemo(
+    () => (transaction: Transaction, term: string) => {
+      return transaction.description.toLowerCase().includes(term.toLowerCase());
+    },
+    []
+  );
 
   const filteredData = useFilterLogic({
     data: data?.data,
@@ -110,7 +93,9 @@ export function TransactionsContainer() {
       error={error}
       paginationLoading={paginationLoading}
       currentPage={currentPage}
+      itemsPerPage={itemsPerPage}
       onPageChange={setCurrentPage}
+      setCurrentPage={setCurrentPage}
       formHook={formHook}
       filterState={filterState}
       onClearFilters={handleClearFilters}

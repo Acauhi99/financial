@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 
 export function useGenericFilterState<T extends Record<string, unknown>>(
   initialCustomFilters: T
@@ -9,30 +9,39 @@ export function useGenericFilterState<T extends Record<string, unknown>>(
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [customFilters, setCustomFilters] = useState<T>(initialCustomFilters);
 
-  const handleSort = (key: string) => {
-    if (sortBy === key) {
-      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    } else {
-      setSortBy(key);
-      setSortOrder("asc");
-    }
-  };
+  const handleSort = useCallback(
+    (key: string) => {
+      if (sortBy === key) {
+        setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+      } else {
+        setSortBy(key);
+        setSortOrder("asc");
+      }
+    },
+    [sortBy, sortOrder]
+  );
 
-  const setCustomFilter = <K extends keyof T>(key: K, value: T[K]) => {
-    setCustomFilters((prev) => ({ ...prev, [key]: value }));
-  };
+  const setCustomFilter = useCallback(
+    <K extends keyof T>(key: K, value: T[K]) => {
+      setCustomFilters((prev) => ({ ...prev, [key]: value }));
+    },
+    []
+  );
 
-  const hasActiveFilters =
-    searchTerm !== "" ||
-    Object.values(customFilters as Record<string, unknown>).some((value) =>
-      Array.isArray(value) ? value.length > 0 : value !== "all"
-    );
+  const hasActiveFilters = useMemo(
+    () =>
+      searchTerm !== "" ||
+      Object.values(customFilters as Record<string, unknown>).some((value) =>
+        Array.isArray(value) ? value.length > 0 : value !== "all"
+      ),
+    [searchTerm, customFilters]
+  );
 
-  const clearFilters = () => {
+  const clearFilters = useCallback(() => {
     setSearchTerm("");
     setShowFilters(false);
     setCustomFilters(initialCustomFilters);
-  };
+  }, [initialCustomFilters]);
 
   return {
     searchTerm,
