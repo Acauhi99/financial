@@ -83,8 +83,40 @@ function App() {
             >
               {!sidebarCollapsed && (
                 <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-gradient-to-br from-gray-600 to-gray-700 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">F</span>
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                      <rect
+                        width="32"
+                        height="32"
+                        rx="8"
+                        fill="url(#sidebarGradient)"
+                      />
+                      <path
+                        d="M8 12h16v2H8v-2zm0 4h12v2H8v-2zm0 4h8v2H8v-2z"
+                        fill="white"
+                        opacity="0.9"
+                      />
+                      <circle
+                        cx="22"
+                        cy="10"
+                        r="3"
+                        fill="white"
+                        opacity="0.8"
+                      />
+                      <defs>
+                        <linearGradient
+                          id="sidebarGradient"
+                          x1="0"
+                          y1="0"
+                          x2="32"
+                          y2="32"
+                          gradientUnits="userSpaceOnUse"
+                        >
+                          <stop stopColor="#4B5563" />
+                          <stop offset="1" stopColor="#374151" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
                   </div>
                   <h1 className="text-lg font-bold text-white">Financeiro</h1>
                 </div>
