@@ -31,7 +31,7 @@ export const filterByDateRange = (date: string, range: string) => {
     return true;
   }
 
-  const itemDate = new Date(date + "T00:00:00");
+  const itemDate = new Date(date + "T12:00:00.000Z");
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 

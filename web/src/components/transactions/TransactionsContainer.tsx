@@ -18,7 +18,7 @@ export function TransactionsContainer() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = PAGINATION.ITEMS_PER_PAGE;
 
-  const { data, isLoading, error } = useTransactions(1, 1000, "", "all");
+  const { data, isLoading, error } = useTransactions(1, 100, "", "all");
   const paginationLoading = usePaginationLoading(isLoading, currentPage);
   const createMutation = useCreateTransaction();
   const formHook = useGenericForm(
@@ -101,7 +101,6 @@ export function TransactionsContainer() {
       currentPage={currentPage}
       itemsPerPage={itemsPerPage}
       onPageChange={setCurrentPage}
-      setCurrentPage={setCurrentPage}
       formHook={formHook}
       filterState={filterState}
       onClearFilters={handleClearFilters}

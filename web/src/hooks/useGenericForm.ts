@@ -40,8 +40,8 @@ export function useGenericForm<T extends Record<string, unknown>>(
       setValues(initialValues);
       setErrors({});
       onSuccess?.();
-    } catch (error) {
-      console.error("Form submission error:", error);
+    } catch {
+      setErrors({ submit: "Erro ao enviar formulário. Tente novamente." });
     } finally {
       setIsLoading(false);
     }

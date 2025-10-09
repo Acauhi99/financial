@@ -27,7 +27,7 @@ interface TransactionsViewProps {
   currentPage: number;
   itemsPerPage: number;
   onPageChange: (page: number) => void;
-  setCurrentPage: (page: number) => void;
+
   formHook: GenericFormHook<TransactionFormData>;
   filterState: GenericFilterState<TFilters>;
   onClearFilters: () => void;
@@ -42,7 +42,7 @@ export function TransactionsView({
   currentPage,
   itemsPerPage,
   onPageChange,
-  setCurrentPage,
+
   formHook,
   filterState,
   onClearFilters,
@@ -127,7 +127,7 @@ export function TransactionsView({
           searchTerm={filterState.searchTerm}
           onSearchChange={(value) => {
             filterState.setSearchTerm(value);
-            setCurrentPage(1);
+            onPageChange(1);
           }}
           sortBy={filterState.sortBy}
           sortOrder={filterState.sortOrder}

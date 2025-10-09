@@ -40,7 +40,7 @@ export function useGenericFilterState<T extends Record<string, unknown>>(
   const clearFilters = useCallback(() => {
     setSearchTerm("");
     setShowFilters(false);
-    setCustomFilters(initialCustomFilters);
+    setCustomFilters({ ...initialCustomFilters });
   }, [initialCustomFilters]);
 
   return {

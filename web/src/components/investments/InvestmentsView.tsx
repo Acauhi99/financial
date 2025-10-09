@@ -27,7 +27,7 @@ interface InvestmentsViewProps {
   currentPage: number;
   itemsPerPage: number;
   onPageChange: (page: number) => void;
-  setCurrentPage: (page: number) => void;
+
   formHook: GenericFormHook<InvestmentFormData>;
   filterState: GenericFilterState<IFilters>;
   onClearFilters: () => void;
@@ -42,7 +42,7 @@ export function InvestmentsView({
   currentPage,
   itemsPerPage,
   onPageChange,
-  setCurrentPage,
+
   formHook,
   filterState,
   onClearFilters,
@@ -131,7 +131,7 @@ export function InvestmentsView({
           searchTerm={filterState.searchTerm}
           onSearchChange={(value) => {
             filterState.setSearchTerm(value);
-            setCurrentPage(1);
+            onPageChange(1);
           }}
           sortBy={filterState.sortBy}
           sortOrder={filterState.sortOrder}

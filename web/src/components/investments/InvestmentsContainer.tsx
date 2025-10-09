@@ -22,7 +22,7 @@ export function InvestmentsContainer() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = PAGINATION.ITEMS_PER_PAGE;
 
-  const { data, isLoading, error } = useInvestments(1, 1000, "");
+  const { data, isLoading, error } = useInvestments(1, 100, "");
   const paginationLoading = usePaginationLoading(isLoading, currentPage);
   const createMutation = useCreateInvestment();
   const formHook = useGenericForm(
@@ -105,7 +105,6 @@ export function InvestmentsContainer() {
       currentPage={currentPage}
       itemsPerPage={itemsPerPage}
       onPageChange={setCurrentPage}
-      setCurrentPage={setCurrentPage}
       formHook={formHook}
       filterState={filterState}
       onClearFilters={handleClearFilters}

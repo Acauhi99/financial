@@ -29,7 +29,7 @@ export function useFilterLogic<T>({
     }
 
     if (sortBy) {
-      filtered.sort((a, b) => {
+      filtered = [...filtered].sort((a, b) => {
         const aValue = (a as Record<string, unknown>)[sortBy];
         const bValue = (b as Record<string, unknown>)[sortBy];
 
