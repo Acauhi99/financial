@@ -9,7 +9,7 @@ type AmountRangeType =
   | "500-1000"
   | "1000-5000"
   | "5000+";
-type DateRangeType = "all" | "today" | "week" | "month" | "3months";
+type DateRangeType = "all" | "today" | "week" | "month" | "3months" | "6months";
 
 interface TransactionFiltersProps {
   filterType: FilterType;

@@ -42,7 +42,13 @@ export function TransactionsContainer() {
       | "500-1000"
       | "1000-5000"
       | "5000+",
-    dateRange: "all" as "all" | "today" | "week" | "month" | "3months",
+    dateRange: "all" as
+      | "all"
+      | "today"
+      | "week"
+      | "month"
+      | "3months"
+      | "6months",
   });
 
   const { filterType, amountRange, dateRange } = filterState.customFilters;

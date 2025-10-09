@@ -9,7 +9,7 @@ type AmountRangeType =
   | "1000-5000"
   | "5000+";
 type RateRangeType = "all" | "0-50" | "50-80" | "80-100" | "100+";
-type DateRangeType = "all" | "today" | "week" | "month" | "3months";
+type DateRangeType = "all" | "today" | "week" | "month" | "3months" | "6months";
 
 interface InvestmentFiltersProps {
   amountRange: AmountRangeType;

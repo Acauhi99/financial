@@ -35,11 +35,11 @@ export interface InvestmentFormData {
 export interface TransactionFilters {
   filterType: "all" | "income" | "expense";
   amountRange: "all" | "0-100" | "100-500" | "500-1000" | "1000-5000" | "5000+";
-  dateRange: "all" | "today" | "week" | "month" | "3months";
+  dateRange: "all" | "today" | "week" | "month" | "3months" | "6months";
 }
 
 export interface InvestmentFilters {
   amountRange: "all" | "0-100" | "100-500" | "500-1000" | "1000-5000" | "5000+";
   rateRange: "all" | "0-50" | "50-80" | "80-100" | "100+";
-  dateRange: "all" | "today" | "week" | "month" | "3months";
+  dateRange: "all" | "today" | "week" | "month" | "3months" | "6months";
 }

@@ -147,6 +147,7 @@ export const FILTER_OPTIONS = {
     { value: "week", label: "Última semana" },
     { value: "month", label: "Último mês" },
     { value: "3months", label: "Últimos 3 meses" },
+    { value: "6months", label: "Últimos 6 meses" },
   ],
   SORT_OPTIONS: [
     { value: "newest", label: "Mais recentes" },

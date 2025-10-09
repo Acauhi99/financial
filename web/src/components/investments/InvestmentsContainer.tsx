@@ -46,7 +46,13 @@ export function InvestmentsContainer() {
       | "1000-5000"
       | "5000+",
     rateRange: "all" as "all" | "0-50" | "50-80" | "80-100" | "100+",
-    dateRange: "all" as "all" | "today" | "week" | "month" | "3months",
+    dateRange: "all" as
+      | "all"
+      | "today"
+      | "week"
+      | "month"
+      | "3months"
+      | "6months",
   });
 
   const { amountRange, rateRange, dateRange } = filterState.customFilters;

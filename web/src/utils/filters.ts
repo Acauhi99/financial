@@ -57,6 +57,13 @@ export const filterByDateRange = (date: string, range: string) => {
       const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
       return itemDate >= threeMonthsAgo && itemDate < tomorrow;
     }
+    case "6months": {
+      const sixMonthsAgo = new Date(
+        today.getTime() - 179 * 24 * 60 * 60 * 1000
+      );
+      const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
+      return itemDate >= sixMonthsAgo && itemDate < tomorrow;
+    }
     default:
       return true;
   }
