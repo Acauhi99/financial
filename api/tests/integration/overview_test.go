@@ -49,6 +49,11 @@ type InvestmentType struct {
 }
 
 func TestOverviewWithRealData(t *testing.T) {
+	token, err := createAuthenticatedUser("overview@test.com", "Overview User")
+	if err != nil {
+		t.Fatalf("Failed to create authenticated user: %v", err)
+	}
+
 	// Create test data
 	transactions := []map[string]interface{}{
 		{"type": "income", "description": "Salary Oct", "amount": 5000.0, "date": "2024-10-15"},
@@ -57,7 +62,7 @@ func TestOverviewWithRealData(t *testing.T) {
 	}
 
 	for _, tx := range transactions {
-		resp, err := makeRequest("POST", "/api/transactions", tx)
+		resp, err := makeRequestWithAuth("POST", "/api/transactions", tx, token)
 		if err != nil {
 			t.Fatalf("Failed to create transaction: %v", err)
 		}
@@ -70,7 +75,7 @@ func TestOverviewWithRealData(t *testing.T) {
 	}
 
 	for _, inv := range investments {
-		resp, err := makeRequest("POST", "/api/investments", inv)
+		resp, err := makeRequestWithAuth("POST", "/api/investments", inv, token)
 		if err != nil {
 			t.Fatalf("Failed to create investment: %v", err)
 		}
@@ -78,7 +83,7 @@ func TestOverviewWithRealData(t *testing.T) {
 	}
 
 	// Test overview
-	resp, err := makeRequest("GET", "/api/overview", nil)
+	resp, err := makeRequestWithAuth("GET", "/api/overview", nil, token)
 	if err != nil {
 		t.Fatalf("Failed to make request: %v", err)
 	}

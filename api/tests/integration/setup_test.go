@@ -97,3 +97,35 @@ func makeRequestWithAuth(method, path string, body interface{}, token string) (*
 	
 	return client.Do(req)
 }
+
+type AuthResponse struct {
+	Token string `json:"token"`
+	User  User   `json:"user"`
+}
+
+type User struct {
+	ID    string `json:"id"`
+	Email string `json:"email"`
+	Name  string `json:"name"`
+}
+
+func createAuthenticatedUser(email, name string) (string, error) {
+	payload := map[string]interface{}{
+		"email":    email,
+		"password": "password123",
+		"name":     name,
+	}
+
+	resp, err := makeRequest("POST", "/api/auth/register", payload)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	var authResp AuthResponse
+	if err := json.NewDecoder(resp.Body).Decode(&authResp); err != nil {
+		return "", err
+	}
+
+	return authResp.Token, nil
+}

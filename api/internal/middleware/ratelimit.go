@@ -46,7 +46,7 @@ func (i *IPRateLimiter) GetLimiter(ip string) *rate.Limiter {
 }
 
 func RateLimit() gin.HandlerFunc {
-	limiter := NewIPRateLimiter(rate.Every(50*time.Millisecond), 100)
+	limiter := NewIPRateLimiter(rate.Every(10*time.Millisecond), 200)
 	
 	return func(c *gin.Context) {
 		ip := c.ClientIP()

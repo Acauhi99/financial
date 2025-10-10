@@ -6,16 +6,7 @@ import (
 	"testing"
 )
 
-type AuthResponse struct {
-	Token string `json:"token"`
-	User  User   `json:"user"`
-}
 
-type User struct {
-	ID    string `json:"id"`
-	Email string `json:"email"`
-	Name  string `json:"name"`
-}
 
 func TestUserRegistration(t *testing.T) {
 	payload := map[string]interface{}{

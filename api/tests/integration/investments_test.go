@@ -26,6 +26,11 @@ type InvestmentPaginatedResponse struct {
 }
 
 func TestCreateInvestment(t *testing.T) {
+	token, err := createAuthenticatedUser("investment@test.com", "Investment User")
+	if err != nil {
+		t.Fatalf("Failed to create authenticated user: %v", err)
+	}
+
 	payload := map[string]interface{}{
 		"name":   "Tesouro Selic 2029",
 		"amount": 10000.0,
@@ -34,7 +39,7 @@ func TestCreateInvestment(t *testing.T) {
 		"type":   "Tesouro Direto",
 	}
 
-	resp, err := makeRequest("POST", "/api/investments", payload)
+	resp, err := makeRequestWithAuth("POST", "/api/investments", payload, token)
 	if err != nil {
 		t.Fatalf("Failed to make request: %v", err)
 	}
@@ -77,6 +82,11 @@ func TestCreateInvestment(t *testing.T) {
 }
 
 func TestGetInvestments(t *testing.T) {
+	token, err := createAuthenticatedUser("getinv@test.com", "Get Inv User")
+	if err != nil {
+		t.Fatalf("Failed to create authenticated user: %v", err)
+	}
+
 	// Create test investments
 	investments := []map[string]interface{}{
 		{"name": "CDB Bank", "amount": 5000.0, "rate": 110.0, "date": "2024-10-09", "type": "CDB"},
@@ -84,7 +94,7 @@ func TestGetInvestments(t *testing.T) {
 	}
 
 	for _, inv := range investments {
-		createResp, err := makeRequest("POST", "/api/investments", inv)
+		createResp, err := makeRequestWithAuth("POST", "/api/investments", inv, token)
 		if err != nil {
 			t.Fatalf("Failed to create investment: %v", err)
 		}
@@ -92,7 +102,7 @@ func TestGetInvestments(t *testing.T) {
 	}
 
 	// Get investments
-	resp, err := makeRequest("GET", "/api/investments", nil)
+	resp, err := makeRequestWithAuth("GET", "/api/investments", nil, token)
 	if err != nil {
 		t.Fatalf("Failed to make request: %v", err)
 	}
@@ -117,6 +127,11 @@ func TestGetInvestments(t *testing.T) {
 }
 
 func TestInvestmentSearch(t *testing.T) {
+	token, err := createAuthenticatedUser("search@test.com", "Search User")
+	if err != nil {
+		t.Fatalf("Failed to create authenticated user: %v", err)
+	}
+
 	// Create test investment
 	payload := map[string]interface{}{
 		"name":   "Tesouro IPCA+ 2035",
@@ -126,14 +141,14 @@ func TestInvestmentSearch(t *testing.T) {
 		"type":   "Tesouro Direto",
 	}
 
-	createResp, err := makeRequest("POST", "/api/investments", payload)
+	createResp, err := makeRequestWithAuth("POST", "/api/investments", payload, token)
 	if err != nil {
 		t.Fatalf("Failed to create investment: %v", err)
 	}
 	createResp.Body.Close()
 
 	// Search for investment
-	resp, err := makeRequest("GET", "/api/investments?search=IPCA", nil)
+	resp, err := makeRequestWithAuth("GET", "/api/investments?search=IPCA", nil, token)
 	if err != nil {
 		t.Fatalf("Failed to make request: %v", err)
 	}
@@ -162,6 +177,11 @@ func TestInvestmentSearch(t *testing.T) {
 }
 
 func TestInvestmentValidation(t *testing.T) {
+	token, err := createAuthenticatedUser("invvalid@test.com", "Inv Valid User")
+	if err != nil {
+		t.Fatalf("Failed to create authenticated user: %v", err)
+	}
+
 	tests := []struct {
 		name     string
 		payload  map[string]interface{}
@@ -204,7 +224,7 @@ func TestInvestmentValidation(t *testing.T) {
 			// Add delay to avoid rate limiting
 			time.Sleep(200 * time.Millisecond)
 			
-			resp, err := makeRequest("POST", "/api/investments", tt.payload)
+			resp, err := makeRequestWithAuth("POST", "/api/investments", tt.payload, token)
 			if err != nil {
 				t.Fatalf("Failed to make request: %v", err)
 			}
@@ -218,6 +238,11 @@ func TestInvestmentValidation(t *testing.T) {
 }
 
 func TestInvestmentPagination(t *testing.T) {
+	token, err := createAuthenticatedUser("pagination@test.com", "Pagination User")
+	if err != nil {
+		t.Fatalf("Failed to create authenticated user: %v", err)
+	}
+
 	// Create multiple investments
 	for i := 1; i <= 15; i++ {
 		payload := map[string]interface{}{
@@ -227,7 +252,7 @@ func TestInvestmentPagination(t *testing.T) {
 			"date":   "2024-10-09",
 		}
 
-		resp, err := makeRequest("POST", "/api/investments", payload)
+		resp, err := makeRequestWithAuth("POST", "/api/investments", payload, token)
 		if err != nil {
 			t.Fatalf("Failed to create investment %d: %v", i, err)
 		}
@@ -235,7 +260,7 @@ func TestInvestmentPagination(t *testing.T) {
 	}
 
 	// Test first page
-	resp, err := makeRequest("GET", "/api/investments?page=1&limit=10", nil)
+	resp, err := makeRequestWithAuth("GET", "/api/investments?page=1&limit=10", nil, token)
 	if err != nil {
 		t.Fatalf("Failed to make request: %v", err)
 	}

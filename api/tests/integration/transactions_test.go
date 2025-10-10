@@ -31,6 +31,11 @@ type Pagination struct {
 }
 
 func TestCreateTransaction(t *testing.T) {
+	token, err := createAuthenticatedUser("transaction@test.com", "Transaction User")
+	if err != nil {
+		t.Fatalf("Failed to create authenticated user: %v", err)
+	}
+
 	payload := map[string]interface{}{
 		"type":        "income",
 		"description": "Test Salary",
@@ -38,7 +43,7 @@ func TestCreateTransaction(t *testing.T) {
 		"date":        "2024-10-09",
 	}
 
-	resp, err := makeRequest("POST", "/api/transactions", payload)
+	resp, err := makeRequestWithAuth("POST", "/api/transactions", payload, token)
 	if err != nil {
 		t.Fatalf("Failed to make request: %v", err)
 	}
@@ -71,6 +76,11 @@ func TestCreateTransaction(t *testing.T) {
 }
 
 func TestGetTransactions(t *testing.T) {
+	token, err := createAuthenticatedUser("gettrans@test.com", "Get Trans User")
+	if err != nil {
+		t.Fatalf("Failed to create authenticated user: %v", err)
+	}
+
 	// First create a transaction
 	payload := map[string]interface{}{
 		"type":        "expense",
@@ -79,14 +89,14 @@ func TestGetTransactions(t *testing.T) {
 		"date":        "2024-10-09",
 	}
 
-	createResp, err := makeRequest("POST", "/api/transactions", payload)
+	createResp, err := makeRequestWithAuth("POST", "/api/transactions", payload, token)
 	if err != nil {
 		t.Fatalf("Failed to create transaction: %v", err)
 	}
 	createResp.Body.Close()
 
 	// Now get transactions
-	resp, err := makeRequest("GET", "/api/transactions", nil)
+	resp, err := makeRequestWithAuth("GET", "/api/transactions", nil, token)
 	if err != nil {
 		t.Fatalf("Failed to make request: %v", err)
 	}
@@ -111,6 +121,11 @@ func TestGetTransactions(t *testing.T) {
 }
 
 func TestTransactionValidation(t *testing.T) {
+	token, err := createAuthenticatedUser("validation@test.com", "Validation User")
+	if err != nil {
+		t.Fatalf("Failed to create authenticated user: %v", err)
+	}
+
 	tests := []struct {
 		name     string
 		payload  map[string]interface{}
@@ -143,7 +158,7 @@ func TestTransactionValidation(t *testing.T) {
 			// Add small delay to avoid rate limiting
 			time.Sleep(200 * time.Millisecond)
 
-			resp, err := makeRequest("POST", "/api/transactions", tt.payload)
+			resp, err := makeRequestWithAuth("POST", "/api/transactions", tt.payload, token)
 			if err != nil {
 				t.Fatalf("Failed to make request: %v", err)
 			}

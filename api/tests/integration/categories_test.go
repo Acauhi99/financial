@@ -14,7 +14,12 @@ type Category struct {
 }
 
 func TestGetCategories(t *testing.T) {
-	resp, err := makeRequest("GET", "/api/categories", nil)
+	token, err := createAuthenticatedUser("categories@test.com", "Categories User")
+	if err != nil {
+		t.Fatalf("Failed to create authenticated user: %v", err)
+	}
+
+	resp, err := makeRequestWithAuth("GET", "/api/categories", nil, token)
 	if err != nil {
 		t.Fatalf("Failed to make request: %v", err)
 	}

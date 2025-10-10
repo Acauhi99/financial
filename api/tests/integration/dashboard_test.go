@@ -21,6 +21,11 @@ type Totals struct {
 }
 
 func TestDashboardSummary(t *testing.T) {
+	token, err := createAuthenticatedUser("dashboard@test.com", "Dashboard User")
+	if err != nil {
+		t.Fatalf("Failed to create authenticated user: %v", err)
+	}
+
 	// Create some test data first
 	transactions := []map[string]interface{}{
 		{"type": "income", "description": "Salary", "amount": 5000.0, "date": "2024-10-09"},
@@ -29,7 +34,7 @@ func TestDashboardSummary(t *testing.T) {
 	}
 
 	for _, tx := range transactions {
-		resp, err := makeRequest("POST", "/api/transactions", tx)
+		resp, err := makeRequestWithAuth("POST", "/api/transactions", tx, token)
 		if err != nil {
 			t.Fatalf("Failed to create transaction: %v", err)
 		}
@@ -37,7 +42,7 @@ func TestDashboardSummary(t *testing.T) {
 	}
 
 	// Test dashboard summary
-	resp, err := makeRequest("GET", "/api/dashboard/summary", nil)
+	resp, err := makeRequestWithAuth("GET", "/api/dashboard/summary", nil, token)
 	if err != nil {
 		t.Fatalf("Failed to make request: %v", err)
 	}
