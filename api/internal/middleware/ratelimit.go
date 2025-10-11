@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"sync"
 	"time"
@@ -85,8 +86,15 @@ func (i *IPRateLimiter) GetLimiter(ip string) *rate.Limiter {
 	return limiter
 }
 
-func RateLimit() gin.HandlerFunc {
-	limiter := NewIPRateLimiter(rate.Every(10*time.Millisecond), 200)
+func RateLimit(enabled bool, rps, burst int) gin.HandlerFunc {
+	if !enabled {
+		return gin.HandlerFunc(func(c *gin.Context) {
+			c.Next()
+		})
+	}
+
+	rateLimit := rate.Every(time.Second / time.Duration(rps))
+	limiter := NewIPRateLimiter(rateLimit, burst)
 
 	return gin.HandlerFunc(func(c *gin.Context) {
 		// Timeout context
@@ -100,11 +108,14 @@ func RateLimit() gin.HandlerFunc {
 			logger.Logger.Warn("Rate limit exceeded",
 				zap.String("ip", ip),
 				zap.String("path", c.Request.URL.Path),
-				zap.String("method", c.Request.Method))
+				zap.String("method", c.Request.Method),
+				zap.Int("rps_limit", rps),
+				zap.Int("burst_limit", burst))
 
 			c.JSON(http.StatusTooManyRequests, gin.H{
-				"error": "Rate limit exceeded",
-				"retry_after": "10ms",
+				"error":       "Rate limit exceeded",
+				"retry_after": fmt.Sprintf("%dms", 1000/rps),
+				"limit":       rps,
 			})
 			c.Abort()
 			return

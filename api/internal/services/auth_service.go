@@ -126,6 +126,10 @@ func (s *AuthService) ValidateToken(tokenString string) (*models.JWTClaims, erro
 	}, nil
 }
 
+func (s *AuthService) GetUserByID(userID string) (*models.User, error) {
+	return s.userRepo.FindByID(userID)
+}
+
 func (s *AuthService) generateToken(userID, email string) (string, error) {
 	claims := jwt.MapClaims{
 		"user_id": userID,

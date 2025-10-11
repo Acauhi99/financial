@@ -24,7 +24,13 @@ func main() {
 
 	// Load configuration
 	cfg := config.Load()
-	logger.Logger.Info("Starting Financial API", zap.String("port", cfg.Port))
+	if err := cfg.Validate(); err != nil {
+		logger.Logger.Fatal("Invalid configuration", zap.Error(err))
+	}
+	logger.Logger.Info("Starting Financial API", 
+		zap.String("port", cfg.Port),
+		zap.String("environment", cfg.Environment),
+		zap.Bool("rate_limit_enabled", cfg.RateLimitEnabled))
 
 	// Connect to database
 	db, err := database.Connect(cfg.MongoURI)
@@ -70,7 +76,7 @@ func main() {
 	r.Use(middleware.Logger())
 	r.Use(middleware.Security())
 	r.Use(middleware.CORS())
-	r.Use(middleware.RateLimit())
+	r.Use(middleware.RateLimit(cfg.RateLimitEnabled, cfg.RateLimitRPS, cfg.RateLimitBurst))
 
 	// Health check
 	r.GET("/", func(c *gin.Context) {

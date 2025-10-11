@@ -53,6 +53,7 @@ func (r *CategoryRepository) SeedDefaultCategories() error {
 		models.Category{Name: "Alimentação", Color: "#f97316", Type: "expense"},
 		models.Category{Name: "Transporte", Color: "#eab308", Type: "expense"},
 		models.Category{Name: "Saúde", Color: "#3b82f6", Type: "expense"},
+		models.Category{Name: "Educação", Color: "#06b6d4", Type: "expense"},
 		models.Category{Name: "Lazer", Color: "#8b5cf6", Type: "expense"},
 		models.Category{Name: "Outros", Color: "#6b7280", Type: "expense"},
 	}

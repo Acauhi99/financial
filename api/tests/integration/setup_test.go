@@ -10,10 +10,17 @@ import (
 	"time"
 )
 
-const (
-	BaseURL = "http://localhost:8080"
+var (
+	BaseURL = getBaseURL()
 	Timeout = 30 * time.Second
 )
+
+func getBaseURL() string {
+	if url := os.Getenv("FINANCIAL_API_URL"); url != "" {
+		return url
+	}
+	return "http://localhost:8080"
+}
 
 func TestMain(m *testing.M) {
 	// Wait for API to be ready
@@ -72,7 +79,7 @@ func makeRequest(method, path string, body interface{}) (*http.Response, error) 
 
 func makeRequestWithAuth(method, path string, body interface{}, token string) (*http.Response, error) {
 	client := &http.Client{Timeout: Timeout}
-	
+
 	var reqBody *bytes.Buffer
 	if body != nil {
 		jsonData, err := json.Marshal(body)
@@ -83,18 +90,18 @@ func makeRequestWithAuth(method, path string, body interface{}, token string) (*
 	} else {
 		reqBody = bytes.NewBuffer(nil)
 	}
-	
+
 	req, err := http.NewRequest(method, BaseURL+path, reqBody)
 	if err != nil {
 		return nil, err
 	}
-	
+
 	if body != nil {
 		req.Header.Set("Content-Type", "application/json")
 	}
-	
+
 	req.Header.Set("Authorization", "Bearer "+token)
-	
+
 	return client.Do(req)
 }
 

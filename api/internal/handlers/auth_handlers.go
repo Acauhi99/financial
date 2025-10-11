@@ -91,8 +91,22 @@ func (h *AuthHandlers) Me(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"user_id": userID,
-		"email":   c.GetString("user_email"),
-	})
+	userIDStr, ok := userID.(string)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user ID"})
+		return
+	}
+
+	// Get user from database
+	user, err := h.authService.GetUserByID(userIDStr)
+	if err != nil {
+		logger.Logger.Error("Failed to get user", 
+			zap.Error(err),
+			zap.String("user_id", userIDStr),
+		)
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, user)
 }

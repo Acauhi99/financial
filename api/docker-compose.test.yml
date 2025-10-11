@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  mongodb-test:
+    image: mongo:7.0
+    container_name: financial-mongodb-test
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
+      MONGO_INITDB_DATABASE: financial_test
+    ports:
+      - "27018:27017"
+    networks:
+      - financial-test-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    tmpfs:
+      - /data/db
+
+  api-test:
+    build: .
+    container_name: financial-api-test
+    environment:
+      - GIN_MODE=test
+      - PORT=8080
+      - MONGO_URI=mongodb://admin:password123@mongodb-test:27017/financial_test?authSource=admin
+      - JWT_SECRET=test-jwt-secret-key-not-for-production
+      - LOG_LEVEL=error
+      - RATE_LIMIT_ENABLED=false
+      - ALLOWED_ORIGINS=*
+      - ENABLE_SWAGGER=false
+      - ENABLE_METRICS=false
+    ports:
+      - "8081:8080"
+    depends_on:
+      mongodb-test:
+        condition: service_healthy
+    networks:
+      - financial-test-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+networks:
+  financial-test-network:
+    driver: bridge
