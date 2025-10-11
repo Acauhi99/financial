@@ -6,7 +6,11 @@ import {
   TrendingUp,
   ChevronLeft,
   ChevronRight,
+  LogOut,
+  User,
 } from "lucide-react";
+import { useAuth } from "./hooks/useAuth";
+import { LoginPage } from "./components/auth/LoginPage";
 
 const InvestmentsContainer = lazy(() =>
   import("./components/investments/InvestmentsContainer").then((m) => ({
@@ -41,9 +45,10 @@ const menuItems = [
   { id: "investments", label: "Investimentos", icon: TrendingUp },
 ] as const;
 
-function App() {
+function MainApp() {
   const [currentPage, setCurrentPage] = useState<Page>("overview");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const { user, logout } = useAuth();
 
   const toggleSidebar = useCallback(() => {
     setSidebarCollapsed((prev) => !prev);
@@ -67,143 +72,181 @@ function App() {
   }, [currentPage]);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className="h-screen bg-gray-100 flex overflow-hidden">
-        {/* Sidebar */}
-        <div
-          className={`${
-            sidebarCollapsed ? "w-16" : "w-64"
-          } bg-gradient-to-b from-gray-900 to-gray-800 shadow-2xl transition-[width] duration-200 ease-out flex flex-col border-r border-gray-700 will-change-[width]`}
-        >
-          <div className="p-4 flex-shrink-0 border-b border-gray-700/50">
-            <div
-              className={`flex items-center ${
-                sidebarCollapsed ? "justify-center" : "justify-between"
-              }`}
-            >
-              {!sidebarCollapsed && (
-                <div className="flex items-center space-x-2">
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                      <rect
-                        width="32"
-                        height="32"
-                        rx="8"
-                        fill="url(#sidebarGradient)"
-                      />
-                      <path
-                        d="M8 12h16v2H8v-2zm0 4h12v2H8v-2zm0 4h8v2H8v-2z"
-                        fill="white"
-                        opacity="0.9"
-                      />
-                      <circle
-                        cx="22"
-                        cy="10"
-                        r="3"
-                        fill="white"
-                        opacity="0.8"
-                      />
-                      <defs>
-                        <linearGradient
-                          id="sidebarGradient"
-                          x1="0"
-                          y1="0"
-                          x2="32"
-                          y2="32"
-                          gradientUnits="userSpaceOnUse"
-                        >
-                          <stop stopColor="#4B5563" />
-                          <stop offset="1" stopColor="#374151" />
-                        </linearGradient>
-                      </defs>
-                    </svg>
-                  </div>
-                  <h1 className="text-lg font-bold text-white">Financeiro</h1>
+    <div className="h-screen bg-gray-100 flex overflow-hidden">
+      {/* Sidebar */}
+      <div
+        className={`${
+          sidebarCollapsed ? "w-16" : "w-64"
+        } bg-gradient-to-b from-gray-900 to-gray-800 shadow-2xl transition-[width] duration-200 ease-out flex flex-col border-r border-gray-700 will-change-[width]`}
+      >
+        <div className="p-4 flex-shrink-0 border-b border-gray-700/50">
+          <div
+            className={`flex items-center ${
+              sidebarCollapsed ? "justify-center" : "justify-between"
+            }`}
+          >
+            {!sidebarCollapsed && (
+              <div className="flex items-center space-x-2">
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <rect
+                      width="32"
+                      height="32"
+                      rx="8"
+                      fill="url(#sidebarGradient)"
+                    />
+                    <path
+                      d="M8 12h16v2H8v-2zm0 4h12v2H8v-2zm0 4h8v2H8v-2z"
+                      fill="white"
+                      opacity="0.9"
+                    />
+                    <circle cx="22" cy="10" r="3" fill="white" opacity="0.8" />
+                    <defs>
+                      <linearGradient
+                        id="sidebarGradient"
+                        x1="0"
+                        y1="0"
+                        x2="32"
+                        y2="32"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop stopColor="#4B5563" />
+                        <stop offset="1" stopColor="#374151" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
                 </div>
-              )}
-              <button
-                onClick={toggleSidebar}
-                className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition-colors duration-150 shadow-sm hover:shadow-md cursor-pointer"
-              >
-                {sidebarCollapsed ? (
-                  <ChevronRight size={16} />
-                ) : (
-                  <ChevronLeft size={16} />
-                )}
-              </button>
-            </div>
-          </div>
-          <nav className="mt-2 flex-1 px-3 space-y-1">
-            {menuItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => handlePageChange(item.id as Page)}
-                className={(() => {
-                  const baseClasses = `w-full flex items-center py-3 rounded-xl text-left transition-colors duration-150 group focus:outline-none cursor-pointer`;
-                  const positionClasses = sidebarCollapsed
-                    ? "justify-center px-2"
-                    : "px-3";
-                  const isActive = currentPage === item.id;
-                  const activeClasses =
-                    isActive && !sidebarCollapsed
-                      ? "bg-white/10 text-white shadow-lg backdrop-blur-sm"
-                      : "";
-                  const inactiveClasses = !isActive
-                    ? "text-gray-300 hover:bg-white/5 hover:text-white"
-                    : "text-white";
-
-                  return `${baseClasses} ${positionClasses} ${activeClasses} ${inactiveClasses}`;
-                })()}
-                title={sidebarCollapsed ? item.label : ""}
-              >
-                <div
-                  className={`${
-                    currentPage === item.id
-                      ? "bg-white/20"
-                      : "bg-gray-700/50 group-hover:bg-gray-600/50"
-                  } p-2 rounded-lg transition-colors duration-150 ${
-                    sidebarCollapsed ? "" : "mr-3"
-                  }`}
-                >
-                  <item.icon size={16} />
-                </div>
-                {!sidebarCollapsed && (
-                  <span className="font-medium">{item.label}</span>
-                )}
-              </button>
-            ))}
-          </nav>
-          <div className="p-4 border-t border-gray-700/50">
-            <div
-              className={`${
-                sidebarCollapsed
-                  ? "flex justify-center"
-                  : "flex items-center space-x-2"
-              } text-gray-400`}
+                <h1 className="text-lg font-bold text-white">Financeiro</h1>
+              </div>
+            )}
+            <button
+              onClick={toggleSidebar}
+              className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition-colors duration-150 shadow-sm hover:shadow-md cursor-pointer"
             >
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-              {!sidebarCollapsed && (
-                <span className="text-xs">Sistema online</span>
+              {sidebarCollapsed ? (
+                <ChevronRight size={16} />
+              ) : (
+                <ChevronLeft size={16} />
               )}
-            </div>
+            </button>
           </div>
         </div>
+        <nav className="mt-2 flex-1 px-3 space-y-1">
+          {menuItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => handlePageChange(item.id as Page)}
+              className={(() => {
+                const baseClasses = `w-full flex items-center py-3 rounded-xl text-left transition-colors duration-150 group focus:outline-none cursor-pointer`;
+                const positionClasses = sidebarCollapsed
+                  ? "justify-center px-2"
+                  : "px-3";
+                const isActive = currentPage === item.id;
+                const activeClasses =
+                  isActive && !sidebarCollapsed
+                    ? "bg-white/10 text-white shadow-lg backdrop-blur-sm"
+                    : "";
+                const inactiveClasses = !isActive
+                  ? "text-gray-300 hover:bg-white/5 hover:text-white"
+                  : "text-white";
 
-        {/* Main Content */}
-        <div className="flex-1 overflow-hidden">
-          <div className="h-full max-w-7xl mx-auto p-6">
-            <Suspense
-              fallback={
-                <div className="flex items-center justify-center h-full">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-                </div>
-              }
+                return `${baseClasses} ${positionClasses} ${activeClasses} ${inactiveClasses}`;
+              })()}
+              title={sidebarCollapsed ? item.label : ""}
             >
-              {currentPageComponent}
-            </Suspense>
+              <div
+                className={`${
+                  currentPage === item.id
+                    ? "bg-white/20"
+                    : "bg-gray-700/50 group-hover:bg-gray-600/50"
+                } p-2 rounded-lg transition-colors duration-150 ${
+                  sidebarCollapsed ? "" : "mr-3"
+                }`}
+              >
+                <item.icon size={16} />
+              </div>
+              {!sidebarCollapsed && (
+                <span className="font-medium">{item.label}</span>
+              )}
+            </button>
+          ))}
+        </nav>
+        <div className="p-4 border-t border-gray-700/50 space-y-3">
+          {/* User Info */}
+          {!sidebarCollapsed && (
+            <div className="flex items-center space-x-3 text-gray-300">
+              <div className="w-8 h-8 bg-gray-600 rounded-lg flex items-center justify-center">
+                <User size={16} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium truncate">{user?.name}</p>
+                <p className="text-xs text-gray-400 truncate">{user?.email}</p>
+              </div>
+            </div>
+          )}
+
+          {/* Logout Button */}
+          <button
+            onClick={logout}
+            className={`${
+              sidebarCollapsed
+                ? "w-full flex justify-center p-2"
+                : "w-full flex items-center space-x-2 px-3 py-2"
+            } text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors duration-150`}
+            title={sidebarCollapsed ? "Sair" : ""}
+          >
+            <LogOut size={16} />
+            {!sidebarCollapsed && <span className="text-sm">Sair</span>}
+          </button>
+
+          {/* Status */}
+          <div
+            className={`${
+              sidebarCollapsed
+                ? "flex justify-center"
+                : "flex items-center space-x-2"
+            } text-gray-400`}
+          >
+            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+            {!sidebarCollapsed && (
+              <span className="text-xs">Sistema online</span>
+            )}
           </div>
         </div>
       </div>
+
+      {/* Main Content */}
+      <div className="flex-1 overflow-hidden">
+        <div className="h-full max-w-7xl mx-auto p-6">
+          <Suspense
+            fallback={
+              <div className="flex items-center justify-center h-full">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+              </div>
+            }
+          >
+            {currentPageComponent}
+          </Suspense>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="h-screen bg-gray-100 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      {isAuthenticated ? <MainApp /> : <LoginPage />}
     </QueryClientProvider>
   );
 }

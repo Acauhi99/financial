@@ -86,18 +86,6 @@ export interface OverviewData {
   }>;
 }
 
-const mockCategories: Category[] = [
-  { id: "cat-1", name: "Salário", color: "#10b981", type: "income" },
-  { id: "cat-2", name: "Freelance", color: "#059669", type: "income" },
-  { id: "cat-3", name: "Investimentos", color: "#047857", type: "income" },
-  { id: "cat-4", name: "Moradia", color: "#ef4444", type: "expense" },
-  { id: "cat-5", name: "Alimentação", color: "#f97316", type: "expense" },
-  { id: "cat-6", name: "Transporte", color: "#eab308", type: "expense" },
-  { id: "cat-7", name: "Saúde", color: "#3b82f6", type: "expense" },
-  { id: "cat-8", name: "Lazer", color: "#8b5cf6", type: "expense" },
-  { id: "cat-9", name: "Outros", color: "#6b7280", type: "expense" },
-];
-
 // Helper para gerar transações com nova estrutura
 const createTransactionMock = (
   id: number,
@@ -715,8 +703,39 @@ const mockInvestments: Investment[] = [
   },
 ];
 
+import { authService } from "./auth";
+
+const API_BASE_URL = "http://localhost:8080/api";
+
 // Simulate API delay
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Helper para fazer requisições autenticadas
+const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
+  const authHeaders = authService.getAuthHeaders();
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...((options.headers as Record<string, string>) || {}),
+  };
+
+  // Adiciona Authorization apenas se existir
+  if (authHeaders.Authorization) {
+    headers.Authorization = authHeaders.Authorization;
+  }
+
+  const response = await fetch(`${API_BASE_URL}${url}`, {
+    ...options,
+    headers,
+  });
+
+  if (response.status === 401) {
+    authService.logout();
+    window.location.reload();
+    throw new Error("Sessão expirada");
+  }
+
+  return response;
+};
 
 // API functions
 export const api = {
@@ -727,39 +746,35 @@ export const api = {
     search = "",
     type = "all"
   ): Promise<PaginatedResponse<Transaction>> {
-    await delay(200);
+    const params = new URLSearchParams({
+      page: page.toString(),
+      limit: limit.toString(),
+      ...(search && { search }),
+      ...(type !== "all" && { type }),
+    });
 
-    const filtered = mockTransactions.filter(
-      (t) =>
-        t.description.toLowerCase().includes(search.toLowerCase()) &&
-        (type === "all" || t.type === type)
-    );
+    const response = await fetchWithAuth(`/transactions?${params}`);
 
-    const total = filtered.length;
-    const totalPages = Math.ceil(total / limit);
-    const start = (page - 1) * limit;
-    const data = filtered.slice(start, start + limit);
+    if (!response.ok) {
+      throw new Error("Erro ao buscar transações");
+    }
 
-    return {
-      data,
-      pagination: { page, limit, total, totalPages },
-    };
+    return response.json();
   },
 
   async createTransaction(
     transaction: Omit<Transaction, "id">
   ): Promise<Transaction> {
-    await delay(500);
-    const newTransaction = createTransactionMock(
-      Date.now(),
-      transaction.type,
-      transaction.description,
-      transaction.amount,
-      transaction.date,
-      transaction.categoryId || "cat-9"
-    );
-    mockTransactions.unshift(newTransaction);
-    return newTransaction;
+    const response = await fetchWithAuth("/transactions", {
+      method: "POST",
+      body: JSON.stringify(transaction),
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro ao criar transação");
+    }
+
+    return response.json();
   },
 
   // Investments
@@ -768,88 +783,68 @@ export const api = {
     limit = 10,
     search = ""
   ): Promise<PaginatedResponse<Investment>> {
-    await delay(200);
+    const params = new URLSearchParams({
+      page: page.toString(),
+      limit: limit.toString(),
+      ...(search && { search }),
+    });
 
-    const filtered = mockInvestments.filter((inv) =>
-      inv.name.toLowerCase().includes(search.toLowerCase())
-    );
+    const response = await fetchWithAuth(`/investments?${params}`);
 
-    const total = filtered.length;
-    const totalPages = Math.ceil(total / limit);
-    const start = (page - 1) * limit;
-    const data = filtered.slice(start, start + limit);
+    if (!response.ok) {
+      throw new Error("Erro ao buscar investimentos");
+    }
 
-    return {
-      data,
-      pagination: { page, limit, total, totalPages },
-    };
+    return response.json();
   },
 
   async createInvestment(
     investment: Omit<Investment, "id" | "monthlyReturn">
   ): Promise<Investment> {
-    await delay(500);
-    const newInvestment = createInvestmentMock(
-      Date.now(),
-      investment.name,
-      investment.amount,
-      investment.rate,
-      investment.date,
-      investment.type || "Outros"
-    );
-    mockInvestments.unshift(newInvestment);
-    return newInvestment;
+    const response = await fetchWithAuth("/investments", {
+      method: "POST",
+      body: JSON.stringify(investment),
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro ao criar investimento");
+    }
+
+    return response.json();
   },
 
-  // Novo endpoint consolidado
   async getDashboardSummary(): Promise<DashboardSummary> {
-    await delay(300);
+    const response = await fetchWithAuth("/dashboard/summary");
 
-    const totalIncome = mockTransactions
-      .filter((t) => t.type === "income")
-      .reduce((sum, t) => sum + t.amount, 0);
+    if (!response.ok) {
+      throw new Error("Erro ao buscar resumo do dashboard");
+    }
 
-    const totalExpenses = mockTransactions
-      .filter((t) => t.type === "expense")
-      .reduce((sum, t) => sum + t.amount, 0);
-
-    const totalInvestments = mockInvestments.reduce(
-      (sum, inv) => sum + inv.amount,
-      0
-    );
-
-    const totalMonthlyReturn = mockInvestments.reduce(
-      (sum, inv) => sum + inv.monthlyReturn,
-      0
-    );
-
-    const averageRate =
-      mockInvestments.length > 0
-        ? mockInvestments.reduce((sum, inv) => sum + inv.rate, 0) /
-          mockInvestments.length
-        : 0;
-
-    return {
-      totals: {
-        balance: totalIncome - totalExpenses,
-        totalIncome,
-        totalExpenses,
-        totalInvestments,
-        totalMonthlyReturn,
-        averageRate,
-      },
-      categories: mockCategories,
-    };
+    return response.json();
   },
 
-  // Endpoint para categorias
   async getCategories(): Promise<Category[]> {
-    await delay(100);
-    return mockCategories;
+    const response = await fetchWithAuth("/categories");
+
+    if (!response.ok) {
+      throw new Error("Erro ao buscar categorias");
+    }
+
+    return response.json();
   },
 
-  // Overview
   async getOverview(): Promise<OverviewData> {
+    const response = await fetchWithAuth("/overview");
+
+    if (!response.ok) {
+      throw new Error("Erro ao buscar dados do overview");
+    }
+
+    return response.json();
+  },
+
+  // Fallback para overview com dados mock (caso a API não esteja implementada)
+  async getOverviewMock(): Promise<OverviewData> {
     await delay(800);
 
     const totalIncome = mockTransactions
